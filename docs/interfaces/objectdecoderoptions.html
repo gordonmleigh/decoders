@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TextDecoderOptions | @fmtk/decoders</title>
+	<title>ObjectDecoderOptions | @fmtk/decoders</title>
 	<meta name="description" content="Documentation for @fmtk/decoders">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="textdecoderoptions.html">TextDecoderOptions</a>
+					<a href="objectdecoderoptions.html">ObjectDecoderOptions</a>
 				</li>
 			</ul>
-			<h1>Interface TextDecoderOptions</h1>
+			<h1>Interface ObjectDecoderOptions</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Options to pass to a <a href="textdecoder.html">TextDecoder</a>.</p>
+						<p>Options to control decoding of an object.</p>
 					</div>
 				</div>
 			</section>
@@ -77,7 +77,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">TextDecoderOptions</span>
+						<span class="target">ObjectDecoderOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -88,9 +88,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="textdecoderoptions.html#maxlength" class="tsd-kind-icon">max<wbr>Length</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="textdecoderoptions.html#minlength" class="tsd-kind-icon">min<wbr>Length</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="textdecoderoptions.html#trim" class="tsd-kind-icon">trim</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="objectdecoderoptions.html#extrafields" class="tsd-kind-icon">extra<wbr>Fields</a></li>
 							</ul>
 						</section>
 					</div>
@@ -99,48 +97,18 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="maxlength" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> max<wbr>Length</h3>
-					<div class="tsd-signature tsd-kind-icon">max<wbr>Length<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<a name="extrafields" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> extra<wbr>Fields</h3>
+					<div class="tsd-signature tsd-kind-icon">extra<wbr>Fields<span class="tsd-signature-symbol">:</span> <a href="../enums/extrafields.html" class="tsd-signature-type">ExtraFields</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/futurematik/decoders/blob/d604b7f/src/composite/text.ts#L16">src/composite/text.ts:16</a></li>
+							<li>Defined in src/composite/object.ts:51</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The maximum allowed length of a string.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="minlength" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> min<wbr>Length</h3>
-					<div class="tsd-signature tsd-kind-icon">min<wbr>Length<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/futurematik/decoders/blob/d604b7f/src/composite/text.ts#L21">src/composite/text.ts:21</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The minimum allowed length of a string. Defaults to 1 for a <a href="textdecoder.html">TextDecoder</a>.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="trim" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> trim</h3>
-					<div class="tsd-signature tsd-kind-icon">trim<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/futurematik/decoders/blob/d604b7f/src/composite/text.ts#L27">src/composite/text.ts:27</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Enabled/disable trimming whitespace from a string. Defaults to <code>true</code> for a
-							<a href="textdecoder.html">TextDecoder</a>.</p>
+							<p>Specifies the action to take for an <a href="objectdecoder.html">ObjectDecoder</a> when a field is
+							encountered that has no corresponding decoder.</p>
 						</div>
 					</div>
 				</section>
@@ -159,16 +127,10 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-is-external">
-						<a href="textdecoderoptions.html" class="tsd-kind-icon">Text<wbr>Decoder<wbr>Options</a>
+						<a href="objectdecoderoptions.html" class="tsd-kind-icon">Object<wbr>Decoder<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="textdecoderoptions.html#maxlength" class="tsd-kind-icon">max<wbr>Length</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="textdecoderoptions.html#minlength" class="tsd-kind-icon">min<wbr>Length</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="textdecoderoptions.html#trim" class="tsd-kind-icon">trim</a>
+								<a href="objectdecoderoptions.html#extrafields" class="tsd-kind-icon">extra<wbr>Fields</a>
 							</li>
 						</ul>
 					</li>

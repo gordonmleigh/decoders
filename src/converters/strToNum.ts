@@ -22,8 +22,6 @@ import { map } from './map';
  * // scientific notation is not allowed:
  * const result4 = decoder('12e10') // = { ok: false, error: [ ... ] }
  * ```
- *
- * @category Converters
  */
 export const strToNum = chain(
   string,

@@ -1,3 +1,6 @@
+/**
+ * @hidden
+ */
 export function isDate(obj: unknown, checkValid = true): obj is Date {
   if (
     typeof obj === 'object' &&

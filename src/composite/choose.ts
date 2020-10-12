@@ -1,5 +1,6 @@
 import { Decoder } from '../core/Decoder';
-import { DecoderError, error, Result } from '../core/Result';
+import { error, Result } from '../core/Result';
+import { DecoderError } from "../core/DecoderError";
 
 /**
  * Get the composite type of an array of decoders.
@@ -35,8 +36,6 @@ export type CombinedTypeOf<T> = T extends Decoder<infer X, infer Y>[]
  * // the `error` field will contain the errors of all decoders
  * const result3 = choice(false); // = { ok: false, error: [ ... ] }
  * ```
- *
- * @category Composite
  */
 export function choose<T extends Decoder<unknown>[]>(
   ...options: T

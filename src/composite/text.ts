@@ -4,7 +4,7 @@ import { Decoder } from '../core/Decoder';
 import { hasMaxLength } from '../predicates/hasMaxLength';
 import { hasMinLength } from '../predicates/hasMinLength';
 import { string } from '../primitives/string';
-import { filterFalsey } from '../util/filterFalsey';
+import { filterFalsey } from '../internal/filterFalsey';
 
 /**
  * Options to pass to a [[TextDecoder]].

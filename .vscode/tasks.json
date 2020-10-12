@@ -5,9 +5,19 @@
       "type": "typescript",
       "tsconfig": "tsconfig.json",
       "option": "watch",
-      "problemMatcher": ["$tsc-watch"],
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
       "group": "build",
       "label": "tsc watch"
+    },
+    {
+      "type": "npm",
+      "script": "dev:docs",
+      "problemMatcher": [],
+      "label": "dev:docs",
+      "detail": "concurrently --kill-others npm:watch:docs npm:serve:docs",
+      "group": "build",
     }
   ]
 }
