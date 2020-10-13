@@ -11,6 +11,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "lib/**/*.map",
+    "!lib/**/*.test.*",
+    "src/**/*.ts",
+    "!src/**/*.test.ts"
+  ],
   "scripts": {
     "build": "yarn clean && yarn compile && yarn test && yarn bundle && yarn docs",
     "bundle": "rollup -c",
