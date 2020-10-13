@@ -24,7 +24,6 @@
     "watch:docs": "onchange src/**/*.ts -i -d 1000 -- yarn docs"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^6.0.0",
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
@@ -37,6 +36,7 @@
     "onchange": "^7.0.2",
     "prettier": "^2.1.2",
     "rollup": "^2.29.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^26.4.1",
     "typedoc": "^0.19.2",

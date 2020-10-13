@@ -1,16 +1,15 @@
+import { isObject } from './isObject';
+
 /**
  * @hidden
  */
-export function isDate(obj: unknown, checkValid = true): obj is Date {
+export function isDate(value: unknown): value is Date {
   if (
-    typeof obj === 'object' &&
-    obj !== null &&
-    Object.prototype.toString.call(obj) === '[object Date]'
+    isObject(value) &&
+    (value instanceof Date ||
+      Object.prototype.toString.call(value) === '[object Date]')
   ) {
-    if (!checkValid) {
-      return true;
-    }
-    const t = (obj as Date).getTime();
+    const t = (value as Date).getTime();
     return t === t;
   }
   return false;

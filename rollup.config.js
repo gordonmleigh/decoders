@@ -1,8 +1,8 @@
+import sourcemaps from 'rollup-plugin-sourcemaps';
 import { terser } from 'rollup-plugin-terser';
-import typescript from '@rollup/plugin-typescript';
 
 export default {
-  input: './src/index.ts',
+  input: './lib/index.js',
   output: [
     {
       file: 'lib/bundle.js',
@@ -11,9 +11,7 @@ export default {
     },
   ],
   plugins: [
-    typescript({
-      tsconfig: 'tsconfig.rollup.json',
-    }),
+    sourcemaps(),
     terser(),
   ],
 };

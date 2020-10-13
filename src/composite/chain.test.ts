@@ -1,29 +1,18 @@
 import 'jest';
-import { Decoder } from '../core/Decoder';
 import { assertCond } from '../internal/assertCond';
+import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder';
 import { chain } from './chain';
 
 describe('chain', () => {
   it('composes multiple decoders', () => {
-    const input = {};
-    const value1 = {};
-    const value2 = {};
-    const value3 = {};
+    const input = Symbol();
+    const value1 = Symbol();
+    const value2 = Symbol();
+    const value3 = Symbol();
 
-    const decoder1 = jest.fn(((x) => ({
-      ok: true,
-      value: value1,
-    })) as Decoder<unknown>);
-
-    const decoder2 = jest.fn(((x) => ({
-      ok: true,
-      value: value2,
-    })) as Decoder<unknown>);
-
-    const decoder3 = jest.fn(((x) => ({
-      ok: true,
-      value: value3,
-    })) as Decoder<unknown>);
+    const decoder1 = mockDecoder(value1);
+    const decoder2 = mockDecoder(value2);
+    const decoder3 = mockDecoder(value3);
 
     const decoder = chain(decoder1, decoder2, decoder3);
 
@@ -45,24 +34,17 @@ describe('chain', () => {
   });
 
   it('fails on first error', () => {
-    const input = {};
-    const value1 = {};
-    const value3 = {};
+    const input = Symbol();
+    const value1 = Symbol();
+    const value3 = Symbol();
 
-    const decoder1 = jest.fn(((x) => ({
-      ok: true,
-      value: value1,
-    })) as Decoder<unknown>);
-
-    const decoder2 = jest.fn(((x) => ({
-      ok: false,
-      error: [{ id: 'FAIL', text: 'failed', field: 'somefield' }],
-    })) as Decoder<unknown>);
-
-    const decoder3 = jest.fn(((x) => ({
-      ok: true,
-      value: value3,
-    })) as Decoder<unknown>);
+    const decoder1 = mockDecoder(value1);
+    const decoder2 = mockFailDecoder({
+      id: 'FAIL',
+      text: 'failed',
+      field: 'somefield',
+    });
+    const decoder3 = mockDecoder(value3);
 
     const decoder = chain(decoder1, decoder2, decoder3);
 

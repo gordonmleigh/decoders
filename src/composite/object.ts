@@ -1,6 +1,7 @@
 import { Decoder } from '../core/Decoder';
+import { DecoderError } from '../core/DecoderError';
 import { error, invalid, ok, Result } from '../core/Result';
-import { DecoderError } from "../core/DecoderError";
+import { isPlainObject } from '../internal/isPlainObject';
 
 /**
  * Error identifier returned by [[ObjectDecoder]] when the given value is not an
@@ -105,7 +106,7 @@ function objectOptions({
   extraFields = ExtraFields.Ignore,
 }: ObjectDecoderOptions = {}): ObjectDecoderFactory {
   return <T>(props: PropDecoders<T>) => (value: unknown): Result<T> => {
-    if (typeof value !== 'object' || value === null) {
+    if (!isPlainObject(value)) {
       return invalid(ExpectedObject, 'expected object');
     }
 
@@ -162,6 +163,9 @@ function objectOptions({
   };
 }
 
+/**
+ * @hidden
+ */
 function joinIds(...ids: (string | undefined)[]): string {
   return ids.filter(Boolean).join('.');
 }

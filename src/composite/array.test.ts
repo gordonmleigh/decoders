@@ -1,17 +1,14 @@
 import 'jest';
-import { Decoder } from '../core/Decoder';
 import { assertCond } from '../internal/assertCond';
+import { mockDecoder } from '../internal/mockDecoder';
 import { array } from './array';
 
 describe('array', () => {
   it('decodes an array', () => {
-    const elem = jest.fn(((x) => ({
-      ok: true,
-      value: x,
-    })) as Decoder<unknown>);
+    const elem = mockDecoder();
 
     const decoder = array(elem);
-    const input = [{}, {}];
+    const input = [Symbol(), Symbol()];
 
     const result = decoder(input);
 

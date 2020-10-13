@@ -8,7 +8,7 @@ export const ExpectedSpecificValue = 'EXPECTED_SPECIFIC_VALUE';
 
 /**
  * Creates a predicate which allows only the given value(s).
- * 
+ *
  * @param options The values allowed.
  */
 export function is<T>(...options: T[]): Decoder<T> {
