@@ -76,13 +76,11 @@
 					<h2>Show me the code!</h2>
 				</a>
 				<p>The following code creates a validator for an object then prints the results of a validation.</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> myModel = model(
-  <span class="hljs-built_in">object</span>({
-    greeting: text,
-    name: text,
-    age: optional(integer),
-  }),
-);
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> myModel = <span class="hljs-built_in">object</span>({
+  greeting: text,
+  name: text,
+  age: optional(integer),
+});
 
 <span class="hljs-keyword">const</span> result = myModel(getValueFromSomewhere());
 
@@ -90,10 +88,7 @@
   <span class="hljs-built_in">console</span>.log(value);
 } <span class="hljs-keyword">else</span> {
   <span class="hljs-built_in">console</span>.error(result.error);
-}
-
-<span class="hljs-comment">// throws on validation error</span>
-<span class="hljs-keyword">const</span> value = myModel.assert(getAnotherValue());</code></pre>
+}</code></pre>
 				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
 					<h2>Documentation</h2>
 				</a>
