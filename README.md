@@ -11,13 +11,11 @@ Typescript lets you check your own code and nothing more. This library lets you 
 The following code creates a validator for an object then prints the results of a validation.
 
 ```typescript
-const myModel = model(
-  object({
-    greeting: text,
-    name: text,
-    age: optional(integer),
-  }),
-);
+const myModel = object({
+  greeting: text,
+  name: text,
+  age: optional(integer),
+});
 
 const result = myModel(getValueFromSomewhere());
 
@@ -26,9 +24,6 @@ if (result.ok) {
 } else {
   console.error(result.error);
 }
-
-// throws on validation error
-const value = myModel.assert(getAnotherValue());
 ```
 
 ## Documentation
