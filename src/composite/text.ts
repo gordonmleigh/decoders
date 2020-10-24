@@ -1,10 +1,10 @@
 import { trim } from '../converters/trim';
-import { chain } from './chain';
 import { Decoder } from '../core/Decoder';
+import { filterFalsey } from '../internal/filterFalsey';
 import { hasMaxLength } from '../predicates/hasMaxLength';
 import { hasMinLength } from '../predicates/hasMinLength';
 import { string } from '../primitives/string';
-import { filterFalsey } from '../internal/filterFalsey';
+import { chain } from './chain';
 
 /**
  * Options to pass to a [[TextDecoder]].
@@ -32,6 +32,11 @@ export interface TextDecoderOptions {
  * validation.
  */
 export interface TextDecoder extends Decoder<string> {
+  /**
+   * A decoder which can decode a `string`, also allowing an empty string.
+   */
+  optional: Decoder<string>;
+
   /**
    * Create a decoder with the specified options.
    *
@@ -62,9 +67,13 @@ export interface TextDecoder extends Decoder<string> {
  * ```
  */
 export const text: TextDecoder = Object.assign(textOptions(), {
+  optional: textOptions({ minLength: 0 }),
   options: textOptions,
 });
 
+/**
+ * @hidden
+ */
 function textOptions({
   maxLength,
   minLength = 1,
