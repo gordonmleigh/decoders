@@ -18,7 +18,7 @@ export const UnexpectedField = 'UNEXPECTED_FIELD';
 /**
  * Defines a map of decoders for each property of a given type.
  */
-export type PropDecoders<T> = { [K in keyof T]: Decoder<T[K]> };
+export type PropDecoders<T> = { [K in keyof T]-?: Decoder<T[K]> };
 
 /**
  * Specifies the action to take for an [[ObjectDecoder]] when a field is
