@@ -4,7 +4,7 @@ import { strToNum } from './strToNum';
 
 /**
  * Decoder which accepts a string and converts it to a number, or accepts a
- * numer directly.
+ * number directly.
  *
  * @example
  *

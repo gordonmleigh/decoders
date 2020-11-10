@@ -8,6 +8,7 @@ export * from './composite/maybe';
 export * from './composite/nullable';
 export * from './composite/object';
 export * from './composite/optional';
+export * from './composite/record';
 export * from './composite/text';
 export * from './converters/map';
 export * from './converters/normaliseNumber';

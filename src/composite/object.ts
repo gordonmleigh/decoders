@@ -2,6 +2,7 @@ import { Decoder } from '../core/Decoder';
 import { DecoderError } from '../core/DecoderError';
 import { error, invalid, ok, Result } from '../core/Result';
 import { isPlainObject } from '../internal/isPlainObject';
+import { joinIds } from '../internal/joinIds';
 
 /**
  * Error identifier returned by [[ObjectDecoder]] when the given value is not an
@@ -161,11 +162,4 @@ function objectOptions({
       return ok(outputValue as T);
     }
   };
-}
-
-/**
- * @hidden
- */
-function joinIds(...ids: (string | undefined)[]): string {
-  return ids.filter(Boolean).join('.');
 }
