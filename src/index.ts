@@ -4,6 +4,7 @@ export * from './composite/chain';
 export * from './composite/choose';
 export * from './composite/Compose';
 export * from './composite/integer';
+export * from './composite/jsonDate';
 export * from './composite/maybe';
 export * from './composite/nullable';
 export * from './composite/object';
