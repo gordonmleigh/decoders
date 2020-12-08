@@ -13,6 +13,12 @@ export function mockDecoder(
   }));
 }
 
+export function mockDecoderFn<V, T>(
+  fn: (value: V) => Result<T>,
+): jest.Mock<Result<T>, [V]> {
+  return jest.fn(fn);
+}
+
 export function mockFailDecoder(
   ...error: (DecoderError | number)[]
 ): jest.Mock<Result<unknown>, [unknown]> {
