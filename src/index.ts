@@ -19,6 +19,8 @@ export * from './core/assert';
 export * from './core/Decoder';
 export * from './core/DecoderError';
 export * from './core/DecodingAssertError';
+export * from './core/makeAssertDecoder';
+export * from './core/model';
 export * from './core/Result';
 export * from './core/typeGuard';
 export * from './predicates/enumValue';

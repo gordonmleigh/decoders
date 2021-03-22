@@ -1,29 +1,32 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond';
 import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder';
-import { assert } from './assert';
 import { DecodingAssertError } from './DecodingAssertError';
+import { makeAssertDecoder } from './makeAssertDecoder';
 
-describe('assert', () => {
-  it('calls the original decoder', () => {
+describe('makeAssertDecpder', () => {
+  it('creates an AssertDecoder that calls the original decoder', () => {
     const value = Symbol();
     const decoder = mockDecoder(value);
+    const asserter = makeAssertDecoder(decoder);
 
     const input = Symbol();
-    const result = assert(decoder, input);
+    const result = asserter(input);
 
     expect(result).toBe(value);
     expect(decoder).toHaveBeenCalledTimes(1);
     expect(decoder.mock.calls[0][0]).toBe(input);
   });
 
-  it('it throws DecodingAssertError on failure', () => {
+  it('creates an AssertDecoder which throws DecodingAssertError on failure', () => {
     const decoder = mockFailDecoder(1);
+    const asserter = makeAssertDecoder(decoder);
+
     const input = Symbol();
 
     let thrownError: unknown;
     try {
-      assert(decoder, input);
+      asserter(input);
     } catch (err) {
       thrownError = err;
     }
