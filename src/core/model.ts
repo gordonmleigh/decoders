@@ -38,7 +38,10 @@ export function model<Out>(decoder: Decoder<Out>): Model<Out> {
   return new DecoderModel(decoder);
 }
 
-class DecoderModel<T> implements Model<T> {
+/**
+ * Implements the [[Model]] interface for a given decoder.
+ */
+export class DecoderModel<T> implements Model<T> {
   constructor(public readonly validate: Decoder<T>) {}
 
   public readonly assert = makeAssertDecoder(this.validate);
