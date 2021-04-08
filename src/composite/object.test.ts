@@ -1,7 +1,8 @@
 import 'jest';
+import { UndefinedFields } from '../core/DecoderOptions';
 import { assertCond } from '../internal/assertCond';
 import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder';
-import { ExpectedObject, object, UnexpectedField } from './object';
+import { ExpectedObject, object } from './object';
 
 describe('object', () => {
   it('invokes each property decoder', () => {
@@ -166,9 +167,12 @@ describe('object', () => {
   it('sets missing properties to be explicitly undefined', () => {
     const prop1 = mockDecoder(undefined);
 
-    const decoder = object({
-      prop1,
-    });
+    const decoder = object(
+      {
+        prop1,
+      },
+      { undefinedFields: UndefinedFields.Explicit },
+    );
 
     const input = {};
     const result = decoder(input);
@@ -177,6 +181,87 @@ describe('object', () => {
     assertCond(result.ok);
     expect(Object.keys(result.value)).toEqual(['prop1']);
     expect(result.value.prop1).toBeUndefined();
+
+    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.mock.calls[0][0]).toBeUndefined();
+  });
+
+  it('removes missing properties if UndefinedFields is set to Strip in decoder call', () => {
+    const prop1 = mockDecoder(undefined);
+
+    const decoder = object({
+      prop1,
+    });
+
+    const input = {};
+    const result = decoder(input, { undefinedFields: UndefinedFields.Strip });
+
+    expect(result.ok).toBe(true);
+    assertCond(result.ok);
+    expect(Object.keys(result.value)).toEqual([]);
+
+    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.mock.calls[0][0]).toBeUndefined();
+  });
+
+  it('removes missing properties if UndefinedFields is set to Strip in decoder creation', () => {
+    const prop1 = mockDecoder(undefined);
+
+    const decoder = object(
+      {
+        prop1,
+      },
+      { undefinedFields: UndefinedFields.Strip },
+    );
+
+    const input = {};
+    const result = decoder(input);
+
+    expect(result.ok).toBe(true);
+    assertCond(result.ok);
+    expect(Object.keys(result.value)).toEqual([]);
+
+    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.mock.calls[0][0]).toBeUndefined();
+  });
+
+  it('chooses decoder call properties over decoder creation properties', () => {
+    const prop1 = mockDecoder(undefined);
+
+    const decoder = object(
+      {
+        prop1,
+      },
+      { undefinedFields: UndefinedFields.Explicit },
+    );
+
+    const input = {};
+    const result = decoder(input, { undefinedFields: UndefinedFields.Strip });
+
+    expect(result.ok).toBe(true);
+    assertCond(result.ok);
+    expect(Object.keys(result.value)).toEqual([]);
+
+    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.mock.calls[0][0]).toBeUndefined();
+  });
+
+  it('creates a new decoder with overridden options with withOptions()', () => {
+    const prop1 = mockDecoder(undefined);
+
+    const decoder = object(
+      {
+        prop1,
+      },
+      { undefinedFields: UndefinedFields.Explicit },
+    ).withOptions({ undefinedFields: UndefinedFields.Strip });
+
+    const input = {};
+    const result = decoder(input);
+
+    expect(result.ok).toBe(true);
+    assertCond(result.ok);
+    expect(Object.keys(result.value)).toEqual([]);
 
     expect(prop1).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBeUndefined();
@@ -217,55 +302,5 @@ describe('object', () => {
 
     expect(prop3).toHaveBeenCalledTimes(1);
     expect(prop3.mock.calls[0][0]).toBe(input.prop3);
-  });
-});
-
-describe('object.partial', () => {
-  it('passes through properties with no matching decoder', () => {
-    const value1 = Symbol();
-
-    const prop1 = mockDecoder(value1);
-
-    const decoder = object.partial({
-      prop1,
-    });
-
-    const input = {
-      prop1: Symbol(),
-      prop2: Symbol(),
-    };
-    const result = decoder(input);
-
-    expect(result.ok).toBe(true);
-    assertCond(result.ok);
-    expect(result.value).toEqual({
-      prop1: value1,
-      prop2: input.prop2,
-    });
-
-    expect(prop1).toHaveBeenCalledTimes(1);
-    expect(prop1.mock.calls[0][0]).toBe(input.prop1);
-  });
-});
-
-describe('object.strict', () => {
-  it('rejects properties with no matching decoder', () => {
-    const value1 = Symbol();
-
-    const prop1 = mockDecoder(value1);
-
-    const decoder = object.strict({
-      prop1,
-    });
-
-    const input = {
-      prop1: Symbol(),
-      prop2: Symbol(),
-    };
-    const result = decoder(input);
-
-    expect(result.ok).toBe(false);
-    assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(UnexpectedField);
   });
 });

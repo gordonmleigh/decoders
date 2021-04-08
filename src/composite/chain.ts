@@ -43,14 +43,14 @@ function chainAll(decoders: Decoder<unknown, any>[]): Decoder<unknown> {
   if (decoders.length === 1) {
     return decoders[0];
   }
-  return (value) => {
+  return (value, opts) => {
     let result: Result<unknown> = ok(value);
 
     for (const decoder of decoders) {
       if (!result.ok) {
         return result;
       }
-      result = decoder(result.value);
+      result = decoder(result.value, opts);
     }
 
     return result;

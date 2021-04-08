@@ -1,3 +1,4 @@
+import { DecoderOptions } from './DecoderOptions';
 import { Result } from './Result';
 
 /**
@@ -13,5 +14,5 @@ export interface Decoder<Out, In = unknown> {
    * @param value The input value
    * @returns [[OkResult]] on success or [[ErrorResult]] on failure.
    */
-  (value: In): Result<Out>;
+  (value: In, opts?: DecoderOptions): Result<Out>;
 }

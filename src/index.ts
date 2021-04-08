@@ -18,6 +18,7 @@ export * from './converters/trim';
 export * from './core/assert';
 export * from './core/Decoder';
 export * from './core/DecoderError';
+export * from './core/DecoderOptions';
 export * from './core/DecodingAssertError';
 export * from './core/makeAssertDecoder';
 export * from './core/model';

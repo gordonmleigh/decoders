@@ -19,7 +19,7 @@ export function record<K extends keyof any, V>(
   decodeKey: Decoder<K>,
   decodeValue?: Decoder<V>,
 ): Decoder<Record<K, V>> {
-  return (value): Result<Record<K, V>> => {
+  return (value, opts): Result<Record<K, V>> => {
     if (!isPlainObject(value)) {
       return invalid(ExpectedRecord, 'expected record');
     }
@@ -29,7 +29,7 @@ export function record<K extends keyof any, V>(
     const outputValue: Record<string, unknown> = {};
 
     for (const [k, v] of Object.entries(value)) {
-      const keyResult = decodeKey(k);
+      const keyResult = decodeKey(k, opts);
       if (!keyResult.ok) {
         anyErrors = true;
         errors.push(
@@ -43,7 +43,7 @@ export function record<K extends keyof any, V>(
       let decodedValue = v;
 
       if (decodeValue) {
-        const valueResult = decodeValue(v);
+        const valueResult = decodeValue(v, opts);
         if (!valueResult.ok) {
           anyErrors = true;
           errors.push(

@@ -1,6 +1,7 @@
 import { Decoder } from '../core/Decoder';
+import { DecoderError } from '../core/DecoderError';
+import { DecoderOptions } from '../core/DecoderOptions';
 import { error, Result } from '../core/Result';
-import { DecoderError } from "../core/DecoderError";
 
 /**
  * Get the composite type of an array of decoders.
@@ -43,11 +44,11 @@ export function choose<T extends Decoder<unknown>[]>(
   if (options.length === 0) {
     throw new Error(`choose must have at least one option`);
   }
-  const combined = (value: unknown): Result<unknown> => {
+  const combined = (value: unknown, opts?: DecoderOptions): Result<unknown> => {
     const errors: DecoderError[] = [];
 
     for (const decoder of options) {
-      const result = decoder(value);
+      const result = decoder(value, opts);
       if (result.ok) {
         return result;
       }
