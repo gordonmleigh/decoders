@@ -1,0 +1,353 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@fmtk/decoders</title>
+	<meta name="description" content="Documentation for @fmtk/decoders">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@fmtk/decoders</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>@fmtk/decoders</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#fmtkdecoders" id="fmtkdecoders" style="color: inherit; text-decoration: none;">
+					<h1>@fmtk/decoders</h1>
+				</a>
+				<p>Lightweight, composable validation and serialization library.</p>
+				<a href="#what39s-it-for" id="what39s-it-for" style="color: inherit; text-decoration: none;">
+					<h2>What&#39;s it for?</h2>
+				</a>
+				<p>Typescript lets you check your own code and nothing more. This library lets you check data flowing in and out of code that is under your control.</p>
+				<a href="#show-me-the-code" id="show-me-the-code" style="color: inherit; text-decoration: none;">
+					<h2>Show me the code!</h2>
+				</a>
+				<p>The following code creates a validator for an object then prints the results of a validation.</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> myModel = <span class="hljs-built_in">object</span>({
+  greeting: text,
+  name: text,
+  age: optional(integer),
+});
+
+<span class="hljs-keyword">const</span> result = myModel(getValueFromSomewhere());
+
+<span class="hljs-keyword">if</span> (result.ok) {
+  <span class="hljs-built_in">console</span>.log(value);
+} <span class="hljs-keyword">else</span> {
+  <span class="hljs-built_in">console</span>.error(result.error);
+}</code></pre>
+				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+					<h2>Documentation</h2>
+				</a>
+				<p>See <a href="https://futurematik.github.io/decoders/globals.html">documentation</a>.</p>
+				<a href="#influences" id="influences" style="color: inherit; text-decoration: none;">
+					<h2>Influences</h2>
+				</a>
+				<p>This project is the successor to the <a href="https://www.npmjs.com/package/@fmtk/validation">@fmtk/validation package</a> which has seen use in numerous Futurematik projects. I wanted to make an API that was a bit clearer in intent compared to the original validation package.</p>
+				<p>The design of this project has been influenced by the <a href="https://www.npmjs.com/package/decoders">decoders package</a> which I discovered early in the build. I considered abandoning this project in favour of the latter, but I decided I wanted to build a Typescript implementation.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-is-external">
+						<a href="enums/extrafields.html" class="tsd-kind-icon">Extra<wbr>Fields</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-is-external">
+						<a href="enums/undefinedfields.html" class="tsd-kind-icon">Undefined<wbr>Fields</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-external">
+						<a href="classes/decodermodel.html" class="tsd-kind-icon">Decoder<wbr>Model</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/decodingasserterror.html" class="tsd-kind-icon">Decoding<wbr>Assert<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/assertdecoder.html" class="tsd-kind-icon">Assert<wbr>Decoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/chain.html" class="tsd-kind-icon">Chain</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/compose.html" class="tsd-kind-icon">Compose</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/decoder.html" class="tsd-kind-icon">Decoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/decodererror.html" class="tsd-kind-icon">Decoder<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/decoderoptions.html" class="tsd-kind-icon">Decoder<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/errorresult.html" class="tsd-kind-icon">Error<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/model.html" class="tsd-kind-icon">Model</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/objectdecoder.html" class="tsd-kind-icon">Object<wbr>Decoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/okresult.html" class="tsd-kind-icon">Ok<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/textdecoder.html" class="tsd-kind-icon">Text<wbr>Decoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/textdecoderoptions.html" class="tsd-kind-icon">Text<wbr>Decoder<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/typeguard.html" class="tsd-kind-icon">Type<wbr>Guard</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/untypedcompose.html" class="tsd-kind-icon">Untyped<wbr>Compose</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#combinedtypeof" class="tsd-kind-icon">Combined<wbr>Type<wbr>Of</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#propdecoders" class="tsd-kind-icon">Prop<wbr>Decoders</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#result" class="tsd-kind-icon">Result</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#conditionfailure" class="tsd-kind-icon">Condition<wbr>Failure</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedarray" class="tsd-kind-icon">Expected<wbr>Array</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedboolean" class="tsd-kind-icon">Expected<wbr>Boolean</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expecteddate" class="tsd-kind-icon">Expected<wbr>Date</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedemail" class="tsd-kind-icon">Expected<wbr>Email</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedenumvalue" class="tsd-kind-icon">Expected<wbr>Enum<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedinteger" class="tsd-kind-icon">Expected<wbr>Integer</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectednumber" class="tsd-kind-icon">Expected<wbr>Number</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedobject" class="tsd-kind-icon">Expected<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedrecord" class="tsd-kind-icon">Expected<wbr>Record</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedspecificvalue" class="tsd-kind-icon">Expected<wbr>Specific<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedstring" class="tsd-kind-icon">Expected<wbr>String</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedstringmaxlength" class="tsd-kind-icon">Expected<wbr>String<wbr>Max<wbr>Length</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expectedstringminlength" class="tsd-kind-icon">Expected<wbr>String<wbr>Min<wbr>Length</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#unexpectedfield" class="tsd-kind-icon">Unexpected<wbr>Field</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#w3cemailvalidationregex" class="tsd-kind-icon">W3CEmail<wbr>Validation<wbr>Regex</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#chain" class="tsd-kind-icon">chain</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#integer" class="tsd-kind-icon">integer</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#isemail" class="tsd-kind-icon">is<wbr>Email</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#isint" class="tsd-kind-icon">is<wbr>Int</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#normalisenumber" class="tsd-kind-icon">normalise<wbr>Number</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#strtonum" class="tsd-kind-icon">str<wbr>ToNum</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#text" class="tsd-kind-icon">text</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#trim" class="tsd-kind-icon">trim</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#array" class="tsd-kind-icon">array</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#assert" class="tsd-kind-icon">assert</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#boolean" class="tsd-kind-icon">boolean</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#choose" class="tsd-kind-icon">choose</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#combinedecoderoptions" class="tsd-kind-icon">combine<wbr>Decoder<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#date" class="tsd-kind-icon">date</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#enumvalue" class="tsd-kind-icon">enum<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#error" class="tsd-kind-icon">error</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#hasmaxlength" class="tsd-kind-icon">has<wbr>Max<wbr>Length</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#hasminlength" class="tsd-kind-icon">has<wbr>Min<wbr>Length</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#invalid" class="tsd-kind-icon">invalid</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#is" class="tsd-kind-icon">is</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#jsondate" class="tsd-kind-icon">json<wbr>Date</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#makeassertdecoder" class="tsd-kind-icon">make<wbr>Assert<wbr>Decoder</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#map" class="tsd-kind-icon">map</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#maybe" class="tsd-kind-icon">maybe</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#model" class="tsd-kind-icon">model</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#nullable" class="tsd-kind-icon">nullable</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#number" class="tsd-kind-icon">number</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#object" class="tsd-kind-icon">object</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#ok" class="tsd-kind-icon">ok</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#optional" class="tsd-kind-icon">optional</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#predicate" class="tsd-kind-icon">predicate</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#record" class="tsd-kind-icon">record</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#regexp" class="tsd-kind-icon">regexp</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#string" class="tsd-kind-icon">string</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#typeguard" class="tsd-kind-icon">type<wbr>Guard</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#unknown" class="tsd-kind-icon">unknown</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#defaultdecoderoptions" class="tsd-kind-icon">Default<wbr>Decoder<wbr>Options</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
