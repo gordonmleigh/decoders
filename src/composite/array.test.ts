@@ -50,4 +50,25 @@ describe('array', () => {
     expect(elem.mock.calls[3][0]).toBe(input[3]);
     expect(elem.mock.calls[4][0]).toBe(input[4]);
   });
+
+  it('nests error fields properly', () => {
+    const elem = mockDecoderFn(
+      (value): Result<number> => invalid('FAIL', 'fail', 'field'),
+    );
+
+    const decoder = array(elem);
+    const input = [1];
+
+    const result = decoder(input);
+
+    expect(result.ok).toBe(false);
+
+    assertCond(!result.ok);
+    expect(result.error).toEqual([
+      { id: 'FAIL', text: 'fail', field: '0.field' },
+    ]);
+
+    expect(elem).toHaveBeenCalledTimes(1);
+    expect(elem.mock.calls[0][0]).toBe(input[0]);
+  });
 });

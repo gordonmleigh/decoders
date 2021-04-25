@@ -2,6 +2,7 @@ import { Decoder } from '../core/Decoder';
 import { DecoderError } from '../core/DecoderError';
 import { DecoderOptions } from '../core/DecoderOptions';
 import { invalid, ok, Result } from '../core/Result';
+import { joinIds } from '../internal/joinIds';
 
 /**
  * Error identifier returned when [[array]] fails.
@@ -30,7 +31,10 @@ export function array<T>(elem: Decoder<T>): Decoder<T[]> {
         decoded[i] = elemResult.value;
       } else {
         errors.push(
-          ...elemResult.error.map((x) => ({ ...x, field: i.toString() })),
+          ...elemResult.error.map((x) => ({
+            ...x,
+            field: joinIds(i.toString(), x.field),
+          })),
         );
         anyErrors = true;
       }
