@@ -15,5 +15,6 @@ export function hasMinLength(min: number): Decoder<string, string> {
     (value) => value.length >= min,
     `must be at least ${min} characters`,
     ExpectedStringMinLength,
+    { minLength: min },
   );
 }

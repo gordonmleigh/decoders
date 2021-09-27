@@ -15,5 +15,7 @@ export function is<T>(...options: T[]): Decoder<T> {
   return (value) =>
     options.includes(value as T)
       ? ok(value as T)
-      : invalid(ExpectedSpecificValue, 'expected specific value');
+      : invalid(ExpectedSpecificValue, 'expected specific value', undefined, {
+          options,
+        });
 }

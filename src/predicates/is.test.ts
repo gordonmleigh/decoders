@@ -33,5 +33,6 @@ describe('is', () => {
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toEqual(ExpectedSpecificValue);
+    expect(result.error[0].details?.options).toEqual([1, 2, 3]);
   });
 });

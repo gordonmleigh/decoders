@@ -35,10 +35,13 @@ describe('predicate', () => {
     expect(mapper.mock.calls[0][0]).toBe(input);
   });
 
-  it('uses custom text and id if supplied', () => {
+  it('uses custom text, id and details if supplied', () => {
     const mapper = jest.fn((x: unknown) => false);
 
-    const decoder = predicate(mapper, 'text', 'FAIL');
+    const decoder = predicate(mapper, 'text', 'FAIL', {
+      foo: 'bar',
+      baz: 'boom',
+    });
     const input = Symbol();
 
     const result = decoder(input);
@@ -47,6 +50,7 @@ describe('predicate', () => {
     assertCond(!result.ok);
     expect(result.error[0].id).toBe('FAIL');
     expect(result.error[0].text).toBe('text');
+    expect(result.error[0].details).toEqual({ foo: 'bar', baz: 'boom' });
 
     expect(mapper).toHaveBeenCalledTimes(1);
     expect(mapper.mock.calls[0][0]).toBe(input);

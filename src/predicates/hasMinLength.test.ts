@@ -28,5 +28,6 @@ describe('hasMinLength', () => {
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toBe(ExpectedStringMinLength);
+    expect(result.error[0].details).toEqual({ minLength: 10 });
   });
 });

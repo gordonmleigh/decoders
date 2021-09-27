@@ -17,5 +17,6 @@ export function hasMaxLength(max: number): Decoder<string, string> {
     (value) => value.length <= max,
     `must be ${max} characters or less`,
     ExpectedStringMaxLength,
+    { maxLength: max },
   );
 }

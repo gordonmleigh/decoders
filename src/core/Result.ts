@@ -42,7 +42,8 @@ export function error(error: DecoderError[]): ErrorResult {
  * @param id A unique ID for the error, for programmatic use.
  * @param text A simple textual description of the error.
  * @param field The field causing the error. Possibly dot-separated path.
+ * @param details Extra details, intended to be used in error formatting.
  */
-export function invalid(id: string, text: string, field?: string): ErrorResult {
-  return { ok: false, error: [{ id, text, field }] };
+export function invalid(id: string, text: string, field?: string, details?: Record<string, any>): ErrorResult {
+  return { ok: false, error: [{ id, text, field, details }] };
 }

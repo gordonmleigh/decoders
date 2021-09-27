@@ -28,5 +28,6 @@ describe('hasMaxLength', () => {
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toBe(ExpectedStringMaxLength);
+    expect(result.error[0].details).toEqual({ maxLength: 2 });
   });
 });

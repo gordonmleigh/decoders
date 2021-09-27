@@ -16,4 +16,9 @@ export interface DecoderError {
    * The field causing the error. Possibly dot-separated path.
    */
   field?: string;
+
+  /**
+   * Extra details, intended to be used in error formatting.
+   */
+  details?: Record<string, any>;
 }
