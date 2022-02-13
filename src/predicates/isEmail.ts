@@ -1,4 +1,4 @@
-import { regexp } from './regexp';
+import { regexp } from './regexp.js';
 
 export const ExpectedEmail = 'EXPECTED_EMAIL';
 

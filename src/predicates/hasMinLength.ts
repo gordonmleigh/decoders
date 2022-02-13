@@ -1,5 +1,5 @@
-import { Decoder } from '../core/Decoder';
-import { predicate } from './predicate';
+import { Decoder } from '../core/Decoder.js';
+import { predicate } from './predicate.js';
 
 /**
  * Error identifier returned when [[hasMinLength]] fails.

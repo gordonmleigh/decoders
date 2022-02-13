@@ -1,5 +1,5 @@
-import { Decoder } from '../core/Decoder';
-import { ok } from '../core/Result';
+import { Decoder } from '../core/Decoder.js';
+import { ok } from '../core/Result.js';
 
 /**
  * Create a decoder which maps its input to another value.

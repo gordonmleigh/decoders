@@ -1,5 +1,5 @@
-import { Decoder } from '../core/Decoder';
-import { invalid, ok } from '../core/Result';
+import { Decoder } from '../core/Decoder.js';
+import { invalid, ok } from '../core/Result.js';
 
 /**
  * The error identifier returned by [[is]] on failure.

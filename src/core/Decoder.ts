@@ -1,5 +1,5 @@
-import { DecoderOptions } from './DecoderOptions';
-import { Result } from './Result';
+import { DecoderOptions } from './DecoderOptions.js';
+import { Result } from './Result.js';
 
 /**
  * Represents a function which can decode a value.

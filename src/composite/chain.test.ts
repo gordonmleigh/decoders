@@ -1,7 +1,7 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder';
-import { chain } from './chain';
+import { assertCond } from '../internal/assertCond.js';
+import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder.js';
+import { chain } from './chain.js';
 
 describe('chain', () => {
   it('composes multiple decoders', () => {

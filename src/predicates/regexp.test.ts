@@ -1,7 +1,7 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ConditionFailure } from './predicate';
-import { regexp } from './regexp';
+import { assertCond } from '../internal/assertCond.js';
+import { ConditionFailure } from './predicate.js';
+import { regexp } from './regexp.js';
 
 describe('predicate', () => {
   it('accepts values if the regexp matches', () => {

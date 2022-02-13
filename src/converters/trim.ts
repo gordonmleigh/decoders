@@ -1,4 +1,4 @@
-import { map } from './map';
+import { map } from './map.js';
 
 /**
  * A decoder which trims the whitespace from start and end of its input.

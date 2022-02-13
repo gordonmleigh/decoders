@@ -1,5 +1,5 @@
-import { Decoder } from '../core/Decoder';
-import { predicate } from './predicate';
+import { Decoder } from '../core/Decoder.js';
+import { predicate } from './predicate.js';
 
 /**
  * Create a predicate which fails if the input does not match the given regular

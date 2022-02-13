@@ -1,7 +1,7 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ExpectedNumber } from '../primitives/number';
-import { normaliseNumber } from './normaliseNumber';
+import { assertCond } from '../internal/assertCond.js';
+import { ExpectedNumber } from '../primitives/number.js';
+import { normaliseNumber } from './normaliseNumber.js';
 
 describe('normaliseNumber', () => {
   it('it convers a string to a number', () => {

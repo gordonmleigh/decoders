@@ -1,4 +1,4 @@
-import { predicate } from './predicate';
+import { predicate } from './predicate.js';
 
 /**
  * Error identifier returned by [[isInt]] on failure.

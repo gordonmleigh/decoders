@@ -1,11 +1,11 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
+import { assertCond } from '../internal/assertCond.js';
 import {
   mockDecoder,
   mockError,
   mockFailDecoder,
 } from '../internal/mockDecoder';
-import { choose } from './choose';
+import { choose } from './choose.js';
 
 describe('choose', () => {
   it('chooses from multiple decoders', () => {

@@ -1,8 +1,8 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder';
-import { assert } from './assert';
-import { DecodingAssertError } from './DecodingAssertError';
+import { assertCond } from '../internal/assertCond.js';
+import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder.js';
+import { assert } from './assert.js';
+import { DecodingAssertError } from './DecodingAssertError.js';
 
 describe('assert', () => {
   it('calls the original decoder', () => {

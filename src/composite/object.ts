@@ -1,15 +1,15 @@
-import { Decoder } from '../core/Decoder';
-import { DecoderError } from '../core/DecoderError';
+import { Decoder } from '../core/Decoder.js';
+import { DecoderError } from '../core/DecoderError.js';
 import {
   combineDecoderOptions,
   DecoderOptions,
   DefaultDecoderOptions,
   ExtraFields,
   UndefinedFields,
-} from '../core/DecoderOptions';
-import { error, invalid, ok, Result } from '../core/Result';
-import { isPlainObject } from '../internal/isPlainObject';
-import { joinIds } from '../internal/joinIds';
+} from '../core/DecoderOptions.js';
+import { error, invalid, ok, Result } from '../core/Result.js';
+import { isPlainObject } from '../internal/isPlainObject.js';
+import { joinIds } from '../internal/joinIds.js';
 
 /**
  * Error identifier returned by [[ObjectDecoder]] when the given value is not an

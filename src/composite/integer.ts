@@ -1,6 +1,6 @@
-import { chain } from './chain';
-import { isInt } from '../predicates/isInt';
-import { number } from '../primitives/number';
+import { isInt } from '../predicates/isInt.js';
+import { number } from '../primitives/number.js';
+import { chain } from './chain.js';
 
 /**
  * Decoder which can decode a number and assert that it is an integer.

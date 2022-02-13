@@ -1,8 +1,8 @@
-import { Decoder } from '../core/Decoder';
-import { DecoderError } from '../core/DecoderError';
-import { DecoderOptions } from '../core/DecoderOptions';
-import { invalid, ok, Result } from '../core/Result';
-import { joinIds } from '../internal/joinIds';
+import { Decoder } from '../core/Decoder.js';
+import { DecoderError } from '../core/DecoderError.js';
+import { DecoderOptions } from '../core/DecoderOptions.js';
+import { invalid, ok, Result } from '../core/Result.js';
+import { joinIds } from '../internal/joinIds.js';
 
 /**
  * Error identifier returned when [[array]] fails.

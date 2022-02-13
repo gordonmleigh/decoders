@@ -1,5 +1,5 @@
-import { Decoder } from '../core/Decoder';
-import { invalid, ok, Result } from '../core/Result';
+import { Decoder } from '../core/Decoder.js';
+import { invalid, ok, Result } from '../core/Result.js';
 
 /**
  * Error identifer returned when [[boolean]] fails.

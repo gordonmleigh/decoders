@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { date, ExpectedDate } from './date';
+import { assertCond } from '../internal/assertCond.js';
+import { date, ExpectedDate } from './date.js';
 
 describe('date', () => {
   it('decodes a date', () => {

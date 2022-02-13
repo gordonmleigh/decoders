@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ExpectedStringMaxLength, hasMaxLength } from './hasMaxLength';
+import { assertCond } from '../internal/assertCond.js';
+import { ExpectedStringMaxLength, hasMaxLength } from './hasMaxLength.js';
 
 describe('hasMaxLength', () => {
   it('decodes a string shorter than max length', () => {

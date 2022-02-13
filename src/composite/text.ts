@@ -1,10 +1,10 @@
-import { trim } from '../converters/trim';
-import { Decoder } from '../core/Decoder';
-import { filterFalsey } from '../internal/filterFalsey';
-import { hasMaxLength } from '../predicates/hasMaxLength';
-import { hasMinLength } from '../predicates/hasMinLength';
-import { string } from '../primitives/string';
-import { chain } from './chain';
+import { trim } from '../converters/trim.js';
+import { Decoder } from '../core/Decoder.js';
+import { filterFalsey } from '../internal/filterFalsey.js';
+import { hasMaxLength } from '../predicates/hasMaxLength.js';
+import { hasMinLength } from '../predicates/hasMinLength.js';
+import { string } from '../primitives/string.js';
+import { chain } from './chain.js';
 
 /**
  * Options to pass to a [[TextDecoder]].
