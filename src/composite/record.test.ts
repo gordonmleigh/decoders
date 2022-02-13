@@ -1,8 +1,8 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { number } from '../primitives/number';
-import { record } from './record';
-import { text } from './text';
+import { assertCond } from '../internal/assertCond.js';
+import { number } from '../primitives/number.js';
+import { record } from './record.js';
+import { text } from './text.js';
 
 describe('record', () => {
   it('can decode a record', () => {

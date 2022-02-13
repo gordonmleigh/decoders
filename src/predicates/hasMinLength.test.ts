@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ExpectedStringMinLength, hasMinLength } from './hasMinLength';
+import { assertCond } from '../internal/assertCond.js';
+import { ExpectedStringMinLength, hasMinLength } from './hasMinLength.js';
 
 describe('hasMinLength', () => {
   it('decodes a string greater than min length', () => {

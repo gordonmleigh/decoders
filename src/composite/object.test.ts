@@ -1,8 +1,8 @@
 import 'jest';
-import { UndefinedFields } from '../core/DecoderOptions';
-import { assertCond } from '../internal/assertCond';
-import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder';
-import { ExpectedObject, object } from './object';
+import { UndefinedFields } from '../core/DecoderOptions.js';
+import { assertCond } from '../internal/assertCond.js';
+import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder.js';
+import { ExpectedObject, object } from './object.js';
 
 describe('object', () => {
   it('invokes each property decoder', () => {

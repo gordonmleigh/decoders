@@ -1,6 +1,6 @@
-import { Decoder } from '../core/Decoder';
-import { invalid, ok, Result } from '../core/Result';
-import { isDate } from '../internal/isDate';
+import { Decoder } from '../core/Decoder.js';
+import { invalid, ok, Result } from '../core/Result.js';
+import { isDate } from '../internal/isDate.js';
 
 /**
  * The error identifier returned when [[date]] fails.

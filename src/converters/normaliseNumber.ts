@@ -1,6 +1,6 @@
-import { choose } from '../composite/choose';
-import { number } from '../primitives/number';
-import { strToNum } from './strToNum';
+import { choose } from '../composite/choose.js';
+import { number } from '../primitives/number.js';
+import { strToNum } from './strToNum.js';
 
 /**
  * Decoder which accepts a string and converts it to a number, or accepts a

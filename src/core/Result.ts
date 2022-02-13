@@ -1,4 +1,4 @@
-import { DecoderError } from './DecoderError';
+import { DecoderError } from './DecoderError.js';
 
 /**
  * Returned by a [[Decoder]] on success.
@@ -44,6 +44,11 @@ export function error(error: DecoderError[]): ErrorResult {
  * @param field The field causing the error. Possibly dot-separated path.
  * @param details Extra details, intended to be used in error formatting.
  */
-export function invalid(id: string, text: string, field?: string, details?: Record<string, any>): ErrorResult {
+export function invalid(
+  id: string,
+  text: string,
+  field?: string,
+  details?: Record<string, any>,
+): ErrorResult {
   return { ok: false, error: [{ id, text, field, details }] };
 }

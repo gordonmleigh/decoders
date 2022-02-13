@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { enumValue } from './enumValue';
+import { assertCond } from '../internal/assertCond.js';
+import { enumValue } from './enumValue.js';
 
 enum TestStringEnum {
   One = 'one',

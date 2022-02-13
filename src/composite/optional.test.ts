@@ -1,7 +1,7 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { mockDecoder } from '../internal/mockDecoder';
-import { optional } from './optional';
+import { assertCond } from '../internal/assertCond.js';
+import { mockDecoder } from '../internal/mockDecoder.js';
+import { optional } from './optional.js';
 
 describe('optional', () => {
   it('passes through non-undefined values to the inner decoder', () => {

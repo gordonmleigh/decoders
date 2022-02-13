@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { map } from './map';
+import { assertCond } from '../internal/assertCond.js';
+import { map } from './map.js';
 
 describe('map', () => {
   it('calls the map function with the input', () => {

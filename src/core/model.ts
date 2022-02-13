@@ -1,6 +1,6 @@
-import { Decoder } from './Decoder';
-import { makeAssertDecoder } from './makeAssertDecoder';
-import { Result } from './Result';
+import { Decoder } from './Decoder.js';
+import { makeAssertDecoder } from './makeAssertDecoder.js';
+import { Result } from './Result.js';
 
 /**
  * Represents a decoder that returns the value itself on success and throws

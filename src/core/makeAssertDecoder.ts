@@ -1,5 +1,5 @@
-import { assert } from './assert';
-import { Decoder } from './Decoder';
+import { assert } from './assert.js';
+import { Decoder } from './Decoder.js';
 
 /**
  * Represents a decoder that returns the value itself on success and throws

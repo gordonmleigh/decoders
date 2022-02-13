@@ -1,7 +1,7 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { mockDecoder } from '../internal/mockDecoder';
-import { maybe } from './maybe';
+import { assertCond } from '../internal/assertCond.js';
+import { mockDecoder } from '../internal/mockDecoder.js';
+import { maybe } from './maybe.js';
 
 describe('maybe', () => {
   it('accepts an empty string and converts to undefined', () => {

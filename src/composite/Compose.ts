@@ -1,4 +1,4 @@
-import { Decoder } from '../core/Decoder';
+import { Decoder } from '../core/Decoder.js';
 
 /**
  * Represents a function which can compose multiple decoders together to create

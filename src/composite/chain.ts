@@ -1,6 +1,6 @@
-import { Decoder } from '../core/Decoder';
-import { ok, Result } from '../core/Result';
-import { Compose } from './Compose';
+import { Decoder } from '../core/Decoder.js';
+import { ok, Result } from '../core/Result.js';
+import { Compose } from './Compose.js';
 
 /**
  * Represents a function which can compose multiple decoders together to create

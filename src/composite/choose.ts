@@ -1,7 +1,7 @@
-import { Decoder } from '../core/Decoder';
-import { DecoderError } from '../core/DecoderError';
-import { DecoderOptions } from '../core/DecoderOptions';
-import { error, Result } from '../core/Result';
+import { Decoder } from '../core/Decoder.js';
+import { DecoderError } from '../core/DecoderError.js';
+import { DecoderOptions } from '../core/DecoderOptions.js';
+import { error, Result } from '../core/Result.js';
 
 /**
  * Get the composite type of an array of decoders.

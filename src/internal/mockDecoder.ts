@@ -1,6 +1,6 @@
 import 'jest';
-import { DecoderError } from '../core/DecoderError';
-import { Result } from '../core/Result';
+import { DecoderError } from '../core/DecoderError.js';
+import { Result } from '../core/Result.js';
 
 export function mockDecoder(): jest.Mock<Result<unknown>, [unknown]>;
 export function mockDecoder<T>(value: T): jest.Mock<Result<T>, [unknown]>;

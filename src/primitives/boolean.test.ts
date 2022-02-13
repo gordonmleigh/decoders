@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { boolean, ExpectedBoolean } from './boolean';
+import { assertCond } from '../internal/assertCond.js';
+import { boolean, ExpectedBoolean } from './boolean.js';
 
 describe('boolean', () => {
   it('decodes true', () => {

@@ -1,8 +1,8 @@
-import { Decoder } from '../core/Decoder';
-import { DecoderError } from '../core/DecoderError';
-import { error, invalid, ok, Result } from '../core/Result';
-import { isPlainObject } from '../internal/isPlainObject';
-import { joinIds } from '../internal/joinIds';
+import { Decoder } from '../core/Decoder.js';
+import { DecoderError } from '../core/DecoderError.js';
+import { error, invalid, ok, Result } from '../core/Result.js';
+import { isPlainObject } from '../internal/isPlainObject.js';
+import { joinIds } from '../internal/joinIds.js';
 
 /**
  * Error identifier returned when the given value is not a record.

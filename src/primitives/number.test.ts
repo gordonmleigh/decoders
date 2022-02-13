@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ExpectedNumber, number } from './number';
+import { assertCond } from '../internal/assertCond.js';
+import { ExpectedNumber, number } from './number.js';
 
 describe('date', () => {
   it('decodes an integer', () => {

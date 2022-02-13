@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ConditionFailure, predicate } from './predicate';
+import { assertCond } from '../internal/assertCond.js';
+import { ConditionFailure, predicate } from './predicate.js';
 
 describe('predicate', () => {
   it('accepts values if the predicate function returns true', () => {

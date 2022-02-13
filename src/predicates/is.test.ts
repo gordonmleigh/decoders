@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ExpectedSpecificValue, is } from './is';
+import { assertCond } from '../internal/assertCond.js';
+import { ExpectedSpecificValue, is } from './is.js';
 
 describe('is', () => {
   it('decodes a specific value', () => {

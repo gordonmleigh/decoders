@@ -1,5 +1,5 @@
-import { Decoder } from './Decoder';
-import { DecodingAssertError } from './DecodingAssertError';
+import { Decoder } from './Decoder.js';
+import { DecodingAssertError } from './DecodingAssertError.js';
 
 /**
  * Successfully decode the value or throw a [[DecoderError]].

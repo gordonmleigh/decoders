@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ExpectedEmail, isEmail } from './isEmail';
+import { assertCond } from '../internal/assertCond.js';
+import { ExpectedEmail, isEmail } from './isEmail.js';
 
 describe('emisEmailail', () => {
   it('accepts a common email format', () => {

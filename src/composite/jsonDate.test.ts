@@ -1,7 +1,7 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ExpectedDate } from '../primitives/date';
-import { jsonDate } from './jsonDate';
+import { assertCond } from '../internal/assertCond.js';
+import { ExpectedDate } from '../primitives/date.js';
+import { jsonDate } from './jsonDate.js';
 
 describe('jsonDate', () => {
   it('decodes a date', () => {

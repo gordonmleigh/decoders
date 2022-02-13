@@ -1,8 +1,8 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { ExpectedInteger } from '../predicates/isInt';
-import { ExpectedNumber } from '../primitives/number';
-import { integer } from './integer';
+import { assertCond } from '../internal/assertCond.js';
+import { ExpectedInteger } from '../predicates/isInt.js';
+import { ExpectedNumber } from '../primitives/number.js';
+import { integer } from './integer.js';
 
 describe('integer', () => {
   it('decodes an integer', () => {

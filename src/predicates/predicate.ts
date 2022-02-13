@@ -1,5 +1,5 @@
-import { Decoder } from '../core/Decoder';
-import { invalid, ok } from '../core/Result';
+import { Decoder } from '../core/Decoder.js';
+import { invalid, ok } from '../core/Result.js';
 
 /**
  * The default error identifier returned by [[predicate]].
@@ -17,7 +17,8 @@ export function predicate<T>(
   test: (value: T) => boolean,
   message = 'condition failure',
   id = ConditionFailure,
-  details?: Record<string, any>
+  details?: Record<string, any>,
 ): Decoder<T, T> {
-  return (value) => (test(value) ? ok(value) : invalid(id, message, undefined, details));
+  return (value) =>
+    test(value) ? ok(value) : invalid(id, message, undefined, details);
 }

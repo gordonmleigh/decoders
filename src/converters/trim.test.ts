@@ -1,6 +1,6 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond';
-import { trim } from './trim';
+import { assertCond } from '../internal/assertCond.js';
+import { trim } from './trim.js';
 
 describe('trim', () => {
   it('strips whitespace from start and end of string input', () => {

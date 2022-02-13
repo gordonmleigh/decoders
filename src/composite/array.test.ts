@@ -1,8 +1,8 @@
 import 'jest';
-import { invalid, ok, Result } from '../core/Result';
-import { assertCond } from '../internal/assertCond';
-import { mockDecoder, mockDecoderFn } from '../internal/mockDecoder';
-import { array } from './array';
+import { invalid, ok, Result } from '../core/Result.js';
+import { assertCond } from '../internal/assertCond.js';
+import { mockDecoder, mockDecoderFn } from '../internal/mockDecoder.js';
+import { array } from './array.js';
 
 describe('array', () => {
   it('decodes an array', () => {

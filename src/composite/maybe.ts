@@ -1,5 +1,5 @@
-import { Decoder } from '../core/Decoder';
-import { ok, Result } from '../core/Result';
+import { Decoder } from '../core/Decoder.js';
+import { ok, Result } from '../core/Result.js';
 
 /**
  * Wraps another decoder to permit an empty string, `null`, or `undefined` in

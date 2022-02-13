@@ -1,8 +1,8 @@
-import { chain } from '../composite/chain';
-import { regexp } from '../predicates/regexp';
-import { ExpectedNumber } from '../primitives/number';
-import { string } from '../primitives/string';
-import { map } from './map';
+import { chain } from '../composite/chain.js';
+import { regexp } from '../predicates/regexp.js';
+import { ExpectedNumber } from '../primitives/number.js';
+import { string } from '../primitives/string.js';
+import { map } from './map.js';
 
 /**
  * Decoder which converts a string to a number.

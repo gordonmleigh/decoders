@@ -1,6 +1,6 @@
 import 'jest';
-import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder';
-import { typeGuard } from './typeGuard';
+import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder.js';
+import { typeGuard } from './typeGuard.js';
 
 describe('typeGuard', () => {
   it('creates an TypeGuard that returns true on success', () => {

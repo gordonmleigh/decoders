@@ -1,7 +1,7 @@
 import 'jest';
-import { Decoder } from '../core/Decoder';
-import { assertCond } from '../internal/assertCond';
-import { nullable } from './nullable';
+import { Decoder } from '../core/Decoder.js';
+import { assertCond } from '../internal/assertCond.js';
+import { nullable } from './nullable.js';
 
 describe('nullable', () => {
   it('passes through non-nulls to the inner decoder', () => {

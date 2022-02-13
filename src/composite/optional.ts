@@ -1,5 +1,5 @@
-import { Decoder } from '../core/Decoder';
-import { ok } from '../core/Result';
+import { Decoder } from '../core/Decoder.js';
+import { ok } from '../core/Result.js';
 
 /**
  * Creates a decoder which can decode `undefined` or pass through to the given
