@@ -1,8 +1,7 @@
 {
   "name": "@fmtk/decoders",
   "version": "0.4.3",
-  "main": "lib/bundle.js",
-  "module": "lib/index.js",
+  "type": "module",
   "types": "lib/index.d.ts",
   "repository": "https://github.com/futurematik/decoders",
   "author": "Gordon Leigh <gordon.leigh@futurematik.co.uk>",
@@ -19,19 +18,22 @@
     "src/**/*.ts",
     "!src/**/*.test.ts"
   ],
+  "exports": {
+    ".": "./lib/index.ts"
+  },
   "scripts": {
-    "build": "yarn clean && yarn compile && yarn test && yarn bundle && yarn docs",
-    "bundle": "rollup -c",
+    "build": "npm run clean && npm run compile && npm run test && npm run docs",
     "clean": "rm -rf docs/ lib/ *.tsbuildinfo",
-    "compile": "yarn index && tsc",
+    "compile": "npm run index && tsc",
     "dev:docs": "concurrently --kill-others npm:watch:docs npm:serve:docs",
     "docs": "typedoc",
     "index": "node makeIndex.js",
     "serve:docs": "http-server docs/ -o",
     "test": "jest",
-    "watch:docs": "onchange src/**/*.ts -i -d 1000 -- yarn docs"
+    "watch:docs": "onchange src/**/*.ts -i -d 1000 -- npm run docs"
   },
   "devDependencies": {
+    "@sucrase/jest-plugin": "^2.2.0",
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
@@ -43,11 +45,7 @@
     "jest": "^26.5.0",
     "onchange": "^7.0.2",
     "prettier": "^2.1.2",
-    "rollup": "^2.29.0",
-    "rollup-plugin-sourcemaps": "^0.6.3",
-    "rollup-plugin-terser": "^7.0.2",
-    "ts-jest": "^26.4.1",
-    "typedoc": "^0.19.2",
-    "typescript": "^4.0.3"
+    "typedoc": "^0.22.11",
+    "typescript": "^4.5.5"
   }
 }
