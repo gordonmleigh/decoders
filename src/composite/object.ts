@@ -6,7 +6,7 @@ import {
   DefaultDecoderOptions,
   ExtraFields,
   UndefinedFields,
-} from '../core/DecoderOptions';
+} from '../core/DecoderOptions.js';
 import { error, invalid, ok, Result } from '../core/Result.js';
 import { isPlainObject } from '../internal/isPlainObject.js';
 import { joinIds } from '../internal/joinIds.js';

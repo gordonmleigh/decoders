@@ -9,10 +9,10 @@ const files = collectFiles(srcDir)
   .map((x) => relative(srcDir, x))
   .filter((x) => x !== 'index');
 
-const index = ['// AUTO-GENERATED '].concat(
-  files.map((x) => `export * from './${x}';`),
+const index = ['// AUTO-GENERATED'].concat(
+  files.map((x) => `export * from './${x}.js';`),
 );
-writeFileSync(join(srcDir, 'index.ts'), index.join('\n'));
+writeFileSync(join(srcDir, 'index.ts'), index.join('\n') + '\n');
 
 function collectFiles(dir) {
   const files = readdirSync(dir, { withFileTypes: true });

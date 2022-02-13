@@ -1,4 +1,4 @@
-import { DecoderError } from "./DecoderError";
+import { DecoderError } from './DecoderError.js';
 
 /**
  * Thrown when a [[AssertDecoder]] fails to decode a value.
@@ -8,7 +8,7 @@ export class DecodingAssertError extends Error {
 
   /**
    * Create a new instance with the specified errors.
-   * 
+   *
    * @param errors The errors encountered during decoding.
    */
   constructor(public readonly errors: DecoderError[]) {

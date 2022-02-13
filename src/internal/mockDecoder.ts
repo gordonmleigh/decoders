@@ -22,6 +22,7 @@ export function mockDecoderFn<V, T>(
 export function mockFailDecoder(
   ...error: (DecoderError | number)[]
 ): jest.Mock<Result<unknown>, [unknown]> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return jest.fn((v) => ({
     ok: false,
     error: error.map((x) => (typeof x === 'number' ? mockError(x) : x)),

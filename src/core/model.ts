@@ -3,6 +3,20 @@ import { makeAssertDecoder } from './makeAssertDecoder.js';
 import { Result } from './Result.js';
 
 /**
+ * Implements the [[Model]] interface for a given decoder.
+ */
+export class DecoderModel<T> implements Model<T> {
+  constructor(public readonly validate: Decoder<T>) {}
+
+  public readonly assert = makeAssertDecoder(this.validate);
+
+  public readonly test = (value: unknown): value is T => {
+    const result = this.validate(value);
+    return result.ok;
+  };
+}
+
+/**
  * Represents a decoder that returns the value itself on success and throws
  * [[DecodingAssertError]] on error.
  */
@@ -36,18 +50,4 @@ export interface Model<Out> {
  */
 export function model<Out>(decoder: Decoder<Out>): Model<Out> {
   return new DecoderModel(decoder);
-}
-
-/**
- * Implements the [[Model]] interface for a given decoder.
- */
-export class DecoderModel<T> implements Model<T> {
-  constructor(public readonly validate: Decoder<T>) {}
-
-  public readonly assert = makeAssertDecoder(this.validate);
-
-  public readonly test = (value: unknown): value is T => {
-    const result = this.validate(value);
-    return result.ok;
-  };
 }
