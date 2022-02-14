@@ -1,6 +1,6 @@
 {
   "name": "@fmtk/decoders",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "type": "module",
   "repository": "https://github.com/futurematik/decoders",
   "author": "Gordon Leigh <gordon.leigh@futurematik.co.uk>",
