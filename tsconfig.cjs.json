@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false,
+    "module": "CommonJS",
+    "outDir": "lib/cjs"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "lib"]
+}

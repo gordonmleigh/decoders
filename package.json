@@ -2,13 +2,18 @@
   "name": "@fmtk/decoders",
   "version": "0.5.1",
   "type": "module",
-  "types": "lib/index.d.ts",
   "repository": "https://github.com/futurematik/decoders",
   "author": "Gordon Leigh <gordon.leigh@futurematik.co.uk>",
   "license": "MIT",
   "private": false,
   "publishConfig": {
     "access": "public"
+  },
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": "./lib/index.js"
   },
   "files": [
     "lib/**/*.js",
@@ -18,13 +23,11 @@
     "src/**/*.ts",
     "!src/**/*.test.ts"
   ],
-  "exports": {
-    ".": "./lib/index.js"
-  },
   "scripts": {
-    "build": "npm run clean && npm run compile && npm run lint && npm run test && npm run docs",
+    "build": "npm run clean && npm run compile && npm run compile:cjs && npm run lint && npm run test && npm run docs",
     "clean": "rm -rf docs/ lib/ *.tsbuildinfo",
     "compile": "npm run index && tsc",
+    "compile:cjs": "tsc -p tsconfig.cjs.json",
     "dev:docs": "concurrently --kill-others npm:watch:docs npm:serve:docs",
     "docs": "typedoc",
     "index": "node makeIndex.js",
