@@ -28,7 +28,7 @@ if (result.ok) {
 
 ## Documentation
 
-See [documentation](https://futurematik.github.io/decoders/globals.html).
+See [documentation](https://futurematik.github.io/decoders/index.html).
 
 ## Influences
 
