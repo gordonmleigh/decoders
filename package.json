@@ -13,7 +13,10 @@
   "module": "./lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
-    ".": "./lib/index.js"
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/cjs/index.js"
+    }
   },
   "files": [
     "lib/**/*.js",
@@ -27,7 +30,7 @@
     "build": "npm run clean && npm run compile && npm run compile:cjs && npm run lint && npm run test && npm run docs",
     "clean": "rm -rf docs/ lib/ *.tsbuildinfo",
     "compile": "npm run index && tsc",
-    "compile:cjs": "tsc -p tsconfig.cjs.json",
+    "compile:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > lib/cjs/package.json",
     "dev:docs": "concurrently --kill-others npm:watch:docs npm:serve:docs",
     "docs": "typedoc",
     "index": "node makeIndex.js",
