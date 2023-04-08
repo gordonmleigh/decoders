@@ -55,7 +55,7 @@ export function object<T>(
     );
   }
 
-  const decoder = decode as ObjectDecoder<T>;
+  const decoder = { decode } as ObjectDecoder<T>;
 
   decoder.withOptions = (newOpts: DecoderOptions): ObjectDecoder<T> => {
     return object(props, combineDecoderOptions(baseOptions, newOpts));
@@ -85,7 +85,10 @@ function doObjectDecode<T>(
     if (key in props) {
       // property is in validator definition
       const decoder = props[key as keyof T];
-      const propResult = decoder((value as Record<string, unknown>)[key], opts);
+      const propResult = decoder.decode(
+        (value as Record<string, unknown>)[key],
+        opts,
+      );
 
       if (!propResult.ok) {
         anyErrors = true;

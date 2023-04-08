@@ -10,7 +10,7 @@ export interface AssertDecoder<Out, In = unknown> {
    * Decode a value and return the decoded value, or throw
    * [[DecodingAssertError]] if decoding fails.
    */
-  (value: In): Out;
+  decode(value: In): Out;
 }
 
 /**
@@ -23,7 +23,9 @@ export interface AssertDecoder<Out, In = unknown> {
 export function makeAssertDecoder<Out, In>(
   decoder: Decoder<Out, In>,
 ): AssertDecoder<Out, In> {
-  return (value: In): Out => {
-    return assert(decoder, value);
+  return {
+    decode: (value: In): Out => {
+      return assert(decoder, value);
+    },
   };
 }

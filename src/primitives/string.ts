@@ -9,7 +9,9 @@ export const ExpectedString = 'EXPECTED_STRING';
 /**
  * A [[Decoder]] which can decode a string value.
  */
-export const string: Decoder<string> = (value) =>
-  typeof value === 'string'
-    ? ok(value)
-    : invalid(ExpectedString, 'expected text');
+export const string: Decoder<string> = {
+  decode: (value) =>
+    typeof value === 'string'
+      ? ok(value)
+      : invalid(ExpectedString, 'expected text'),
+};

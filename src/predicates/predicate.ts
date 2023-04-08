@@ -19,6 +19,8 @@ export function predicate<T>(
   id = ConditionFailure,
   details?: Record<string, any>,
 ): Decoder<T, T> {
-  return (value) =>
-    test(value) ? ok(value) : invalid(id, message, undefined, details);
+  return {
+    decode: (value) =>
+      test(value) ? ok(value) : invalid(id, message, undefined, details),
+  };
 }

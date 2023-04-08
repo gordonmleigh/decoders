@@ -1,17 +1,31 @@
 import { Decoder } from './Decoder.js';
-import { makeAssertDecoder } from './makeAssertDecoder.js';
+import { DecoderOptions } from './DecoderOptions.js';
+import { DecodingAssertError } from './DecodingAssertError.js';
 import { Result } from './Result.js';
 
 /**
  * Implements the [[Model]] interface for a given decoder.
  */
 export class DecoderModel<T> implements Model<T> {
-  constructor(public readonly validate: Decoder<T>) {}
+  constructor(private readonly decoder: Decoder<T>) {}
 
-  public readonly assert = makeAssertDecoder(this.validate);
+  public readonly assert = (value: unknown, opts?: DecoderOptions): T => {
+    const result = this.decode(value, opts);
+    if (!result.ok) {
+      throw new DecodingAssertError(result.error);
+    }
+    return result.value;
+  };
+
+  public readonly decode = (
+    value: unknown,
+    opts?: DecoderOptions,
+  ): Result<T> => {
+    return this.decoder.decode(value, opts);
+  };
 
   public readonly test = (value: unknown): value is T => {
-    const result = this.validate(value);
+    const result = this.decoder.decode(value);
     return result.ok;
   };
 }
@@ -28,17 +42,17 @@ export interface Model<Out> {
   assert(value: unknown): Out;
 
   /**
-   * Returns true if the value can be decoded.
-   */
-  test(value: unknown): value is Out;
-
-  /**
    * Decode a value, possibly validating or transforming it.
    *
    * @param value The input value
    * @returns [[OkResult]] on success or [[ErrorResult]] on failure.
    */
-  validate(value: unknown): Result<Out>;
+  decode(value: unknown): Result<Out>;
+
+  /**
+   * Returns true if the value can be decoded.
+   */
+  test(value: unknown): value is Out;
 }
 
 /**

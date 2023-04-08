@@ -10,5 +10,7 @@ export const ExpectedDate = 'EXPECTED_DATE';
 /**
  * A [[Decoder]] which can decode a Date value.
  */
-export const date: Decoder<Date> = (value: unknown): Result<Date> =>
-  isDate(value) ? ok(value) : invalid(ExpectedDate, 'expected date');
+export const date: Decoder<Date> = {
+  decode: (value: unknown): Result<Date> =>
+    isDate(value) ? ok(value) : invalid(ExpectedDate, 'expected date'),
+};

@@ -13,5 +13,5 @@ export interface TypeGuard<T> {
  * @param decoder The decoder to use to perform the type check.
  */
 export function typeGuard<Out>(decoder: Decoder<Out, unknown>): TypeGuard<Out> {
-  return (value: unknown): value is Out => decoder(value).ok;
+  return (value: unknown): value is Out => decoder.decode(value).ok;
 }

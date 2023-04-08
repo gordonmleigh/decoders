@@ -9,7 +9,7 @@ describe('predicate', () => {
     const decoder = predicate(mapper);
     const input = Symbol();
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -25,7 +25,7 @@ describe('predicate', () => {
     const decoder = predicate(mapper);
     const input = Symbol();
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -44,7 +44,7 @@ describe('predicate', () => {
     });
     const input = Symbol();
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);

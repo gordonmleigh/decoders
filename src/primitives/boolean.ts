@@ -9,7 +9,9 @@ export const ExpectedBoolean = 'EXPECTED_BOOLEAN';
 /**
  * A [[Decoder]] which can decode a boolean value.
  */
-export const boolean: Decoder<boolean> = (value: unknown): Result<boolean> =>
-  typeof value === 'boolean'
-    ? ok(value)
-    : invalid(ExpectedBoolean, 'expected boolean');
+export const boolean: Decoder<boolean> = {
+  decode: (value: unknown): Result<boolean> =>
+    typeof value === 'boolean'
+      ? ok(value)
+      : invalid(ExpectedBoolean, 'expected boolean'),
+};

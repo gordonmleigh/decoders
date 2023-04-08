@@ -5,7 +5,7 @@ import { isInt } from './isInt.js';
 
 describe('integer', () => {
   it('decodes an integer', () => {
-    const result = isInt(3);
+    const result = isInt.decode(3);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -13,7 +13,7 @@ describe('integer', () => {
   });
 
   it('decodes the biggest possible integer', () => {
-    const result = isInt(Number.MAX_SAFE_INTEGER);
+    const result = isInt.decode(Number.MAX_SAFE_INTEGER);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -21,7 +21,7 @@ describe('integer', () => {
   });
 
   it('decodes the smallest possible integer', () => {
-    const result = isInt(Number.MIN_SAFE_INTEGER);
+    const result = isInt.decode(Number.MIN_SAFE_INTEGER);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -29,7 +29,7 @@ describe('integer', () => {
   });
 
   it('rejects a float', () => {
-    const result = isInt(3.14);
+    const result = isInt.decode(3.14);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -37,7 +37,7 @@ describe('integer', () => {
   });
 
   it('rejects an unsafe integer', () => {
-    const result = isInt(Number.MAX_SAFE_INTEGER + 1);
+    const result = isInt.decode(Number.MAX_SAFE_INTEGER + 1);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -45,7 +45,7 @@ describe('integer', () => {
   });
 
   it('rejects an unsafe negative integer', () => {
-    const result = isInt(Number.MIN_SAFE_INTEGER - 1);
+    const result = isInt.decode(Number.MIN_SAFE_INTEGER - 1);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);

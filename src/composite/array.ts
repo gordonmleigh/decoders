@@ -16,33 +16,35 @@ export const ExpectedArray = 'EXPECTED_ARRAY';
  * @param elem The [[Decoder]] to use to decode the elements.
  */
 export function array<T>(elem: Decoder<T>): Decoder<T[]> {
-  return (value: unknown, opts?: DecoderOptions): Result<T[]> => {
-    if (!Array.isArray(value)) {
-      return invalid(ExpectedArray, 'expected array');
-    }
-
-    const decoded: T[] = [];
-    const errors: DecoderError[] = [];
-    let anyErrors = false;
-
-    for (let i = 0; i < value.length; ++i) {
-      const elemResult = elem(value[i], opts);
-      if (elemResult.ok) {
-        decoded[i] = elemResult.value;
-      } else {
-        errors.push(
-          ...elemResult.error.map((x) => ({
-            ...x,
-            field: joinIds(i.toString(), x.field),
-          })),
-        );
-        anyErrors = true;
+  return {
+    decode: (value: unknown, opts?: DecoderOptions): Result<T[]> => {
+      if (!Array.isArray(value)) {
+        return invalid(ExpectedArray, 'expected array');
       }
-    }
 
-    if (anyErrors) {
-      return { ok: false, error: errors };
-    }
-    return ok(decoded);
+      const decoded: T[] = [];
+      const errors: DecoderError[] = [];
+      let anyErrors = false;
+
+      for (let i = 0; i < value.length; ++i) {
+        const elemResult = elem.decode(value[i], opts);
+        if (elemResult.ok) {
+          decoded[i] = elemResult.value;
+        } else {
+          errors.push(
+            ...elemResult.error.map((x) => ({
+              ...x,
+              field: joinIds(i.toString(), x.field),
+            })),
+          );
+          anyErrors = true;
+        }
+      }
+
+      if (anyErrors) {
+        return { ok: false, error: errors };
+      }
+      return ok(decoded);
+    },
   };
 }

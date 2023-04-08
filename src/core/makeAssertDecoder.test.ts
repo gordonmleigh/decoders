@@ -11,10 +11,10 @@ describe('makeAssertDecpder', () => {
     const asserter = makeAssertDecoder(decoder);
 
     const input = Symbol();
-    const result = asserter(input);
+    const result = asserter.decode(input);
 
     expect(result).toBe(value);
-    expect(decoder).toHaveBeenCalledTimes(1);
+    expect(decoder.decode).toHaveBeenCalledTimes(1);
     expect(decoder.mock.calls[0][0]).toBe(input);
   });
 
@@ -26,7 +26,7 @@ describe('makeAssertDecpder', () => {
 
     let thrownError: unknown;
     try {
-      asserter(input);
+      asserter.decode(input);
     } catch (err) {
       thrownError = err;
     }

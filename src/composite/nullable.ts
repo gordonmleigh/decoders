@@ -20,6 +20,10 @@ import { ok } from '../core/Result.js';
 export function nullable<Out, In>(
   decoder: Decoder<Out, In>,
 ): Decoder<Out | null, In> {
-  return (value, opts) =>
-    value === null ? ok((value as unknown) as null) : decoder(value, opts);
+  return {
+    decode: (value, opts) =>
+      value === null
+        ? ok(value as unknown as null)
+        : decoder.decode(value, opts),
+  };
 }

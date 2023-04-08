@@ -25,7 +25,7 @@ describe('object', () => {
       prop2: Symbol(),
       prop3: Symbol(),
     };
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -35,13 +35,13 @@ describe('object', () => {
       prop3: value3,
     });
 
-    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBe(input.prop1);
 
-    expect(prop2).toHaveBeenCalledTimes(1);
+    expect(prop2.decode).toHaveBeenCalledTimes(1);
     expect(prop2.mock.calls[0][0]).toBe(input.prop2);
 
-    expect(prop3).toHaveBeenCalledTimes(1);
+    expect(prop3.decode).toHaveBeenCalledTimes(1);
     expect(prop3.mock.calls[0][0]).toBe(input.prop3);
   });
 
@@ -55,7 +55,7 @@ describe('object', () => {
     });
 
     const input = {};
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -63,7 +63,7 @@ describe('object', () => {
       prop1: value1,
     });
 
-    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBeUndefined();
   });
 
@@ -76,13 +76,13 @@ describe('object', () => {
       prop1,
     });
 
-    const result = decoder(1);
+    const result = decoder.decode(1);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toBe(ExpectedObject);
 
-    expect(prop1).toHaveBeenCalledTimes(0);
+    expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
 
   it('rejects dates', () => {
@@ -94,13 +94,13 @@ describe('object', () => {
       prop1,
     });
 
-    const result = decoder(new Date());
+    const result = decoder.decode(new Date());
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toBe(ExpectedObject);
 
-    expect(prop1).toHaveBeenCalledTimes(0);
+    expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
 
   it('rejects functions', () => {
@@ -112,13 +112,13 @@ describe('object', () => {
       prop1,
     });
 
-    const result = decoder(() => {});
+    const result = decoder.decode(() => {});
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toBe(ExpectedObject);
 
-    expect(prop1).toHaveBeenCalledTimes(0);
+    expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
 
   it('rejects class instances', () => {
@@ -130,13 +130,13 @@ describe('object', () => {
       prop1,
     });
 
-    const result = decoder(new (class {})());
+    const result = decoder.decode(new (class {})());
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toBe(ExpectedObject);
 
-    expect(prop1).toHaveBeenCalledTimes(0);
+    expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
 
   it('ignores properties with no matching decoder', () => {
@@ -152,7 +152,7 @@ describe('object', () => {
       prop1: Symbol(),
       prop2: Symbol(),
     };
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -160,7 +160,7 @@ describe('object', () => {
       prop1: value1,
     });
 
-    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBe(input.prop1);
   });
 
@@ -175,14 +175,14 @@ describe('object', () => {
     );
 
     const input = {};
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(Object.keys(result.value)).toEqual(['prop1']);
     expect(result.value.prop1).toBeUndefined();
 
-    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBeUndefined();
   });
 
@@ -194,13 +194,15 @@ describe('object', () => {
     });
 
     const input = {};
-    const result = decoder(input, { undefinedFields: UndefinedFields.Strip });
+    const result = decoder.decode(input, {
+      undefinedFields: UndefinedFields.Strip,
+    });
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(Object.keys(result.value)).toEqual([]);
 
-    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBeUndefined();
   });
 
@@ -215,13 +217,13 @@ describe('object', () => {
     );
 
     const input = {};
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(Object.keys(result.value)).toEqual([]);
 
-    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBeUndefined();
   });
 
@@ -236,13 +238,15 @@ describe('object', () => {
     );
 
     const input = {};
-    const result = decoder(input, { undefinedFields: UndefinedFields.Strip });
+    const result = decoder.decode(input, {
+      undefinedFields: UndefinedFields.Strip,
+    });
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(Object.keys(result.value)).toEqual([]);
 
-    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBeUndefined();
   });
 
@@ -257,13 +261,13 @@ describe('object', () => {
     ).withOptions({ undefinedFields: UndefinedFields.Strip });
 
     const input = {};
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(Object.keys(result.value)).toEqual([]);
 
-    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBeUndefined();
   });
 
@@ -285,7 +289,7 @@ describe('object', () => {
       prop2: Symbol(),
       prop3: Symbol(),
     };
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -294,13 +298,13 @@ describe('object', () => {
       { id: 'FAIL3', text: 'text3', field: 'prop3.field3' },
     ]);
 
-    expect(prop1).toHaveBeenCalledTimes(1);
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBe(input.prop1);
 
-    expect(prop2).toHaveBeenCalledTimes(1);
+    expect(prop2.decode).toHaveBeenCalledTimes(1);
     expect(prop2.mock.calls[0][0]).toBe(input.prop2);
 
-    expect(prop3).toHaveBeenCalledTimes(1);
+    expect(prop3.decode).toHaveBeenCalledTimes(1);
     expect(prop3.mock.calls[0][0]).toBe(input.prop3);
   });
 });

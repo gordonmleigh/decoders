@@ -11,13 +11,13 @@ describe('array', () => {
     const decoder = array(elem);
     const input = [Symbol(), Symbol()];
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toEqual(input);
 
-    expect(elem).toHaveBeenCalledTimes(2);
+    expect(elem.decode).toHaveBeenCalledTimes(2);
     expect(elem.mock.calls[0][0]).toBe(input[0]);
     expect(elem.mock.calls[1][0]).toBe(input[1]);
   });
@@ -33,7 +33,7 @@ describe('array', () => {
     const decoder = array(elem);
     const input = [1, 2, 3, 4, 5];
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(false);
 
@@ -43,7 +43,7 @@ describe('array', () => {
       { id: 'FAIL', text: 'fail', field: '4' },
     ]);
 
-    expect(elem).toHaveBeenCalledTimes(5);
+    expect(elem.decode).toHaveBeenCalledTimes(5);
     expect(elem.mock.calls[0][0]).toBe(input[0]);
     expect(elem.mock.calls[1][0]).toBe(input[1]);
     expect(elem.mock.calls[2][0]).toBe(input[2]);
@@ -59,7 +59,7 @@ describe('array', () => {
     const decoder = array(elem);
     const input = [1];
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(false);
 
@@ -68,7 +68,7 @@ describe('array', () => {
       { id: 'FAIL', text: 'fail', field: '0.field' },
     ]);
 
-    expect(elem).toHaveBeenCalledTimes(1);
+    expect(elem.decode).toHaveBeenCalledTimes(1);
     expect(elem.mock.calls[0][0]).toBe(input[0]);
   });
 });

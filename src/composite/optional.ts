@@ -20,6 +20,8 @@ import { ok } from '../core/Result.js';
 export function optional<Out, In>(
   decoder: Decoder<Out, In>,
 ): Decoder<Out | undefined, In> {
-  return (value, opts) =>
-    typeof value === 'undefined' ? ok(value) : decoder(value, opts);
+  return {
+    decode: (value, opts) =>
+      typeof value === 'undefined' ? ok(value) : decoder.decode(value, opts),
+  };
 }

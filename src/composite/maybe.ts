@@ -30,8 +30,10 @@ import { ok, Result } from '../core/Result.js';
 export function maybe<Out, In>(
   decoder: Decoder<Out, In>,
 ): Decoder<Out | undefined, In> {
-  return (value, opts) =>
-    isEmpty(value) ? ok(undefined) : normalise(decoder(value, opts));
+  return {
+    decode: (value, opts) =>
+      isEmpty(value) ? ok(undefined) : normalise(decoder.decode(value, opts)),
+  };
 }
 
 /**

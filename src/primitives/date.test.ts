@@ -4,14 +4,14 @@ import { date, ExpectedDate } from './date.js';
 
 describe('date', () => {
   it('decodes a date', () => {
-    const result = date(new Date(1602598990374));
+    const result = date.decode(new Date(1602598990374));
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toEqual(new Date(1602598990374));
   });
 
   it('rejects numbers', () => {
-    const result = date(0);
+    const result = date.decode(0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toBe(ExpectedDate);

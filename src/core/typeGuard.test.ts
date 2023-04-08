@@ -11,7 +11,7 @@ describe('typeGuard', () => {
     const result = guard(input);
 
     expect(result).toBe(true);
-    expect(decoder).toHaveBeenCalledTimes(1);
+    expect(decoder.decode).toHaveBeenCalledTimes(1);
     expect(decoder.mock.calls[0][0]).toBe(input);
   });
 
@@ -23,7 +23,7 @@ describe('typeGuard', () => {
     const result = guard(input);
 
     expect(result).toBe(false);
-    expect(decoder).toHaveBeenCalledTimes(1);
+    expect(decoder.decode).toHaveBeenCalledTimes(1);
     expect(decoder.mock.calls[0][0]).toBe(input);
   });
 });

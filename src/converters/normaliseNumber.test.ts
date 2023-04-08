@@ -5,7 +5,7 @@ import { normaliseNumber } from './normaliseNumber.js';
 
 describe('normaliseNumber', () => {
   it('it convers a string to a number', () => {
-    const result = normaliseNumber('42');
+    const result = normaliseNumber.decode('42');
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -13,7 +13,7 @@ describe('normaliseNumber', () => {
   });
 
   it('it convers a string with decimal places to a number', () => {
-    const result = normaliseNumber('42.23');
+    const result = normaliseNumber.decode('42.23');
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -21,7 +21,7 @@ describe('normaliseNumber', () => {
   });
 
   it('it rejects a non-numeric string', () => {
-    const result = normaliseNumber('42 grams');
+    const result = normaliseNumber.decode('42 grams');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -29,7 +29,7 @@ describe('normaliseNumber', () => {
   });
 
   it('it accepts a number', () => {
-    const result = normaliseNumber(5);
+    const result = normaliseNumber.decode(5);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);

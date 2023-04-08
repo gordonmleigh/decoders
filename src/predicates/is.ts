@@ -12,10 +12,12 @@ export const ExpectedSpecificValue = 'EXPECTED_SPECIFIC_VALUE';
  * @param options The values allowed.
  */
 export function is<T>(...options: T[]): Decoder<T> {
-  return (value) =>
-    options.includes(value as T)
-      ? ok(value as T)
-      : invalid(ExpectedSpecificValue, 'expected specific value', undefined, {
-          options,
-        });
+  return {
+    decode: (value) =>
+      options.includes(value as T)
+        ? ok(value as T)
+        : invalid(ExpectedSpecificValue, 'expected specific value', undefined, {
+            options,
+          }),
+  };
 }

@@ -9,7 +9,7 @@ describe('record', () => {
     // integration test
     const decoder = record(text, number);
 
-    const result = decoder({
+    const result = decoder.decode({
       one: 1,
       two: 2,
     });

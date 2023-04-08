@@ -8,7 +8,7 @@ import { DecodingAssertError } from './DecodingAssertError.js';
  * @param value The value to decode.
  */
 export function assert<Out, In>(decoder: Decoder<Out, In>, value: In): Out {
-  const result = decoder(value);
+  const result = decoder.decode(value);
   if (!result.ok) {
     throw new DecodingAssertError(result.error);
   }

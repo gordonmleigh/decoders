@@ -44,18 +44,20 @@ export function choose<T extends Decoder<unknown>[]>(
   if (options.length === 0) {
     throw new Error(`choose must have at least one option`);
   }
-  const combined = (value: unknown, opts?: DecoderOptions): Result<unknown> => {
-    const errors: DecoderError[] = [];
+  const combined = {
+    decode: (value: unknown, opts?: DecoderOptions): Result<unknown> => {
+      const errors: DecoderError[] = [];
 
-    for (const decoder of options) {
-      const result = decoder(value, opts);
-      if (result.ok) {
-        return result;
+      for (const decoder of options) {
+        const result = decoder.decode(value, opts);
+        if (result.ok) {
+          return result;
+        }
+        errors.push(...result.error);
       }
-      errors.push(...result.error);
-    }
 
-    return error(errors);
+      return error(errors);
+    },
   };
   return combined as CombinedTypeOf<T>;
 }

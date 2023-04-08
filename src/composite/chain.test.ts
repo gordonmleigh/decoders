@@ -16,20 +16,20 @@ describe('chain', () => {
 
     const decoder = chain(decoder1, decoder2, decoder3);
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
 
     expect(result.value).toBe(value3);
 
-    expect(decoder1).toHaveBeenCalledTimes(1);
+    expect(decoder1.decode).toHaveBeenCalledTimes(1);
     expect(decoder1.mock.calls[0][0]).toBe(input);
 
-    expect(decoder2).toHaveBeenCalledTimes(1);
+    expect(decoder2.decode).toHaveBeenCalledTimes(1);
     expect(decoder2.mock.calls[0][0]).toBe(value1);
 
-    expect(decoder3).toHaveBeenCalledTimes(1);
+    expect(decoder3.decode).toHaveBeenCalledTimes(1);
     expect(decoder3.mock.calls[0][0]).toBe(value2);
   });
 
@@ -48,7 +48,7 @@ describe('chain', () => {
 
     const decoder = chain(decoder1, decoder2, decoder3);
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -57,12 +57,12 @@ describe('chain', () => {
       { id: 'FAIL', text: 'failed', field: 'somefield' },
     ]);
 
-    expect(decoder1).toHaveBeenCalledTimes(1);
+    expect(decoder1.decode).toHaveBeenCalledTimes(1);
     expect(decoder1.mock.calls[0][0]).toBe(input);
 
-    expect(decoder2).toHaveBeenCalledTimes(1);
+    expect(decoder2.decode).toHaveBeenCalledTimes(1);
     expect(decoder2.mock.calls[0][0]).toBe(value1);
 
-    expect(decoder3).toHaveBeenCalledTimes(0);
+    expect(decoder3.decode).toHaveBeenCalledTimes(0);
   });
 });

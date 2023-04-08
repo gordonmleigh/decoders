@@ -13,7 +13,7 @@ describe('assert', () => {
     const result = assert(decoder, input);
 
     expect(result).toBe(value);
-    expect(decoder).toHaveBeenCalledTimes(1);
+    expect(decoder.decode).toHaveBeenCalledTimes(1);
     expect(decoder.mock.calls[0][0]).toBe(input);
   });
 

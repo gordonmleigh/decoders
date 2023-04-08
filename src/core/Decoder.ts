@@ -14,5 +14,5 @@ export interface Decoder<Out, In = unknown> {
    * @param value The input value
    * @returns [[OkResult]] on success or [[ErrorResult]] on failure.
    */
-  (value: In, opts?: DecoderOptions): Result<Out>;
+  decode(value: In, opts?: DecoderOptions): Result<Out>;
 }

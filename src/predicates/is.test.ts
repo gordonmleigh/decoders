@@ -5,7 +5,7 @@ import { ExpectedSpecificValue, is } from './is.js';
 describe('is', () => {
   it('decodes a specific value', () => {
     const decoder = is('hello world');
-    const result = decoder('hello world');
+    const result = decoder.decode('hello world');
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toEqual('hello world');
@@ -13,7 +13,7 @@ describe('is', () => {
 
   it('matches values using strict comparison', () => {
     const decoder = is(null);
-    const result = decoder(undefined);
+    const result = decoder.decode(undefined);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toEqual(ExpectedSpecificValue);
@@ -21,7 +21,7 @@ describe('is', () => {
 
   it('matches NaN', () => {
     const decoder = is(0 / 0);
-    const result = decoder(0 / 0);
+    const result = decoder.decode(0 / 0);
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toBeNaN();
@@ -29,7 +29,7 @@ describe('is', () => {
 
   it('rejects a non-matching value', () => {
     const decoder = is(1, 2, 3);
-    const result = decoder(0);
+    const result = decoder.decode(0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error[0].id).toEqual(ExpectedSpecificValue);

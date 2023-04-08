@@ -6,7 +6,7 @@ import { strToNum } from './strToNum.js';
 
 describe('strToNum', () => {
   it('it convers a string to a number', () => {
-    const result = strToNum('42');
+    const result = strToNum.decode('42');
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -14,7 +14,7 @@ describe('strToNum', () => {
   });
 
   it('it convers a string with decimal places to a number', () => {
-    const result = strToNum('42.23');
+    const result = strToNum.decode('42.23');
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -22,7 +22,7 @@ describe('strToNum', () => {
   });
 
   it('it rejects a non-numeric string', () => {
-    const result = strToNum('42 grams');
+    const result = strToNum.decode('42 grams');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -30,7 +30,7 @@ describe('strToNum', () => {
   });
 
   it('it rejects a number', () => {
-    const result = strToNum(5);
+    const result = strToNum.decode(5);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);

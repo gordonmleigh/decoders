@@ -10,13 +10,13 @@ describe('optional', () => {
     const decoder = optional(inner);
 
     const input = Symbol();
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toBe(value);
 
-    expect(inner).toHaveBeenCalledTimes(1);
+    expect(inner.decode).toHaveBeenCalledTimes(1);
     expect(inner.mock.calls[0][0]).toBe(input);
   });
 
@@ -25,13 +25,13 @@ describe('optional', () => {
     const inner = mockDecoder(value);
     const decoder = optional(inner);
 
-    const result = decoder(null);
+    const result = decoder.decode(null);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toBe(value);
 
-    expect(inner).toHaveBeenCalledTimes(1);
+    expect(inner.decode).toHaveBeenCalledTimes(1);
     expect(inner.mock.calls[0][0]).toBe(null);
   });
 
@@ -39,12 +39,12 @@ describe('optional', () => {
     const inner = mockDecoder();
     const decoder = optional(inner);
 
-    const result = decoder(undefined);
+    const result = decoder.decode(undefined);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toBeUndefined();
 
-    expect(inner).toHaveBeenCalledTimes(0);
+    expect(inner.decode).toHaveBeenCalledTimes(0);
   });
 });

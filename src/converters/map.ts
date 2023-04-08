@@ -13,5 +13,5 @@ import { ok } from '../core/Result.js';
  * ```
  */
 export function map<T, V>(map: (value: T) => V): Decoder<V, T> {
-  return (value) => ok(map(value));
+  return { decode: (value) => ok(map(value)) };
 }
