@@ -40,7 +40,7 @@ describe('chain', () => {
 
     const decoder1 = mockDecoder(value1);
     const decoder2 = mockFailDecoder({
-      id: 'FAIL',
+      type: 'FAIL',
       text: 'failed',
       field: 'somefield',
     });
@@ -54,7 +54,7 @@ describe('chain', () => {
     assertCond(!result.ok);
 
     expect(result.error).toEqual([
-      { id: 'FAIL', text: 'failed', field: 'somefield' },
+      { type: 'FAIL', text: 'failed', field: 'somefield' },
     ]);
 
     expect(decoder1.decode).toHaveBeenCalledTimes(1);

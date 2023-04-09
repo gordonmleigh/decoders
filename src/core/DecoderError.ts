@@ -1,11 +1,11 @@
 /**
  * Represents an error which occurs during a decoding operation.
  */
-export interface DecoderError {
+export interface DecoderError<Key extends string = string> {
   /**
    * A unique ID for the error, for programmatic use.
    */
-  id: string;
+  type: Key;
 
   /**
    * A simple textual description of the error.

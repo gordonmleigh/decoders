@@ -25,7 +25,7 @@ describe('normaliseNumber', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedNumber);
+    expect(result.error[0].type).toEqual(ExpectedNumber);
   });
 
   it('it accepts a number', () => {

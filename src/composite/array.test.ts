@@ -39,8 +39,8 @@ describe('array', () => {
 
     assertCond(!result.ok);
     expect(result.error).toEqual([
-      { id: 'FAIL', text: 'fail', field: '3' },
-      { id: 'FAIL', text: 'fail', field: '4' },
+      { type: 'FAIL', text: 'fail', field: '3' },
+      { type: 'FAIL', text: 'fail', field: '4' },
     ]);
 
     expect(elem.decode).toHaveBeenCalledTimes(5);
@@ -65,7 +65,7 @@ describe('array', () => {
 
     assertCond(!result.ok);
     expect(result.error).toEqual([
-      { id: 'FAIL', text: 'fail', field: '0.field' },
+      { type: 'FAIL', text: 'fail', field: '0.field' },
     ]);
 
     expect(elem.decode).toHaveBeenCalledTimes(1);

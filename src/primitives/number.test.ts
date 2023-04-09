@@ -21,27 +21,27 @@ describe('date', () => {
     const result = number.decode('42');
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedNumber);
+    expect(result.error[0].type).toBe(ExpectedNumber);
   });
 
   it('rejects NaN', () => {
     const result = number.decode(0 / 0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedNumber);
+    expect(result.error[0].type).toBe(ExpectedNumber);
   });
 
   it('rejects +Infinity', () => {
     const result = number.decode(Number.POSITIVE_INFINITY);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedNumber);
+    expect(result.error[0].type).toBe(ExpectedNumber);
   });
 
   it('rejects -Infinity', () => {
     const result = number.decode(Number.NEGATIVE_INFINITY);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedNumber);
+    expect(result.error[0].type).toBe(ExpectedNumber);
   });
 });

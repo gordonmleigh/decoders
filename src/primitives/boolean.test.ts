@@ -21,6 +21,6 @@ describe('boolean', () => {
     const result = boolean.decode(0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedBoolean);
+    expect(result.error[0].type).toBe(ExpectedBoolean);
   });
 });

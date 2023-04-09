@@ -22,6 +22,6 @@ export function expectInvalid(
   assertCond(!result.ok);
 
   if (error !== undefined) {
-    expect(result.error[0].id).toEqual(error);
+    expect(result.error[0].type).toEqual(error);
   }
 }

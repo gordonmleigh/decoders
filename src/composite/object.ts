@@ -108,7 +108,7 @@ class ObjectDecoder<Out> implements Decoder<Out> {
           case ExtraFields.Reject:
             anyErrors = true;
             errors.push({
-              id: UnexpectedField,
+              type: UnexpectedField,
               text: 'unexpected value',
               field: key,
             });

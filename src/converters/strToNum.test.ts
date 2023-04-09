@@ -26,7 +26,7 @@ describe('strToNum', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedNumber);
+    expect(result.error[0].type).toEqual(ExpectedNumber);
   });
 
   it('it rejects a number', () => {
@@ -34,6 +34,6 @@ describe('strToNum', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedString);
+    expect(result.error[0].type).toEqual(ExpectedString);
   });
 });

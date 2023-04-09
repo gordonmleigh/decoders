@@ -33,7 +33,7 @@ describe('integer', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedInteger);
+    expect(result.error[0].type).toBe(ExpectedInteger);
   });
 
   it('rejects an unsafe integer', () => {
@@ -41,7 +41,7 @@ describe('integer', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedInteger);
+    expect(result.error[0].type).toBe(ExpectedInteger);
   });
 
   it('rejects an unsafe negative integer', () => {
@@ -49,6 +49,6 @@ describe('integer', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedInteger);
+    expect(result.error[0].type).toBe(ExpectedInteger);
   });
 });

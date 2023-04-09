@@ -35,7 +35,7 @@ describe('emisEmailail', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error[0].type).toEqual(ExpectedEmail);
   });
 
   it('rejects a space in the domain', () => {
@@ -43,7 +43,7 @@ describe('emisEmailail', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error[0].type).toEqual(ExpectedEmail);
   });
 
   it('rejects a space in the user part', () => {
@@ -51,7 +51,7 @@ describe('emisEmailail', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error[0].type).toEqual(ExpectedEmail);
   });
 
   it('rejects multiple at symbols', () => {
@@ -59,7 +59,7 @@ describe('emisEmailail', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error[0].type).toEqual(ExpectedEmail);
   });
 
   it('rejects zero at symbols', () => {
@@ -67,6 +67,6 @@ describe('emisEmailail', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error[0].type).toEqual(ExpectedEmail);
   });
 });

@@ -29,7 +29,7 @@ describe('predicate', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ConditionFailure);
+    expect(result.error[0].type).toBe(ConditionFailure);
 
     expect(mapper).toHaveBeenCalledTimes(1);
     expect(mapper.mock.calls[0][0]).toBe(input);
@@ -48,7 +48,7 @@ describe('predicate', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe('FAIL');
+    expect(result.error[0].type).toBe('FAIL');
     expect(result.error[0].text).toBe('text');
     expect(result.error[0].details).toEqual({ foo: 'bar', baz: 'boom' });
 

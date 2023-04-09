@@ -50,5 +50,5 @@ export function invalid(
   field?: string,
   details?: Record<string, any>,
 ): ErrorResult {
-  return { ok: false, error: [{ id, text, field, details }] };
+  return { ok: false, error: [{ type: id, text, field, details }] };
 }

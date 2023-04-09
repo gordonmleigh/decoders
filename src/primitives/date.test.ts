@@ -14,6 +14,6 @@ describe('date', () => {
     const result = date.decode(0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedDate);
+    expect(result.error[0].type).toBe(ExpectedDate);
   });
 });

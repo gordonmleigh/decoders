@@ -31,7 +31,7 @@ describe('assert', () => {
     expect(thrownError).toBeInstanceOf(DecodingAssertError);
     assertCond(thrownError instanceof DecodingAssertError);
     expect(thrownError.errors).toEqual([
-      { id: 'FAIL1', text: 'text1', field: 'field1' },
+      { type: 'FAIL1', text: 'text1', field: 'field1' },
     ]);
   });
 });

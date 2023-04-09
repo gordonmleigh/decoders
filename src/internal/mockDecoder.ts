@@ -44,5 +44,5 @@ export function mockFailDecoder(
 }
 
 export function mockError(n: number): DecoderError {
-  return { id: `FAIL${n}`, text: `text${n}`, field: `field${n}` };
+  return { type: `FAIL${n}`, text: `text${n}`, field: `field${n}` };
 }

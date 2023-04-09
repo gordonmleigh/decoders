@@ -80,7 +80,7 @@ describe('object', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedObject);
+    expect(result.error[0].type).toBe(ExpectedObject);
 
     expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
@@ -98,7 +98,7 @@ describe('object', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedObject);
+    expect(result.error[0].type).toBe(ExpectedObject);
 
     expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
@@ -116,7 +116,7 @@ describe('object', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedObject);
+    expect(result.error[0].type).toBe(ExpectedObject);
 
     expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
@@ -134,7 +134,7 @@ describe('object', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedObject);
+    expect(result.error[0].type).toBe(ExpectedObject);
 
     expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
@@ -294,8 +294,8 @@ describe('object', () => {
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
     expect(result.error).toEqual([
-      { id: 'FAIL2', text: 'text2', field: 'prop2.field2' },
-      { id: 'FAIL3', text: 'text3', field: 'prop3.field3' },
+      { type: 'FAIL2', text: 'text2', field: 'prop2.field2' },
+      { type: 'FAIL3', text: 'text3', field: 'prop3.field3' },
     ]);
 
     expect(prop1.decode).toHaveBeenCalledTimes(1);

@@ -16,7 +16,7 @@ describe('is', () => {
     const result = decoder.decode(undefined);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedSpecificValue);
+    expect(result.error[0].type).toEqual(ExpectedSpecificValue);
   });
 
   it('matches NaN', () => {
@@ -32,7 +32,7 @@ describe('is', () => {
     const result = decoder.decode(0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedSpecificValue);
+    expect(result.error[0].type).toEqual(ExpectedSpecificValue);
     expect(result.error[0].details?.options).toEqual([1, 2, 3]);
   });
 });
