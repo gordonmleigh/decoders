@@ -1,13 +1,13 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
 import { number } from '../primitives/number.js';
+import { string } from '../primitives/string.js';
 import { record } from './record.js';
-import { text } from './text.js';
 
 describe('record', () => {
   it('can decode a record', () => {
     // integration test
-    const decoder = record(text, number);
+    const decoder = record(string, number);
 
     const result = decoder.decode({
       one: 1,

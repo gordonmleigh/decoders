@@ -1,19 +1,36 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond.js';
-import { ExpectedString, string } from './string.js';
+import { expectInvalid, expectValid } from '../internal/expectResult.js';
+import { ExpectedString, ExpectedStringLength, string } from './string.js';
 
 describe('date', () => {
   it('decodes a string', () => {
     const result = string.decode('hello world');
-    expect(result.ok).toBe(true);
-    assertCond(result.ok);
-    expect(result.value).toEqual('hello world');
+    expectValid(result, 'hello world');
   });
 
   it('rejects numbers', () => {
     const result = string.decode(0);
-    expect(result.ok).toBe(false);
-    assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedString);
+    expectInvalid(result, ExpectedString);
+  });
+
+  it('trims if trim is set', () => {
+    const result = string.trim().decode('  \nhello world\t \n');
+    expectValid(result, 'hello world');
+  });
+
+  it('requires minimum length if set', () => {
+    const decoder = string.min(4);
+
+    expectInvalid(decoder.decode('123'), ExpectedStringLength);
+    expectValid(decoder.decode('1234'), '1234');
+    expectValid(decoder.decode('12345'), '12345');
+  });
+
+  it('requires maximum length if set', () => {
+    const decoder = string.max(4);
+
+    expectValid(decoder.decode('123'), '123');
+    expectValid(decoder.decode('1234'), '1234');
+    expectInvalid(decoder.decode('12345'), ExpectedStringLength);
   });
 });

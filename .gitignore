@@ -1,8 +1,8 @@
-node_modules/
+.DS_Store
+.local/
+*.log
+coverage/
 dist/
 lib/
-.local/
-coverage/
-*.log
-yarn-error.log
+node_modules/
 test-report.xml
