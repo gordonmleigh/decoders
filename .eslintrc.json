@@ -30,7 +30,7 @@
         ],
         "@typescript-eslint/no-use-before-define": [
           "warn",
-          { "functions": false }
+          { "classes": false, "functions": false }
         ],
         "import/extensions": ["error", "always"],
         "import/no-extraneous-dependencies": "error"

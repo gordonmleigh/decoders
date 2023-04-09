@@ -1,4 +1,4 @@
-import { isInt } from '../predicates/isInt.js';
+import { isInteger } from '../predicates/isInt.js';
 import { number } from '../primitives/number.js';
 import { chain } from './chain.js';
 
@@ -12,4 +12,4 @@ import { chain } from './chain.js';
  * const result2 = integer(12.34); // = { ok: false, error: [ ... ] }
  * ```
  */
-export const integer = chain(number, isInt);
+export const integer = chain(number, isInteger);

@@ -15,36 +15,40 @@ export const ExpectedArray = 'EXPECTED_ARRAY';
  *
  * @param elem The [[Decoder]] to use to decode the elements.
  */
-export function array<T>(elem: Decoder<T>): Decoder<T[]> {
-  return {
-    decode: (value: unknown, opts?: DecoderOptions): Result<T[]> => {
-      if (!Array.isArray(value)) {
-        return invalid(ExpectedArray, 'expected array');
-      }
+export function array<T>(element: Decoder<T>): Decoder<T[]> {
+  return new ArrayDecoder(element);
+}
 
-      const decoded: T[] = [];
-      const errors: DecoderError[] = [];
-      let anyErrors = false;
+class ArrayDecoder<Element> implements Decoder<Element[]> {
+  constructor(public readonly element: Decoder<Element>) {}
 
-      for (let i = 0; i < value.length; ++i) {
-        const elemResult = elem.decode(value[i], opts);
-        if (elemResult.ok) {
-          decoded[i] = elemResult.value;
-        } else {
-          errors.push(
-            ...elemResult.error.map((x) => ({
-              ...x,
-              field: joinIds(i.toString(), x.field),
-            })),
-          );
-          anyErrors = true;
-        }
-      }
+  public decode(value: unknown, opts?: DecoderOptions): Result<Element[]> {
+    if (!Array.isArray(value)) {
+      return invalid(ExpectedArray, 'expected array');
+    }
 
-      if (anyErrors) {
-        return { ok: false, error: errors };
+    const decoded: Element[] = [];
+    const errors: DecoderError[] = [];
+    let anyErrors = false;
+
+    for (let i = 0; i < value.length; ++i) {
+      const elemResult = this.element.decode(value[i], opts);
+      if (elemResult.ok) {
+        decoded[i] = elemResult.value;
+      } else {
+        errors.push(
+          ...elemResult.error.map((x) => ({
+            ...x,
+            field: joinIds(i.toString(), x.field),
+          })),
+        );
+        anyErrors = true;
       }
-      return ok(decoded);
-    },
-  };
+    }
+
+    if (anyErrors) {
+      return { ok: false, error: errors };
+    }
+    return ok(decoded);
+  }
 }

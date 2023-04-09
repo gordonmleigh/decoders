@@ -4,19 +4,19 @@ import { DecoderOptions } from '../core/DecoderOptions.js';
 import { error, Result } from '../core/Result.js';
 
 /**
- * Get the composite type of an array of decoders.
+ * Get the output type of an array of decoders.
  *
  * @example
  *
  * ```typescript
- * type A = CombinedTypeOf<[Decoder<number>, Decoder<string>]>;
+ * type A = ChooseOutputType<[Decoder<number>, Decoder<string>]>;
  *
  * // equivalent to
- * type B = Decoder<number|string>;
+ * type B = number | string;
  * ```
  */
-export type CombinedTypeOf<T> = T extends Decoder<infer X, infer Y>[]
-  ? Decoder<X, Y>
+export type ChooseOutputType<T> = T extends Decoder<infer Out, any>[]
+  ? Out
   : never;
 
 /**
@@ -38,26 +38,31 @@ export type CombinedTypeOf<T> = T extends Decoder<infer X, infer Y>[]
  * const result3 = choice(false); // = { ok: false, error: [ ... ] }
  * ```
  */
-export function choose<T extends Decoder<unknown>[]>(
-  ...options: T
-): CombinedTypeOf<T> {
-  if (options.length === 0) {
-    throw new Error(`choose must have at least one option`);
-  }
-  const combined = {
-    decode: (value: unknown, opts?: DecoderOptions): Result<unknown> => {
-      const errors: DecoderError[] = [];
+export function choose<Decoders extends Decoder<any, In>[], In = unknown>(
+  ...options: Decoders
+): Decoder<ChooseOutputType<Decoders>, In> {
+  return new ChooseDecoder(options);
+}
 
-      for (const decoder of options) {
-        const result = decoder.decode(value, opts);
-        if (result.ok) {
-          return result;
-        }
-        errors.push(...result.error);
+class ChooseDecoder<Decoders extends Decoder<any, In>[], In = unknown>
+  implements Decoder<ChooseOutputType<Decoders>, In>
+{
+  constructor(public readonly options: Decoders) {}
+
+  public decode(
+    value: In,
+    opts?: DecoderOptions,
+  ): Result<ChooseOutputType<Decoders>> {
+    const errors: DecoderError[] = [];
+
+    for (const decoder of this.options) {
+      const result = decoder.decode(value, opts);
+      if (result.ok) {
+        return result;
       }
+      errors.push(...result.error);
+    }
 
-      return error(errors);
-    },
-  };
-  return combined as CombinedTypeOf<T>;
+    return error(errors);
+  }
 }

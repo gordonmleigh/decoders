@@ -16,3 +16,13 @@ export interface Decoder<Out, In = unknown> {
    */
   decode(value: In, opts?: DecoderOptions): Result<Out>;
 }
+
+/**
+ * Determine the input type of the decoder.
+ */
+export type InputType<T> = T extends Decoder<any, infer In> ? In : never;
+
+/**
+ * Determine the output type of the decoder.
+ */
+export type OutputType<T> = T extends Decoder<infer Out, any> ? Out : never;

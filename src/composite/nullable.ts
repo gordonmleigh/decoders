@@ -1,5 +1,6 @@
 import { Decoder } from '../core/Decoder.js';
-import { ok } from '../core/Result.js';
+import { is } from '../predicates/is.js';
+import { choose } from './choose.js';
 
 /**
  * Creates a decoder which can decode `null` or pass through to the given
@@ -20,10 +21,5 @@ import { ok } from '../core/Result.js';
 export function nullable<Out, In>(
   decoder: Decoder<Out, In>,
 ): Decoder<Out | null, In> {
-  return {
-    decode: (value, opts) =>
-      value === null
-        ? ok(value as unknown as null)
-        : decoder.decode(value, opts),
-  };
+  return choose(is(null), decoder);
 }

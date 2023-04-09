@@ -33,11 +33,11 @@ export type PropDecoders<T> = { [K in keyof T]-?: Decoder<T[K]> };
  *
  * @template T The output value type.
  */
-export interface ObjectDecoder<T> extends Decoder<T> {
+export interface IObjectDecoder<T> extends Decoder<T> {
   /**
    * Create another decoder instance with different options.
    */
-  withOptions(options: DecoderOptions): ObjectDecoder<T>;
+  withOptions(options: DecoderOptions): IObjectDecoder<T>;
 }
 
 /**
@@ -45,99 +45,96 @@ export interface ObjectDecoder<T> extends Decoder<T> {
  */
 export function object<T>(
   props: PropDecoders<T>,
-  baseOptions?: DecoderOptions,
+  defaultOptions?: DecoderOptions,
 ): ObjectDecoder<T> {
-  function decode(value: unknown, opts?: DecoderOptions): Result<T> {
-    return doObjectDecode(
-      props,
-      value,
-      combineDecoderOptions(baseOptions, opts),
-    );
-  }
-
-  const decoder = { decode } as ObjectDecoder<T>;
-
-  decoder.withOptions = (newOpts: DecoderOptions): ObjectDecoder<T> => {
-    return object(props, combineDecoderOptions(baseOptions, newOpts));
-  };
-
-  return decoder;
+  return new ObjectDecoder(props, defaultOptions);
 }
 
-/**
- * @hidden
- */
-function doObjectDecode<T>(
-  props: PropDecoders<T>,
-  value: unknown,
-  opts?: DecoderOptions,
-): Result<T> {
-  if (!isPlainObject(value)) {
-    return invalid(ExpectedObject, 'expected object');
-  }
+class ObjectDecoder<Out> implements Decoder<Out> {
+  constructor(
+    public readonly properties: PropDecoders<Out>,
+    public readonly defaultOptions: DecoderOptions = {},
+  ) {}
 
-  let anyErrors = false;
-  const errors: DecoderError[] = [];
-  const allKeys = Object.keys(Object.assign({}, value, props));
-  const outputValue: Record<string, unknown> = {};
+  public decode(value: unknown, optionOverrides?: DecoderOptions): Result<Out> {
+    if (!isPlainObject(value)) {
+      return invalid(ExpectedObject, 'expected object');
+    }
+    const opts = combineDecoderOptions(this.defaultOptions, optionOverrides);
 
-  for (const key of allKeys) {
-    if (key in props) {
-      // property is in validator definition
-      const decoder = props[key as keyof T];
-      const propResult = decoder.decode(
-        (value as Record<string, unknown>)[key],
-        opts,
-      );
+    let anyErrors = false;
+    const errors: DecoderError[] = [];
+    const allKeys = Object.keys(Object.assign({}, value, this.properties));
+    const outputValue: Record<string, unknown> = {};
 
-      if (!propResult.ok) {
-        anyErrors = true;
-        errors.push(
-          ...propResult.error.map((x) => ({
-            ...x,
-            field: joinIds(key, x.field),
-          })),
+    for (const key of allKeys) {
+      if (key in this.properties) {
+        // property is in validator definition
+        const decoder = this.properties[key as keyof Out];
+        const propResult = decoder.decode(
+          (value as Record<string, unknown>)[key],
+          opts,
         );
-      } else if (propResult.value === undefined) {
-        switch (
-          opts?.undefinedFields ??
-          DefaultDecoderOptions.undefinedFields
-        ) {
-          case UndefinedFields.Explicit:
-            outputValue[key] = propResult.value;
-            break;
 
-          case UndefinedFields.FromInput:
-            if (key in value) {
+        if (!propResult.ok) {
+          anyErrors = true;
+          errors.push(
+            ...propResult.error.map((x) => ({
+              ...x,
+              field: joinIds(key, x.field),
+            })),
+          );
+        } else if (propResult.value === undefined) {
+          switch (
+            opts?.undefinedFields ??
+            DefaultDecoderOptions.undefinedFields
+          ) {
+            case UndefinedFields.Explicit:
               outputValue[key] = propResult.value;
-            }
-            break;
+              break;
+
+            case UndefinedFields.FromInput:
+              if (key in value) {
+                outputValue[key] = propResult.value;
+              }
+              break;
+          }
+        } else {
+          outputValue[key] = propResult.value;
         }
       } else {
-        outputValue[key] = propResult.value;
-      }
-    } else {
-      // property is not in validator definition
-      switch (opts?.extraFields ?? DefaultDecoderOptions.extraFields) {
-        case ExtraFields.Reject:
-          anyErrors = true;
-          errors.push({
-            id: UnexpectedField,
-            text: 'unexpected value',
-            field: key,
-          });
-          break;
+        // property is not in validator definition
+        switch (opts?.extraFields ?? DefaultDecoderOptions.extraFields) {
+          case ExtraFields.Reject:
+            anyErrors = true;
+            errors.push({
+              id: UnexpectedField,
+              text: 'unexpected value',
+              field: key,
+            });
+            break;
 
-        case ExtraFields.Include:
-          outputValue[key] = (value as Record<string, unknown>)[key];
-          break;
+          case ExtraFields.Include:
+            outputValue[key] = (value as Record<string, unknown>)[key];
+            break;
+        }
       }
+    }
+
+    if (anyErrors || errors.length) {
+      return error(errors);
+    } else {
+      return ok(outputValue as Out);
     }
   }
 
-  if (anyErrors || errors.length) {
-    return error(errors);
-  } else {
-    return ok(outputValue as T);
+  /**
+   * Create another decoder instance with different options.
+   */
+  public withOptions(options: DecoderOptions): ObjectDecoder<Out> {
+    return new ObjectDecoder(
+      this.properties,
+      combineDecoderOptions(this.defaultOptions, options),
+    );
   }
 }

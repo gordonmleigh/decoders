@@ -2,7 +2,6 @@
 export * from './composite/array.js';
 export * from './composite/chain.js';
 export * from './composite/choose.js';
-export * from './composite/Compose.js';
 export * from './composite/integer.js';
 export * from './composite/jsonDate.js';
 export * from './composite/maybe.js';

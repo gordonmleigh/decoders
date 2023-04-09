@@ -1,8 +1,8 @@
 import { Decoder } from '../core/Decoder.js';
-import { invalid, ok } from '../core/Result.js';
+import { invalid, ok, Result } from '../core/Result.js';
 
 /**
- * The default error identifier returned by [[predicate]].
+ * The default error identifier returned by {@link predicate}.
  */
 export const ConditionFailure = 'CONDITION_FAILURE';
 
@@ -19,8 +19,21 @@ export function predicate<T>(
   id = ConditionFailure,
   details?: Record<string, any>,
 ): Decoder<T, T> {
-  return {
-    decode: (value) =>
-      test(value) ? ok(value) : invalid(id, message, undefined, details),
-  };
+  return new PredicateDecoder(test, message, id, details);
+}
+
+class PredicateDecoder<T> implements Decoder<T, T> {
+  constructor(
+    public readonly test: (value: T) => boolean,
+    private readonly message = 'condition failure',
+    private readonly id = ConditionFailure,
+    private readonly details?: Record<string, any>,
+  ) {}
+
+  public decode(value: T): Result<T> {
+    if (this.test(value)) {
+      return ok(value);
+    }
+    return invalid(this.id, this.message, undefined, this.details);
+  }
 }

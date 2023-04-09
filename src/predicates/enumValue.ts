@@ -1,5 +1,5 @@
 import { Decoder } from '../core/Decoder.js';
-import { invalid, ok } from '../core/Result.js';
+import { predicate } from './predicate.js';
 
 /**
  * Error identifier returned by [[enumValue]] on failure.
@@ -25,12 +25,10 @@ export const ExpectedEnumValue = 'EXPECTED_ENUM_VALUE';
  * ```
  */
 export function enumValue<T>(values: Record<string, T>): Decoder<T> {
-  return {
-    decode: (value) =>
-      Object.values(values).includes(value as T)
-        ? ok(value as T)
-        : invalid(ExpectedEnumValue, 'expected enum value', undefined, {
-            options: values,
-          }),
-  };
+  const allowedValues = Object.values(values);
+  return predicate(
+    (value: T) => allowedValues.includes(value),
+    'expected enum value',
+    ExpectedEnumValue,
+  );
 }

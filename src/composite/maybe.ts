@@ -1,5 +1,8 @@
+import { map } from '../converters/map.js';
 import { Decoder } from '../core/Decoder.js';
-import { ok, Result } from '../core/Result.js';
+import { is } from '../predicates/is.js';
+import { chain } from './chain.js';
+import { choose } from './choose.js';
 
 /**
  * Wraps another decoder to permit an empty string, `null`, or `undefined` in
@@ -30,25 +33,14 @@ import { ok, Result } from '../core/Result.js';
 export function maybe<Out, In>(
   decoder: Decoder<Out, In>,
 ): Decoder<Out | undefined, In> {
-  return {
-    decode: (value, opts) =>
-      isEmpty(value) ? ok(undefined) : normalise(decoder.decode(value, opts)),
-  };
+  return chain(
+    choose(is(null), is(undefined), is(''), decoder),
+    map((value: Out | Empty) =>
+      value === '' || value === null || typeof value === 'undefined'
+        ? undefined
+        : (value as Out),
+    ),
+  );
 }
 
-/**
- * @hidden
- */
-function isEmpty(value: unknown): boolean {
-  return value === '' || value === null || typeof value === 'undefined';
-}
-
-/**
- * @hidden
- */
-function normalise<T>(result: Result<T>): Result<T | undefined> {
-  if (result.ok && isEmpty(result.value)) {
-    return ok(undefined);
-  }
-  return result;
-}
+type Empty = undefined | null | '';

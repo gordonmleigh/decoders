@@ -1,5 +1,5 @@
 import { Decoder } from '../core/Decoder.js';
-import { invalid, ok } from '../core/Result.js';
+import { predicate } from './predicate.js';
 
 /**
  * The error identifier returned by [[is]] on failure.
@@ -12,12 +12,10 @@ export const ExpectedSpecificValue = 'EXPECTED_SPECIFIC_VALUE';
  * @param options The values allowed.
  */
 export function is<T>(...options: T[]): Decoder<T> {
-  return {
-    decode: (value) =>
-      options.includes(value as T)
-        ? ok(value as T)
-        : invalid(ExpectedSpecificValue, 'expected specific value', undefined, {
-            options,
-          }),
-  };
+  return predicate<T>(
+    (value) => options.includes(value),
+    'expected specific value',
+    ExpectedSpecificValue,
+    { options },
+  );
 }

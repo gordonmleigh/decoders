@@ -1,69 +1,68 @@
-import { Decoder } from '../core/Decoder.js';
+import { Decoder, InputType, OutputType } from '../core/Decoder.js';
+import { DecoderOptions } from '../core/DecoderOptions.js';
 import { ok, Result } from '../core/Result.js';
-import { Compose } from './Compose.js';
+
+type DecoderArray = Decoder<any, any>[];
+
+export type DecoderChain<D> = D extends readonly [Decoder<any, any>]
+  ? D
+  : D extends readonly [any, ...infer Rest extends DecoderArray]
+  ? readonly [Decoder<InputType<Rest[0]>, any>, ...DecoderChain<Rest>]
+  : never;
+
+type ChainInput<D extends DecoderArray> = D extends [
+  infer First,
+  ...DecoderArray,
+]
+  ? InputType<First>
+  : never;
+
+type ChainOutput<D extends DecoderArray> = D extends [
+  ...DecoderArray,
+  infer Last,
+]
+  ? OutputType<Last>
+  : never;
 
 /**
- * Represents a function which can compose multiple decoders together to create
- * a single decoder. Types are not checked.
+ * Compose multiple decoders together to create a single decoder.
  */
-export interface UntypedCompose {
-  /**
-   * Compose multiple decoders together to create a single decoder.
-   */
-  (decoders: Decoder<unknown, any>[]): Decoder<unknown>;
+
+export function chain<Chain extends DecoderArray>(
+  ...decoders: DecoderChain<Chain>
+): ChainDecoder<Chain>;
+export function chain<T>(
+  ...decoders: Decoder<T, T>[]
+): ChainDecoder<Decoder<T, T>[]>;
+export function chain<Out, In>(
+  first: Decoder<Out, In>,
+  ...decoders: Decoder<Out, Out>[]
+): ChainDecoder<Decoder<Out, Out>[]>;
+export function chain(
+  ...decoders: Decoder<any, any>[]
+): ChainDecoder<Decoder<any, any>[]> {
+  return new ChainDecoder(decoders as any);
 }
 
-/**
- * Represents a function which can compose multiple decoders together to create
- * a single decoder. Type-safe up to 8-arity.
- *
- * Includes a convenience property `all` to compose unknown types together.
- */
-export interface Chain extends Compose {
-  /**
-   * Compose multiple decoders together to create a single decoder. Types are
-   * not checked.
-   */
-  all: UntypedCompose;
-}
+class ChainDecoder<Chain extends DecoderArray>
+  implements Decoder<ChainOutput<Chain>, ChainInput<Chain>>
+{
+  constructor(public readonly decoders: DecoderChain<Chain>) {}
 
-/**
- * Compose multiple decoders together to create a single decoder. Type-safe up
- * to 8-arity.
- */
-export const chain: Chain = Object.assign(variadicChain, { all: chainAll });
+  public decode(
+    value: ChainInput<Chain>,
+    opts?: DecoderOptions,
+  ): Result<ChainOutput<Chain>> {
+    let next = value;
 
-/**
- * @hidden
- */
-function chainAll(decoders: Decoder<unknown, any>[]): Decoder<unknown> {
-  if (decoders.length === 0) {
-    throw new Error(`there must be at least one Decoder in a chain`);
-  }
-  if (decoders.length === 1) {
-    return decoders[0];
-  }
-  return {
-    decode: (value, opts) => {
-      let result: Result<unknown> = ok(value);
-
-      for (const decoder of decoders) {
-        if (!result.ok) {
-          return result;
-        }
-        result = decoder.decode(result.value, opts);
+    for (const decoder of this.decoders) {
+      const result = decoder.decode(next, opts);
+      if (!result.ok) {
+        return result as any;
       }
+      next = result.value;
+    }
 
-      return result;
-    },
-  };
-}
-
-/**
- * @hidden
- */
-function variadicChain(
-  ...decoders: Decoder<unknown, unknown>[]
-): Decoder<unknown, unknown> {
-  return chainAll(decoders);
+    return ok(next);
+  }
 }
