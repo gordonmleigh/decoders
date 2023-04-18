@@ -11,15 +11,17 @@ export interface OkResult<T> {
 /**
  * Returned by a [[Decoder]] on failure.
  */
-export interface ErrorResult {
+export interface ErrorResult<Err extends DecoderError = DecoderError> {
   ok: false;
-  error: DecoderError[];
+  error: Err;
 }
 
 /**
  * Returned by a [[Decoder]].
  */
-export type Result<T> = OkResult<T> | ErrorResult;
+export type Result<T, Err extends DecoderError = DecoderError> =
+  | OkResult<T>
+  | ErrorResult<Err>;
 
 /**
  * Create an [[OkResult]].
@@ -33,22 +35,19 @@ export function ok<T>(value: T): OkResult<T> {
  * Create an [[ErrorResult]].
  * @param error The error to return.
  */
-export function error(error: DecoderError[]): ErrorResult {
+export function error<Err extends DecoderError>(error: Err): ErrorResult<Err> {
   return { ok: false, error };
 }
 
 /**
  * Create an [[ErrorResult]] with a single error.
- * @param id A unique ID for the error, for programmatic use.
+ * @param type A unique ID for the error, for programmatic use.
  * @param text A simple textual description of the error.
- * @param field The field causing the error. Possibly dot-separated path.
  * @param details Extra details, intended to be used in error formatting.
  */
-export function invalid(
-  id: string,
+export function invalid<Type extends string>(
+  type: Type,
   text: string,
-  field?: string,
-  details?: Record<string, any>,
-): ErrorResult {
-  return { ok: false, error: [{ type: id, text, field, details }] };
+): ErrorResult<DecoderError<Type>> {
+  return { ok: false, error: { type, text } };
 }

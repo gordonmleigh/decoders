@@ -1,6 +1,5 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { ExpectedDate } from '../primitives/date.js';
 import { jsonDate } from './jsonDate.js';
 
 describe('jsonDate', () => {
@@ -22,13 +21,13 @@ describe('jsonDate', () => {
     const result = jsonDate.decode('fred');
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedDate);
+    expect(result.error.type).toBe('value:date');
   });
 
   it('rejects numbers', () => {
     const result = jsonDate.decode(0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedDate);
+    expect(result.error.type).toBe('value:date');
   });
 });

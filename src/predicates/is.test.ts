@@ -1,6 +1,6 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { ExpectedSpecificValue, is } from './is.js';
+import { is } from './is.js';
 
 describe('is', () => {
   it('decodes a specific value', () => {
@@ -16,7 +16,7 @@ describe('is', () => {
     const result = decoder.decode(undefined);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toEqual(ExpectedSpecificValue);
+    expect(result.error.type).toEqual('value:is');
   });
 
   it('matches NaN', () => {
@@ -32,7 +32,7 @@ describe('is', () => {
     const result = decoder.decode(0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toEqual(ExpectedSpecificValue);
-    expect(result.error[0].details?.options).toEqual([1, 2, 3]);
+    expect(result.error.type).toEqual('value:is');
+    expect(result.error.options).toEqual([1, 2, 3]);
   });
 });

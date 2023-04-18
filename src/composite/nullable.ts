@@ -1,4 +1,5 @@
 import { Decoder } from '../core/Decoder.js';
+import { DecoderError } from '../core/DecoderError.js';
 import { is } from '../predicates/is.js';
 import { choose } from './choose.js';
 
@@ -18,8 +19,9 @@ import { choose } from './choose.js';
  * const result3 = decoder(12); // = { ok: false, error: [ ... ] }
  * ```
  */
-export function nullable<Out, In>(
-  decoder: Decoder<Out, In>,
-): Decoder<Out | null, In> {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function nullable<Out, In, Err extends DecoderError>(
+  decoder: Decoder<Out, In, Err>,
+) {
   return choose(is(null), decoder);
 }

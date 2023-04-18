@@ -1,6 +1,6 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { ConditionFailure, predicate } from './predicate.js';
+import { predicate } from './predicate.js';
 
 describe('predicate', () => {
   it('accepts values if the predicate function returns true', () => {
@@ -29,7 +29,7 @@ describe('predicate', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ConditionFailure);
+    expect(result.error.type).toBe('value:condition');
 
     expect(mapper).toHaveBeenCalledTimes(1);
     expect(mapper.mock.calls[0][0]).toBe(input);
@@ -48,9 +48,12 @@ describe('predicate', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe('FAIL');
-    expect(result.error[0].text).toBe('text');
-    expect(result.error[0].details).toEqual({ foo: 'bar', baz: 'boom' });
+    expect(result.error).toEqual({
+      type: 'FAIL',
+      text: 'text',
+      foo: 'bar',
+      baz: 'boom',
+    });
 
     expect(mapper).toHaveBeenCalledTimes(1);
     expect(mapper.mock.calls[0][0]).toBe(input);

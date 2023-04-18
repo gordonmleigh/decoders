@@ -1,6 +1,5 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { ExpectedNumber } from '../primitives/number.js';
 import { normaliseNumber } from './normaliseNumber.js';
 
 describe('normaliseNumber', () => {
@@ -25,7 +24,7 @@ describe('normaliseNumber', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toEqual(ExpectedNumber);
+    expect(result.error.type).toEqual('value:number');
   });
 
   it('it accepts a number', () => {

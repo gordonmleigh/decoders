@@ -1,6 +1,5 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { ExpectedInteger } from '../predicates/isInt.js';
 import { isInteger } from './isInt.js';
 
 describe('integer', () => {
@@ -33,7 +32,7 @@ describe('integer', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedInteger);
+    expect(result.error.type).toBe('value:integer');
   });
 
   it('rejects an unsafe integer', () => {
@@ -41,7 +40,7 @@ describe('integer', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedInteger);
+    expect(result.error.type).toBe('value:integer');
   });
 
   it('rejects an unsafe negative integer', () => {
@@ -49,6 +48,6 @@ describe('integer', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedInteger);
+    expect(result.error.type).toBe('value:integer');
   });
 });

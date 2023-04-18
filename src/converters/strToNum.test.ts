@@ -1,7 +1,5 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { ExpectedNumber } from '../primitives/number.js';
-import { ExpectedString } from '../primitives/string.js';
 import { strToNum } from './strToNum.js';
 
 describe('strToNum', () => {
@@ -26,7 +24,7 @@ describe('strToNum', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toEqual(ExpectedNumber);
+    expect(result.error.type).toEqual('value:number');
   });
 
   it('it rejects a number', () => {
@@ -34,6 +32,6 @@ describe('strToNum', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toEqual(ExpectedString);
+    expect(result.error.type).toEqual('value:string');
   });
 });

@@ -12,4 +12,7 @@ import { chain } from './chain.js';
  * const result2 = integer(12.34); // = { ok: false, error: [ ... ] }
  * ```
  */
-export const integer = chain(number, isInteger);
+export const integer = chain(number, isInteger).withError(
+  'value:integer',
+  'expected integer',
+);

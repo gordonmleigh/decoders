@@ -1,6 +1,6 @@
 import 'jest';
 import { expectInvalid, expectValid } from '../internal/expectResult.js';
-import { ExpectedString, ExpectedStringLength, string } from './string.js';
+import { string } from './string.js';
 
 describe('date', () => {
   it('decodes a string', () => {
@@ -10,7 +10,7 @@ describe('date', () => {
 
   it('rejects numbers', () => {
     const result = string.decode(0);
-    expectInvalid(result, ExpectedString);
+    expectInvalid(result, 'value:string');
   });
 
   it('trims if trim is set', () => {
@@ -21,7 +21,7 @@ describe('date', () => {
   it('requires minimum length if set', () => {
     const decoder = string.min(4);
 
-    expectInvalid(decoder.decode('123'), ExpectedStringLength);
+    expectInvalid(decoder.decode('123'), 'value:string');
     expectValid(decoder.decode('1234'), '1234');
     expectValid(decoder.decode('12345'), '12345');
   });
@@ -31,6 +31,6 @@ describe('date', () => {
 
     expectValid(decoder.decode('123'), '123');
     expectValid(decoder.decode('1234'), '1234');
-    expectInvalid(decoder.decode('12345'), ExpectedStringLength);
+    expectInvalid(decoder.decode('12345'), 'value:string');
   });
 });

@@ -21,4 +21,7 @@ import { strToNum } from './strToNum.js';
  * const result4 = decoder('12e10') // = { ok: false, error: [ ... ] }
  * ```
  */
-export const normaliseNumber = choose(number, strToNum);
+export const normaliseNumber = choose(number, strToNum).withError(
+  'value:number',
+  'expected a number',
+);

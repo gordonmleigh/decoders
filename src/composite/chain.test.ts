@@ -42,7 +42,6 @@ describe('chain', () => {
     const decoder2 = mockFailDecoder({
       type: 'FAIL',
       text: 'failed',
-      field: 'somefield',
     });
     const decoder3 = mockDecoder(value3);
 
@@ -53,9 +52,10 @@ describe('chain', () => {
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
 
-    expect(result.error).toEqual([
-      { type: 'FAIL', text: 'failed', field: 'somefield' },
-    ]);
+    expect(result.error).toEqual({
+      type: 'FAIL',
+      text: 'failed',
+    });
 
     expect(decoder1.decode).toHaveBeenCalledTimes(1);
     expect(decoder1.mock.calls[0][0]).toBe(input);

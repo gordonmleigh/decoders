@@ -1,6 +1,6 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { boolean, ExpectedBoolean } from './boolean.js';
+import { boolean } from './boolean.js';
 
 describe('boolean', () => {
   it('decodes true', () => {
@@ -21,6 +21,6 @@ describe('boolean', () => {
     const result = boolean.decode(0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedBoolean);
+    expect(result.error.type).toBe('value:boolean');
   });
 });

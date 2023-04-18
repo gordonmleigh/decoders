@@ -1,6 +1,6 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { date, ExpectedDate } from './date.js';
+import { date } from './date.js';
 
 describe('date', () => {
   it('decodes a date', () => {
@@ -14,6 +14,6 @@ describe('date', () => {
     const result = date.decode(0);
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedDate);
+    expect(result.error.type).toBe('value:date');
   });
 });

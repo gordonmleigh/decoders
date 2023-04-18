@@ -1,39 +1,67 @@
 import { Decoder } from '../core/Decoder.js';
-import { invalid, ok, Result } from '../core/Result.js';
-
-/**
- * The default error identifier returned by {@link predicate}.
- */
-export const ConditionFailure = 'CONDITION_FAILURE';
+import { DecoderError } from '../core/DecoderError.js';
+import { ok, Result } from '../core/Result.js';
 
 /**
  * Create a [[Decoder]] which tests for the given condition.
- * @param test A condition predicate function.
- * @param message An optional error message to return on failure.
- * @param id An optional error id to return on failure.
- * @param details Extra details, intended to be used in error formatting.
  */
-export function predicate<T>(
-  test: (value: T) => boolean,
-  message = 'condition failure',
-  id = ConditionFailure,
-  details?: Record<string, any>,
-): Decoder<T, T> {
-  return new PredicateDecoder(test, message, id, details);
+export function predicate<Value>(
+  test: (value: Value) => boolean,
+  message?: string,
+): Decoder<Value, Value, DecoderError<'value:condition'>>;
+export function predicate<Value, Type extends string>(
+  test: (value: Value) => boolean,
+  message: string | undefined,
+  type: Type,
+): Decoder<Value, Value, DecoderError<Type>>;
+export function predicate<Value, Type extends string, Meta>(
+  test: (value: Value) => boolean,
+  message: string | undefined,
+  type: Type,
+  meta: Meta,
+): Decoder<Value, Value, DecoderError<Type> & Meta>;
+export function predicate(
+  test: (value: any) => boolean,
+  text = 'condition failure',
+  type = 'value:condition',
+  meta?: any,
+): Decoder<any, any, any> {
+  return new PredicateDecoder(test, type, text, meta);
 }
 
-class PredicateDecoder<T> implements Decoder<T, T> {
-  constructor(
-    public readonly test: (value: T) => boolean,
-    private readonly message = 'condition failure',
-    private readonly id = ConditionFailure,
-    private readonly details?: Record<string, any>,
-  ) {}
+class PredicateDecoder<Value, ErrorType extends string, ErrorMeta>
+  implements Decoder<Value, Value, DecoderError<ErrorType> & ErrorMeta>
+{
+  public readonly test: (value: Value) => boolean;
+  private readonly type: ErrorType;
+  private readonly text: string;
+  private readonly meta!: ErrorMeta;
 
-  public decode(value: T): Result<T> {
+  constructor(
+    test: (value: Value) => boolean,
+    type: ErrorType,
+    text: string,
+    meta?: ErrorMeta,
+  ) {
+    this.test = test;
+    this.type = type;
+    this.text = text;
+    this.meta = meta as ErrorMeta;
+  }
+
+  public decode(
+    value: Value,
+  ): Result<Value, DecoderError<ErrorType> & ErrorMeta> {
     if (this.test(value)) {
       return ok(value);
     }
-    return invalid(this.id, this.message, undefined, this.details);
+    return {
+      ok: false,
+      error: {
+        type: this.type,
+        text: this.text,
+        ...this.meta,
+      },
+    };
   }
 }

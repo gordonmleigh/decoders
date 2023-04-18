@@ -2,9 +2,9 @@ import 'jest';
 import { UndefinedFields } from '../core/DecoderOptions.js';
 import { assertCond } from '../internal/assertCond.js';
 import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder.js';
-import { ExpectedObject, object } from './object.js';
+import { object } from './object.js';
 
-describe('object', () => {
+describe('composite:object', () => {
   it('invokes each property decoder', () => {
     const value1 = Symbol();
     const value2 = Symbol();
@@ -80,7 +80,7 @@ describe('object', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedObject);
+    expect(result.error.type).toBe('composite:object');
 
     expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
@@ -98,7 +98,7 @@ describe('object', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedObject);
+    expect(result.error.type).toBe('composite:object');
 
     expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
@@ -116,7 +116,7 @@ describe('object', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedObject);
+    expect(result.error.type).toBe('composite:object');
 
     expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
@@ -134,7 +134,7 @@ describe('object', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ExpectedObject);
+    expect(result.error.type).toBe('composite:object');
 
     expect(prop1.decode).toHaveBeenCalledTimes(0);
   });
@@ -293,10 +293,14 @@ describe('object', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error).toEqual([
-      { type: 'FAIL2', text: 'text2', field: 'prop2.field2' },
-      { type: 'FAIL3', text: 'text3', field: 'prop3.field3' },
-    ]);
+    expect(result.error).toEqual({
+      type: 'composite:object',
+      text: 'invalid properties',
+      properties: {
+        prop2: { type: 'FAIL2', text: 'text2' },
+        prop3: { type: 'FAIL3', text: 'text3' },
+      },
+    });
 
     expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBe(input.prop1);

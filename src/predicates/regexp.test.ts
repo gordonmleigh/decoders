@@ -1,6 +1,5 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { ConditionFailure } from './predicate.js';
 import { regexp } from './regexp.js';
 
 describe('predicate', () => {
@@ -21,7 +20,7 @@ describe('predicate', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe(ConditionFailure);
+    expect(result.error.type).toBe('value:regexp');
   });
 
   it('uses custom text and id if supplied', () => {
@@ -31,7 +30,7 @@ describe('predicate', () => {
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].type).toBe('FAIL');
-    expect(result.error[0].text).toBe('text');
+    expect(result.error.type).toBe('FAIL');
+    expect(result.error.text).toBe('text');
   });
 });

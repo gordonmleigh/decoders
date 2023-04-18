@@ -1,6 +1,5 @@
 import { chain } from '../composite/chain.js';
 import { regexp } from '../predicates/regexp.js';
-import { ExpectedNumber } from '../primitives/number.js';
 import { string } from '../primitives/string.js';
 import { map } from './map.js';
 
@@ -24,6 +23,6 @@ import { map } from './map.js';
  */
 export const strToNum = chain(
   string,
-  regexp(/^\d+(\.(\d*))?$/, 'expected number', ExpectedNumber),
+  regexp(/^\d+(\.(\d*))?$/, 'expected number', 'value:number'),
   map(parseFloat),
 );

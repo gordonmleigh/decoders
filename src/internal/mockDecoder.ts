@@ -34,15 +34,13 @@ export function mockDecoderFn<Out, In>(
   return new MockDecoder(fn);
 }
 
-export function mockFailDecoder(
-  ...error: (DecoderError | number)[]
-): MockDecoder {
+export function mockFailDecoder(error: DecoderError | number): MockDecoder {
   return new MockDecoder(() => ({
     ok: false,
-    error: error.map((x) => (typeof x === 'number' ? mockError(x) : x)),
+    error: typeof error === 'number' ? mockError(error) : error,
   }));
 }
 
 export function mockError(n: number): DecoderError {
-  return { type: `FAIL${n}`, text: `text${n}`, field: `field${n}` };
+  return { type: `FAIL${n}`, text: `text${n}` };
 }

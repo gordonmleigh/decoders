@@ -1,7 +1,9 @@
+import { withError, WithErrorFn } from '../converters/withError.js';
 import { Decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
 import { DecoderOptions } from '../core/DecoderOptions.js';
 import { error, Result } from '../core/Result.js';
+import { DecoderArray } from '../internal/AnyDecoder.js';
 
 /**
  * Get the output type of an array of decoders.
@@ -15,9 +17,23 @@ import { error, Result } from '../core/Result.js';
  * type B = number | string;
  * ```
  */
-export type ChooseOutputType<T> = T extends Decoder<infer Out, any>[]
+export type ChooseOutputType<T> = T extends DecoderArray<infer Out>
   ? Out
   : never;
+
+export type ChooseError<T extends DecoderArray> =
+  DecoderError<'composite:choose'> & {
+    choose: {
+      [K in keyof T]: T[K] extends Decoder<any, any, infer Err> ? Err : never;
+    };
+  };
+
+export interface ChooseDecoderType<
+  Decoders extends DecoderArray<any, In>,
+  In = unknown,
+> extends Decoder<ChooseOutputType<Decoders>, In, ChooseError<Decoders>> {
+  withError: WithErrorFn<this>;
+}
 
 /**
  * Create a decoder which can succesfully decode an input value using one of the
@@ -38,21 +54,21 @@ export type ChooseOutputType<T> = T extends Decoder<infer Out, any>[]
  * const result3 = choice(false); // = { ok: false, error: [ ... ] }
  * ```
  */
-export function choose<Decoders extends Decoder<any, In>[], In = unknown>(
+export function choose<Decoders extends DecoderArray<any, In>, In = unknown>(
   ...options: Decoders
-): Decoder<ChooseOutputType<Decoders>, In> {
+): ChooseDecoderType<Decoders, In> {
   return new ChooseDecoder(options);
 }
 
-class ChooseDecoder<Decoders extends Decoder<any, In>[], In = unknown>
-  implements Decoder<ChooseOutputType<Decoders>, In>
+class ChooseDecoder<Decoders extends DecoderArray<any, In>, In = unknown>
+  implements ChooseDecoderType<Decoders, In>
 {
   constructor(public readonly options: Decoders) {}
 
   public decode(
     value: In,
     opts?: DecoderOptions,
-  ): Result<ChooseOutputType<Decoders>> {
+  ): Result<ChooseOutputType<Decoders>, ChooseError<Decoders>> {
     const errors: DecoderError[] = [];
 
     for (const decoder of this.options) {
@@ -60,9 +76,15 @@ class ChooseDecoder<Decoders extends Decoder<any, In>[], In = unknown>
       if (result.ok) {
         return result;
       }
-      errors.push(...result.error);
+      errors.push(result.error);
     }
 
-    return error(errors);
+    return error({
+      type: 'composite:choose',
+      text: 'failed to match one of',
+      choose: errors as ChooseError<Decoders>['choose'],
+    });
   }
+
+  public readonly withError = withError(this).map;
 }

@@ -53,7 +53,11 @@ describe('choose', () => {
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
 
-    expect(result.error).toEqual([mockError(1), mockError(2), mockError(3)]);
+    expect(result.error).toEqual({
+      type: 'composite:choose',
+      text: 'failed to match one of',
+      choose: [mockError(1), mockError(2), mockError(3)],
+    });
 
     expect(decoder1.decode).toHaveBeenCalledTimes(1);
     expect(decoder1.mock.calls[0][0]).toBe(input);

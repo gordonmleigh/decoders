@@ -1,15 +1,6 @@
 import { Decoder } from '../core/Decoder.js';
-import { invalid, ok, Result } from '../core/Result.js';
-
-/**
- * The error identifer returned when {@link string} fails.
- */
-export const ExpectedString = 'EXPECTED_STRING';
-
-/**
- * The error identifer returned when a string is the wrong length.
- */
-export const ExpectedStringLength = 'EXPECTED_STRING_LENGTH';
+import { DecoderError } from '../core/DecoderError.js';
+import { ok, Result } from '../core/Result.js';
 
 /**
  * Options to pass to a {@link StringDecoder}.
@@ -31,16 +22,24 @@ export interface StringDecoderOptions {
   trim?: boolean;
 }
 
-class StringDecoder implements Decoder<string> {
+class StringDecoder
+  implements Decoder<string, unknown, DecoderError<'value:string'>>
+{
   public readonly options: Readonly<StringDecoderOptions>;
 
   constructor(options: StringDecoderOptions = {}) {
     this.options = Object.freeze(options);
   }
 
-  public decode(value: unknown): Result<string> {
+  public decode(value: unknown): Result<string, DecoderError<'value:string'>> {
     if (typeof value !== 'string') {
-      return invalid(ExpectedString, 'expected string');
+      return {
+        ok: false,
+        error: {
+          type: 'value:string',
+          text: 'expected string',
+        },
+      };
     }
     const str = this.options.trim ? value.trim() : value;
 
@@ -48,19 +47,25 @@ class StringDecoder implements Decoder<string> {
       this.options.maxLength !== undefined &&
       str.length > this.options.maxLength
     ) {
-      return invalid(
-        ExpectedStringLength,
-        `expected max length ${this.options.maxLength}`,
-      );
+      return {
+        ok: false,
+        error: {
+          type: 'value:string',
+          text: `expected max length ${this.options.maxLength}`,
+        },
+      };
     }
     if (
       this.options.minLength !== undefined &&
       str.length < this.options.minLength
     ) {
-      return invalid(
-        ExpectedStringLength,
-        `expected min length ${this.options.minLength}`,
-      );
+      return {
+        ok: false,
+        error: {
+          type: 'value:string',
+          text: `expected min length ${this.options.minLength}`,
+        },
+      };
     }
     return ok(str);
   }

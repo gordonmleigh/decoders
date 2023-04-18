@@ -6,5 +6,5 @@ export default {
   testEnvironment: 'node',
   testPathIgnorePatterns: ['/node_modules/', '/lib/', '/build/', '/dist/'],
   testRegex: '(/__tests__/.*|(\\.|/)(test))\\.[jt]sx?$',
-  transform: { '\\.[jt]sx?$': '@sucrase/jest-plugin' },
+  transform: { '\\.[jt]sx?$': '@swc/jest' },
 };
