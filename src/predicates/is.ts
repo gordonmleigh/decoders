@@ -16,8 +16,8 @@ export function is<const T>(
 ): Decoder<T, unknown, IsDecoderError<T>> {
   return predicate(
     (value: T) => options.includes(value),
-    'expected specific value',
     'value:is',
+    'expected specific value',
     { options },
   );
 }

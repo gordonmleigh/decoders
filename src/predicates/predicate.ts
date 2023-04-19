@@ -8,23 +8,22 @@ import { ok } from '../core/Result.js';
  */
 export function predicate<Value>(
   test: (value: Value) => boolean,
-  message?: string,
 ): Decoder<Value, Value, DecoderError<'value:condition'>>;
 export function predicate<Value, Type extends string>(
   test: (value: Value) => boolean,
-  message: string | undefined,
   type: Type,
+  message: string | undefined,
 ): Decoder<Value, Value, DecoderError<Type>>;
 export function predicate<Value, Type extends string, Meta>(
   test: (value: Value) => boolean,
-  message: string | undefined,
   type: Type,
+  message: string,
   meta: Meta,
 ): Decoder<Value, Value, DecoderError<Type> & Meta>;
 export function predicate(
   test: (value: any) => boolean,
-  text = 'condition failure',
   type = 'value:condition',
+  text = 'condition failure',
   meta?: any,
 ): Decoder<any, any, any> {
   return decoder((value) => {

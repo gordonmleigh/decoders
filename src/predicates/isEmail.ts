@@ -8,6 +8,6 @@ export const W3CEmailValidationRegex =
 
 export const isEmail = regexp(
   W3CEmailValidationRegex,
-  'expected email',
   'value:email',
+  'expected email',
 );

@@ -15,17 +15,16 @@ export type RegexpDecoderError<T extends string = 'value:regexp'> =
  */
 export function regexp(
   match: RegExp,
-  message?: string,
 ): Decoder<string, string, RegexpDecoderError>;
 export function regexp<Type extends string>(
   match: RegExp,
-  message: string | undefined,
   type: Type,
+  message: string | undefined,
 ): Decoder<string, string, RegexpDecoderError<Type>>;
 export function regexp(
   match: RegExp,
-  message = `must match ${match}`,
   type = 'value:regexp',
+  message = `must match ${match}`,
 ): Decoder<string, string, RegexpDecoderError<string>> {
-  return predicate((x) => match.test(x), message, type);
+  return predicate((x) => match.test(x), type, message);
 }

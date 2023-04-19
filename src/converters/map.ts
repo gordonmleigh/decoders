@@ -13,6 +13,6 @@ import { ok } from '../core/Result.js';
  * const trim = map((value: string) => value.trim());
  * ```
  */
-export function map<T, V>(map: (value: T) => V): Decoder<V, T> {
+export function map<Out, In>(map: (value: In) => Out): Decoder<Out, In> {
   return decoder((value) => ok(map(value)));
 }

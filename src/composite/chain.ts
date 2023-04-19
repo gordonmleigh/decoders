@@ -13,7 +13,7 @@ export type DecoderChain<Decoders> = Decoders extends readonly [AnyDecoder]
 
 export type ConstrainedDecoderArray<Out, In = unknown, Middle = any> =
   | [Decoder<Out, In>]
-  | [Decoder<Middle, In>, Decoder<Out, any>]
+  | [Decoder<Middle, In>, Decoder<Out, Middle>]
   | [Decoder<Middle, In>, ...DecoderArray, Decoder<Out, Middle>];
 
 export type ChainInput<D extends DecoderArray> = D extends [

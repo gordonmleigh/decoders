@@ -6,6 +6,6 @@ import { predicate } from './predicate.js';
  */
 export const isInteger = predicate(
   Number.isSafeInteger,
-  'expected integer',
   'value:integer',
+  'expected integer',
 );

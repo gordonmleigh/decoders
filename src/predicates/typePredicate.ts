@@ -11,23 +11,22 @@ export const ExpectedType = 'EXPECTED_TYPE';
  */
 export function typePredicate<Out extends In, In>(
   test: TypePredicate<Out, In>,
-  message?: string,
 ): Decoder<Out, In, DecoderError<'value:type'>>;
 export function typePredicate<Out extends In, In, Type extends string>(
   test: TypePredicate<Out, In>,
-  message: string | undefined,
   type: Type,
+  message: string,
 ): Decoder<Out, In, DecoderError<Type>>;
 export function typePredicate<Out extends In, In, Type extends string, Meta>(
   test: TypePredicate<Out, In>,
-  message: string | undefined,
   type: Type,
+  message: string,
   meta: Meta,
 ): Decoder<Out, In, DecoderError<Type> & Meta>;
 export function typePredicate(
   test: TypePredicate<any>,
-  text = 'condition failure',
   type = 'value:condition',
+  text = 'condition failure',
   meta?: any,
 ): Decoder<any, any, any> {
   return decoder((value) => {

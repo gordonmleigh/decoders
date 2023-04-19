@@ -24,7 +24,7 @@ describe('predicate', () => {
   });
 
   it('uses custom text and id if supplied', () => {
-    const decoder = regexp(/^nomatch$/, 'text', 'FAIL');
+    const decoder = regexp(/^nomatch$/, 'FAIL', 'text');
 
     const result = decoder.decode('test');
 

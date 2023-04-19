@@ -38,7 +38,7 @@ describe('predicate', () => {
   it('uses custom text, id and details if supplied', () => {
     const mapper = jest.fn((x: unknown) => false);
 
-    const decoder = predicate(mapper, 'text', 'FAIL', {
+    const decoder = predicate(mapper, 'FAIL', 'text', {
       foo: 'bar',
       baz: 'boom',
     });

@@ -5,6 +5,6 @@ import { typePredicate } from '../predicates/typePredicate.js';
  */
 export const boolean = typePredicate(
   (value): value is boolean => typeof value === 'boolean',
-  'expected boolean',
   'value:boolean',
+  'expected boolean',
 );
