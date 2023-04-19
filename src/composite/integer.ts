@@ -1,4 +1,4 @@
-import { isInteger } from '../predicates/isInt.js';
+import { isInteger } from '../predicates/isInteger.js';
 import { number } from '../primitives/number.js';
 import { chain } from './chain.js';
 

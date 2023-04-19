@@ -83,10 +83,7 @@ class ChainDecoder<
     return new this(chain);
   };
 
-  constructor(
-    public readonly decoders: DecoderChain<Chain>,
-    private readonly error?: (error: ChainError<Chain>) => Err,
-  ) {}
+  constructor(public readonly decoders: DecoderChain<Chain>) {}
 
   public decode(
     value: ChainInput<Chain>,
@@ -97,12 +94,6 @@ class ChainDecoder<
     for (const decoder of this.decoders) {
       const result = decoder.decode(next, opts);
       if (!result.ok) {
-        if (this.error) {
-          return {
-            ok: false,
-            error: this.error(result.error),
-          };
-        }
         return result;
       }
       next = result.value;

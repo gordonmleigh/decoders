@@ -1,7 +1,7 @@
 import { Decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
 import { DecoderOptions } from '../core/DecoderOptions.js';
-import { error, ok, Result } from '../core/Result.js';
+import { error, invalid, ok, Result } from '../core/Result.js';
 
 /**
  * The error type of an array decoder.
@@ -34,7 +34,7 @@ export function array<Element, ElementErr extends DecoderError>(
  * inferred.
  */
 export function arrayType<Element>(): ArrayDecoderFactory<Element> {
-  return ArrayDecoder as ArrayDecoderFactory<Element>;
+  return ArrayDecoder;
 }
 
 class ArrayDecoder<Element, ElementErr extends DecoderError>
@@ -53,7 +53,7 @@ class ArrayDecoder<Element, ElementErr extends DecoderError>
     opts?: DecoderOptions,
   ): Result<Element[], ArrayError<ElementErr>> {
     if (!Array.isArray(value)) {
-      return error({ type: 'composite:array', text: 'expected array' });
+      return invalid('composite:array', 'expected array');
     }
 
     const decoded: Element[] = [];

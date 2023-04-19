@@ -1,4 +1,5 @@
 import { Decoder } from './Decoder.js';
+import { DecoderError } from './DecoderError.js';
 import { DecoderOptions } from './DecoderOptions.js';
 import { DecodingAssertError } from './DecodingAssertError.js';
 import { Result } from './Result.js';
@@ -6,10 +7,12 @@ import { Result } from './Result.js';
 /**
  * Implements the [[Model]] interface for a given decoder.
  */
-export class DecoderModel<T> implements Model<T> {
-  constructor(private readonly decoder: Decoder<T>) {}
+export class DecoderModel<Out extends In, In, Err extends DecoderError>
+  implements Model<Out, In, Err>
+{
+  constructor(private readonly decoder: Decoder<Out, In, Err>) {}
 
-  public readonly assert = (value: unknown, opts?: DecoderOptions): T => {
+  public readonly assert = (value: In, opts?: DecoderOptions): Out => {
     const result = this.decode(value, opts);
     if (!result.ok) {
       throw new DecodingAssertError(result.error);
@@ -18,13 +21,13 @@ export class DecoderModel<T> implements Model<T> {
   };
 
   public readonly decode = (
-    value: unknown,
+    value: In,
     opts?: DecoderOptions,
-  ): Result<T> => {
+  ): Result<Out, Err> => {
     return this.decoder.decode(value, opts);
   };
 
-  public readonly test = (value: unknown): value is T => {
+  public readonly test = (value: In): value is Out => {
     const result = this.decoder.decode(value);
     return result.ok;
   };
@@ -34,12 +37,16 @@ export class DecoderModel<T> implements Model<T> {
  * Represents a decoder that returns the value itself on success and throws
  * [[DecodingAssertError]] on error.
  */
-export interface Model<Out> {
+export interface Model<
+  Out extends In,
+  In = unknown,
+  Err extends DecoderError = DecoderError,
+> {
   /**
    * Decode a value and return the decoded value, or throw
    * [[DecodingAssertError]] if decoding fails.
    */
-  assert(value: unknown): Out;
+  assert(value: In): Out;
 
   /**
    * Decode a value, possibly validating or transforming it.
@@ -47,12 +54,12 @@ export interface Model<Out> {
    * @param value The input value
    * @returns [[OkResult]] on success or [[ErrorResult]] on failure.
    */
-  decode(value: unknown): Result<Out>;
+  decode(value: In): Result<Out, Err>;
 
   /**
    * Returns true if the value can be decoded.
    */
-  test(value: unknown): value is Out;
+  test(value: In): value is Out;
 }
 
 /**
@@ -62,6 +69,8 @@ export interface Model<Out> {
  *
  * @param decoder The decoder to wrap.
  */
-export function model<Out>(decoder: Decoder<Out>): Model<Out> {
+export function model<Out extends In, In, Err extends DecoderError>(
+  decoder: Decoder<Out, In, Err>,
+): Model<Out, In, Err> {
   return new DecoderModel(decoder);
 }

@@ -45,9 +45,17 @@ export function error<Err extends DecoderError>(error: Err): ErrorResult<Err> {
  * @param text A simple textual description of the error.
  * @param details Extra details, intended to be used in error formatting.
  */
-export function invalid<Type extends string>(
+export function invalid<Type extends string, Rest>(
   type: Type,
   text: string,
-): ErrorResult<DecoderError<Type>> {
-  return { ok: false, error: { type, text } };
+  rest?: Rest,
+): ErrorResult<DecoderError<Type> & Rest> {
+  return {
+    ok: false,
+    error: {
+      text,
+      type,
+      ...rest,
+    } as DecoderError<Type> & Rest,
+  };
 }

@@ -1,6 +1,6 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { isInteger } from './isInt.js';
+import { isInteger } from './isInteger.js';
 
 describe('integer', () => {
   it('decodes an integer', () => {

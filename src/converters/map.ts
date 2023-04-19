@@ -1,3 +1,4 @@
+import { decoder } from '../composite/decoder.js';
 import { Decoder } from '../core/Decoder.js';
 import { ok } from '../core/Result.js';
 
@@ -13,5 +14,5 @@ import { ok } from '../core/Result.js';
  * ```
  */
 export function map<T, V>(map: (value: T) => V): Decoder<V, T> {
-  return { decode: (value) => ok(map(value)) };
+  return decoder((value) => ok(map(value)));
 }
