@@ -1,20 +1,75 @@
-import { Decoder, OutputType } from '../core/Decoder.js';
+import { Decoder, OptionsType, OutputType } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import {
-  DecoderOptions,
-  DefaultDecoderOptions,
-  ExtraFields,
-  UndefinedFields,
-  combineDecoderOptions,
-} from '../core/DecoderOptions.js';
 import { Result, error, invalid, ok } from '../core/Result.js';
-import { ExpandType } from '../internal/ExpandType.js';
 import { isPlainObject } from '../internal/isPlainObject.js';
+import { stripUndefined } from '../internal/stripUndefined.js';
+import { UnionToIntersection, ValuesOf } from '../internal/typeUtils.js';
+
+/**
+ * Specifies the action to take when a field is encountered that has no
+ * corresponding decoder.
+ */
+export enum ExtraFields {
+  /**
+   * Silently drop the field.
+   */
+  Ignore,
+
+  /**
+   * Include the field and its value verbatim.
+   */
+  Include,
+
+  /**
+   * Return a error result.
+   */
+  Reject,
+}
+
+/**
+ * Specifies the action to take for an when a decoder for a field returns
+ * undefined.
+ */
+export enum UndefinedFields {
+  /**
+   * Keep if present in input.
+   */
+  FromInput,
+
+  /**
+   * Set undefined explicitly even if not present in input.
+   */
+  Explicit,
+
+  /**
+   * Remove undefined fields.
+   */
+  Strip,
+}
+
+/**
+ * Options to control decoding of a value.
+ */
+export interface ObjectDecoderOptions {
+  /**
+   * Specifies the action to take when a field is encountered that has no
+   * corresponding decoder.
+   */
+  extraFields?: ExtraFields;
+
+  /**
+   * Specifies the action to take for an when a decoder for a field returns
+   * undefined.
+   */
+  undefinedFields?: UndefinedFields;
+}
 
 /**
  * Defines a map of decoders for each property of a given type.
  */
-export type PropDecoders<T> = { [K in keyof T]-?: Decoder<T[K]> };
+export type PropDecoders<T> = {
+  [K in keyof T]-?: Decoder<T[K], any, any, any>;
+};
 
 export interface ObjectErrorBase<Out> extends DecoderError<'composite:object'> {
   properties?: {
@@ -31,22 +86,26 @@ export interface ObjectError<Props extends PropDecoders<any>>
   };
 }
 
+export type ObjectPropsOptions<Props extends PropDecoders<any>> =
+  ObjectDecoderOptions &
+    UnionToIntersection<Exclude<OptionsType<ValuesOf<Props>>, void>>;
+
 export type ObjectType<Props extends PropDecoders<any>> = {
   [K in keyof Props]: OutputType<Props[K]>;
 };
 
-export interface ObjectDecoder<
-  Out,
-  Err extends ObjectErrorBase<Out> = ObjectErrorBase<Out>,
-> extends Decoder<Out, unknown, Err> {
-  withOptions(options: DecoderOptions): ObjectDecoder<Out, Err>;
-}
+export type ObjectDecoderType<Props extends PropDecoders<any>> = Decoder<
+  ObjectType<Props>,
+  unknown,
+  ObjectError<Props>,
+  ObjectPropsOptions<Props>
+>;
 
 export interface ObjectDecoderFactory<Out> {
   schema<Props extends PropDecoders<Out>>(
     props: Props,
-    defaultOptions?: DecoderOptions,
-  ): ObjectDecoder<Out, ExpandType<ObjectError<Props>>>;
+    defaultOptions?: ObjectPropsOptions<Props>,
+  ): ObjectDecoderType<Props>;
 }
 
 /**
@@ -54,12 +113,9 @@ export interface ObjectDecoderFactory<Out> {
  */
 export function object<Props extends PropDecoders<any>>(
   props: Props,
-  defaultOptions?: DecoderOptions,
-): ObjectDecoder<
-  ExpandType<ObjectType<Props>>,
-  ExpandType<ObjectError<Props>>
-> {
-  return ObjectDecoderImpl.schema(props, defaultOptions);
+  defaultOptions?: ObjectPropsOptions<Props>,
+): ObjectDecoderType<Props> {
+  return ObjectDecoder.schema(props, defaultOptions);
 }
 
 /**
@@ -67,35 +123,37 @@ export function object<Props extends PropDecoders<any>>(
  * inferred.
  */
 export function objectType<Out>(): ObjectDecoderFactory<Out> {
-  return ObjectDecoderImpl as ObjectDecoderFactory<Out>;
+  return ObjectDecoder as ObjectDecoderFactory<Out>;
 }
 
-class ObjectDecoderImpl<Props extends PropDecoders<any>>
-  implements ObjectDecoder<ObjectType<Props>, ObjectError<Props>>
+class ObjectDecoder<Props extends PropDecoders<any>>
+  implements ObjectDecoderType<Props>
 {
   public static readonly schema = <Props extends PropDecoders<any>>(
     props: Props,
-    defaultOptions?: DecoderOptions,
-  ): ObjectDecoder<
-    ExpandType<ObjectType<Props>>,
-    ExpandType<ObjectError<Props>>
-  > => {
+    defaultOptions?: ObjectPropsOptions<Props>,
+  ): ObjectDecoderType<Props> => {
     return new this(props, defaultOptions) as any;
   };
 
   constructor(
     public readonly properties: Props,
-    public readonly defaultOptions: DecoderOptions = {},
+    public readonly defaultOptions: ObjectPropsOptions<Props> = {} as any,
   ) {}
 
   public decode(
     value: unknown,
-    optionOverrides?: DecoderOptions,
+    optionOverrides?: ObjectPropsOptions<Props>,
   ): Result<ObjectType<Props>, ObjectError<Props>> {
     if (!isPlainObject(value)) {
       return invalid('composite:object', 'expected object');
     }
-    const opts = combineDecoderOptions(this.defaultOptions, optionOverrides);
+    const opts = optionOverrides
+      ? {
+          ...this.defaultOptions,
+          ...stripUndefined(optionOverrides),
+        }
+      : this.defaultOptions;
 
     let anyErrors = false;
     const errors = {} as Record<keyof Props, DecoderError>;
@@ -115,10 +173,7 @@ class ObjectDecoderImpl<Props extends PropDecoders<any>>
           anyErrors = true;
           errors[key as keyof Props] = propResult.error;
         } else if (propResult.value === undefined) {
-          switch (
-            opts?.undefinedFields ??
-            DefaultDecoderOptions.undefinedFields
-          ) {
+          switch (opts?.undefinedFields) {
             case UndefinedFields.Explicit:
               outputValue[key] = propResult.value;
               break;
@@ -134,11 +189,11 @@ class ObjectDecoderImpl<Props extends PropDecoders<any>>
         }
       } else {
         // property is not in validator definition
-        switch (opts?.extraFields ?? DefaultDecoderOptions.extraFields) {
+        switch (opts?.extraFields) {
           case ExtraFields.Reject:
             anyErrors = true;
             errors[key as keyof Props] = {
-              type: 'invalid',
+              type: 'value:invalid',
               text: 'unexpected property',
             };
             break;
@@ -159,15 +214,5 @@ class ObjectDecoderImpl<Props extends PropDecoders<any>>
     } else {
       return ok(outputValue as ObjectType<Props>);
     }
-  }
-
-  /**
-   * Create another decoder instance with different options.
-   */
-  public withOptions(options: DecoderOptions): ObjectDecoderImpl<Props> {
-    return new ObjectDecoderImpl<Props>(
-      this.properties,
-      combineDecoderOptions(this.defaultOptions, options),
-    );
   }
 }

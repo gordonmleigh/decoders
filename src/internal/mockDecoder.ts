@@ -1,26 +1,31 @@
 import 'jest';
+import { DecoderFunction } from '../composite/decoder.js';
 import { Decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderOptions } from '../core/DecoderOptions.js';
 import { Result } from '../core/Result.js';
 
-class MockDecoder<Out = unknown, In = unknown> implements Decoder<Out, In> {
-  public readonly decode: jest.Mock<
-    Result<Out>,
-    [value: In, opts?: DecoderOptions | undefined]
-  >;
+class MockDecoder<
+  Out = unknown,
+  In = unknown,
+  Err extends DecoderError = DecoderError,
+  Opts = void,
+> implements Decoder<Out, In, Err, Opts>
+{
+  public readonly decode: jest.Mock<Result<Out, Err>, [value: In, opts?: Opts]>;
 
   public get mock(): (typeof this.decode)['mock'] {
     return this.decode.mock;
   }
 
-  constructor(decode: Decoder<Out, In>['decode']) {
+  constructor(decode: DecoderFunction<Out, In, Err, Opts>) {
     this.decode = jest.fn(decode);
   }
 }
 
 export function mockDecoder(): MockDecoder;
-export function mockDecoder<T>(value: T): MockDecoder<T>;
+export function mockDecoder<T, Opts = void>(
+  value: T,
+): MockDecoder<T, unknown, DecoderError, Opts>;
 export function mockDecoder(value?: unknown): MockDecoder {
   return new MockDecoder((v) => ({
     ok: true,

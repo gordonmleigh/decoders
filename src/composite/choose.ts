@@ -1,9 +1,8 @@
 import { withError, WithErrorFn } from '../converters/withError.js';
-import { Decoder } from '../core/Decoder.js';
+import { AnyDecoder, Decoder, DecoderArray } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderOptions } from '../core/DecoderOptions.js';
 import { error, Result } from '../core/Result.js';
-import { DecoderArray } from '../internal/AnyDecoder.js';
+import { UnionToIntersection } from '../internal/typeUtils.js';
 
 /**
  * Get the output type of an array of decoders.
@@ -24,14 +23,30 @@ export type ChooseOutputType<T> = T extends DecoderArray<infer Out>
 export type ChooseError<T extends DecoderArray> =
   DecoderError<'composite:choose'> & {
     choose: {
-      [K in keyof T]: T[K] extends Decoder<any, any, infer Err> ? Err : never;
+      [K in keyof T]: T[K] extends AnyDecoder<any, any, infer Err>
+        ? Err
+        : never;
     };
   };
+
+export type ChooseOptionsType<T> = T extends DecoderArray<
+  any,
+  any,
+  any,
+  infer Opts
+>
+  ? UnionToIntersection<Opts>
+  : never;
 
 export interface ChooseDecoderType<
   Decoders extends DecoderArray<any, In>,
   In = unknown,
-> extends Decoder<ChooseOutputType<Decoders>, In, ChooseError<Decoders>> {
+> extends Decoder<
+    ChooseOutputType<Decoders>,
+    In,
+    ChooseError<Decoders>,
+    ChooseOptionsType<Decoders>
+  > {
   withError: WithErrorFn<this>;
 }
 
@@ -67,7 +82,7 @@ class ChooseDecoder<Decoders extends DecoderArray<any, In>, In = unknown>
 
   public decode(
     value: In,
-    opts?: DecoderOptions,
+    opts?: ChooseOptionsType<Decoders>,
   ): Result<ChooseOutputType<Decoders>, ChooseError<Decoders>> {
     const errors: DecoderError[] = [];
 

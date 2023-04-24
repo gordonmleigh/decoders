@@ -1,13 +1,18 @@
-import { Decoder, ErrorType, InputType, OutputType } from '../core/Decoder.js';
+import {
+  AnyDecoder,
+  Decoder,
+  ErrorType,
+  InputType,
+  OptionsType,
+  OutputType,
+} from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderOptions } from '../core/DecoderOptions.js';
 import { Result } from '../core/Result.js';
-import { AnyDecoder } from '../internal/AnyDecoder.js';
 
 export type DecoderWithError<
   Input extends AnyDecoder,
   Err extends DecoderError,
-> = Decoder<OutputType<Input>, InputType<Input>, Err>;
+> = Decoder<OutputType<Input>, InputType<Input>, Err, OptionsType<Input>>;
 
 export interface WithErrorFn<Input extends AnyDecoder> {
   /**
@@ -67,7 +72,7 @@ class WithErrorWrapper<Input extends AnyDecoder, Err extends DecoderError>
 
   public decode(
     value: InputType<Input>,
-    opts?: DecoderOptions | undefined,
+    opts?: OptionsType<Input>,
   ): Result<OutputType<Input>, Err> {
     const result = this.wrapped.decode(value, opts);
     if (!result.ok) {

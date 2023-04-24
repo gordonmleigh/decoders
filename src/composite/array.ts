@@ -1,20 +1,32 @@
-import { Decoder } from '../core/Decoder.js';
+import {
+  AnyDecoder,
+  Decoder,
+  ErrorType,
+  OptionsType,
+  OutputType,
+} from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderOptions } from '../core/DecoderOptions.js';
-import { error, invalid, ok, Result } from '../core/Result.js';
+import { Result, error, invalid, ok } from '../core/Result.js';
 
 /**
  * The error type of an array decoder.
  */
-export interface ArrayError<Element extends DecoderError = DecoderError>
+export interface ArrayError<ElementDecoder extends AnyDecoder>
   extends DecoderError<'composite:array'> {
-  elements?: { [index: number]: Element };
+  elements?: { [index: number]: ErrorType<ElementDecoder> };
 }
 
-export interface ArrayDecoderFactory<Element> {
-  schema<Err extends DecoderError>(
-    element: Decoder<Element, unknown, Err>,
-  ): ArrayDecoder<Element, Err>;
+export type ArrayDecoderType<ElementDecoder extends AnyDecoder> = Decoder<
+  OutputType<ElementDecoder>[],
+  unknown,
+  ArrayError<ElementDecoder>,
+  OptionsType<ElementDecoder>
+>;
+
+export interface ArrayDecoderFactory<ElementType> {
+  schema<ElementDecoder extends Decoder<ElementType>>(
+    element: ElementDecoder,
+  ): ArrayDecoderType<ElementDecoder>;
 }
 
 /**
@@ -23,9 +35,9 @@ export interface ArrayDecoderFactory<Element> {
  *
  * @param elem The [[Decoder]] to use to decode the elements.
  */
-export function array<Element, ElementErr extends DecoderError>(
-  element: Decoder<Element, unknown, ElementErr>,
-): Decoder<Element[], unknown, ArrayError<ElementErr>> {
+export function array<ElementDecoder extends AnyDecoder>(
+  element: ElementDecoder,
+): ArrayDecoderType<ElementDecoder> {
   return ArrayDecoder.schema(element);
 }
 
@@ -33,31 +45,31 @@ export function array<Element, ElementErr extends DecoderError>(
  * Helper function to allow the output type to be constrained and the error type
  * inferred.
  */
-export function arrayType<Element>(): ArrayDecoderFactory<Element> {
+export function arrayType<ElementType>(): ArrayDecoderFactory<ElementType> {
   return ArrayDecoder;
 }
 
-class ArrayDecoder<Element, ElementErr extends DecoderError>
-  implements Decoder<Element[], unknown, ArrayError<ElementErr>>
+class ArrayDecoder<ElementDecoder extends AnyDecoder>
+  implements ArrayDecoderType<ElementDecoder>
 {
-  public static readonly schema = <Element, ElementErr extends DecoderError>(
-    element: Decoder<Element, unknown, ElementErr>,
-  ): ArrayDecoder<Element, ElementErr> => {
+  public static readonly schema = <ElementDecoder extends AnyDecoder>(
+    element: ElementDecoder,
+  ): ArrayDecoderType<ElementDecoder> => {
     return new this(element);
   };
 
-  constructor(public readonly element: Decoder<Element, unknown, ElementErr>) {}
+  constructor(public readonly element: ElementDecoder) {}
 
   public decode(
     value: unknown,
-    opts?: DecoderOptions,
-  ): Result<Element[], ArrayError<ElementErr>> {
+    opts?: OptionsType<ElementDecoder>,
+  ): Result<OutputType<ElementDecoder>[], ArrayError<ElementDecoder>> {
     if (!Array.isArray(value)) {
       return invalid('composite:array', 'expected array');
     }
 
-    const decoded: Element[] = [];
-    const errors: Record<number, ElementErr> = {};
+    const decoded: OutputType<ElementDecoder>[] = [];
+    const errors: Record<number, ErrorType<ElementDecoder>> = {};
     let anyErrors = false;
 
     for (let i = 0; i < value.length; ++i) {

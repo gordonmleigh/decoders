@@ -8,19 +8,23 @@ export type DecoderFunction<
   Out,
   In = unknown,
   Err extends DecoderError = DecoderError,
-> = Decoder<Out, In, Err>['decode'];
+  Opts = unknown,
+> = Decoder<Out, In, Err, Opts>['decode'];
 
 /**
  * Create a custom decoder from a {@link DecoderFunction}.
  */
-export function decoder<Out, In, Err extends DecoderError>(
-  decode: DecoderFunction<Out, In, Err>,
-): Decoder<Out, In, Err> {
+export function decoder<
+  Out,
+  In = unknown,
+  Err extends DecoderError = DecoderError,
+  Opts = unknown,
+>(decode: DecoderFunction<Out, In, Err, Opts>): Decoder<Out, In, Err, Opts> {
   return new SimpleDecoder(decode);
 }
 
-class SimpleDecoder<Out, In, Err extends DecoderError>
-  implements Decoder<Out, In, Err>
+class SimpleDecoder<Out, In, Err extends DecoderError, Opts>
+  implements Decoder<Out, In, Err, Opts>
 {
-  constructor(public readonly decode: DecoderFunction<Out, In, Err>) {}
+  constructor(public readonly decode: DecoderFunction<Out, In, Err, Opts>) {}
 }

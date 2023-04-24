@@ -1,8 +1,7 @@
 import 'jest';
-import { UndefinedFields } from '../core/DecoderOptions.js';
 import { assertCond } from '../internal/assertCond.js';
 import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder.js';
-import { object } from './object.js';
+import { ExtraFields, UndefinedFields, object } from './object.js';
 
 describe('composite:object', () => {
   it('invokes each property decoder', () => {
@@ -10,8 +9,8 @@ describe('composite:object', () => {
     const value2 = Symbol();
     const value3 = Symbol();
 
-    const prop1 = mockDecoder(value1);
-    const prop2 = mockDecoder(value2);
+    const prop1 = mockDecoder<typeof value1, { str: string }>(value1);
+    const prop2 = mockDecoder<typeof value2, { num: number }>(value2);
     const prop3 = mockDecoder(value3);
 
     const decoder = object({
@@ -25,7 +24,10 @@ describe('composite:object', () => {
       prop2: Symbol(),
       prop3: Symbol(),
     };
-    const result = decoder.decode(input);
+    const result = decoder.decode(input, {
+      num: 1,
+      str: 'hello',
+    });
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -37,9 +39,11 @@ describe('composite:object', () => {
 
     expect(prop1.decode).toHaveBeenCalledTimes(1);
     expect(prop1.mock.calls[0][0]).toBe(input.prop1);
+    expect(prop1.mock.calls[0][1]).toEqual({ num: 1, str: 'hello' });
 
     expect(prop2.decode).toHaveBeenCalledTimes(1);
     expect(prop2.mock.calls[0][0]).toBe(input.prop2);
+    expect(prop1.mock.calls[0][1]).toEqual({ num: 1, str: 'hello' });
 
     expect(prop3.decode).toHaveBeenCalledTimes(1);
     expect(prop3.mock.calls[0][0]).toBe(input.prop3);
@@ -164,6 +168,38 @@ describe('composite:object', () => {
     expect(prop1.mock.calls[0][0]).toBe(input.prop1);
   });
 
+  it('rejects properties with no matching decoder if extraFields is set to Reject', () => {
+    const value1 = Symbol();
+
+    const prop1 = mockDecoder(value1);
+
+    const decoder = object({
+      prop1,
+    });
+
+    const input = {
+      prop1: Symbol(),
+      prop2: Symbol(),
+    };
+    const result = decoder.decode(input, { extraFields: ExtraFields.Reject });
+
+    expect(result.ok).toBe(false);
+    assertCond(!result.ok);
+    expect(result.error).toEqual({
+      type: 'composite:object',
+      text: 'invalid properties',
+      properties: {
+        prop2: {
+          type: 'value:invalid',
+          text: 'unexpected property',
+        },
+      },
+    });
+
+    expect(prop1.decode).toHaveBeenCalledTimes(1);
+    expect(prop1.mock.calls[0][0]).toBe(input.prop1);
+  });
+
   it('sets missing properties to be explicitly undefined', () => {
     const prop1 = mockDecoder(undefined);
 
@@ -241,27 +277,6 @@ describe('composite:object', () => {
     const result = decoder.decode(input, {
       undefinedFields: UndefinedFields.Strip,
     });
-
-    expect(result.ok).toBe(true);
-    assertCond(result.ok);
-    expect(Object.keys(result.value)).toEqual([]);
-
-    expect(prop1.decode).toHaveBeenCalledTimes(1);
-    expect(prop1.mock.calls[0][0]).toBeUndefined();
-  });
-
-  it('creates a new decoder with overridden options with withOptions()', () => {
-    const prop1 = mockDecoder(undefined);
-
-    const decoder = object(
-      {
-        prop1,
-      },
-      { undefinedFields: UndefinedFields.Explicit },
-    ).withOptions({ undefinedFields: UndefinedFields.Strip });
-
-    const input = {};
-    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);

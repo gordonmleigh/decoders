@@ -1,20 +1,25 @@
 import { WithErrorFn, withError } from '../converters/withError.js';
-import { Decoder, InputType, OutputType } from '../core/Decoder.js';
+import {
+  AnyDecoder,
+  Decoder,
+  DecoderArray,
+  InputType,
+  OutputType,
+} from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderOptions } from '../core/DecoderOptions.js';
 import { Result, ok } from '../core/Result.js';
-import { AnyDecoder, DecoderArray } from '../internal/AnyDecoder.js';
+import { UnionToIntersection } from '../internal/typeUtils.js';
 
 export type DecoderChain<Decoders> = Decoders extends readonly [AnyDecoder]
   ? Decoders
   : Decoders extends readonly [any, ...infer Rest extends DecoderArray]
-  ? readonly [Decoder<InputType<Rest[0]>, any>, ...DecoderChain<Rest>]
+  ? readonly [AnyDecoder<InputType<Rest[0]>>, ...DecoderChain<Rest>]
   : never;
 
 export type ConstrainedDecoderArray<Out, In = unknown, Middle = any> =
-  | [Decoder<Out, In>]
-  | [Decoder<Middle, In>, Decoder<Out, Middle>]
-  | [Decoder<Middle, In>, ...DecoderArray, Decoder<Out, Middle>];
+  | [AnyDecoder<Out, In>]
+  | [AnyDecoder<Middle, In>, AnyDecoder<Out, Middle>]
+  | [AnyDecoder<Middle, In>, ...DecoderArray, AnyDecoder<Out, Middle>];
 
 export type ChainInput<D extends DecoderArray> = D extends [
   infer First,
@@ -38,10 +43,20 @@ export type ChainError<D extends DecoderArray> = D extends DecoderArray<
   ? Err
   : never;
 
+export type ChainOptions<D extends DecoderArray> = D extends DecoderArray<
+  any,
+  any,
+  any,
+  infer Options
+>
+  ? UnionToIntersection<Exclude<Options, void>>
+  : never;
+
 export interface ChainDecoderType<
   Chain extends DecoderArray,
   Err extends DecoderError = ChainError<Chain>,
-> extends Decoder<ChainOutput<Chain>, ChainInput<Chain>, Err> {
+  Opts = ChainOptions<Chain>,
+> extends Decoder<ChainOutput<Chain>, ChainInput<Chain>, Err, Opts> {
   withError: WithErrorFn<this>;
 }
 
@@ -72,10 +87,8 @@ export function chainType<
   return ChainDecoder;
 }
 
-class ChainDecoder<
-  Chain extends DecoderArray,
-  Err extends DecoderError = ChainError<Chain>,
-> implements ChainDecoderType<Chain, Err>
+class ChainDecoder<Chain extends DecoderArray>
+  implements ChainDecoderType<Chain, ChainError<Chain>>
 {
   public static readonly schema = <Chain extends DecoderArray>(
     ...chain: DecoderChain<Chain>
@@ -87,8 +100,8 @@ class ChainDecoder<
 
   public decode(
     value: ChainInput<Chain>,
-    opts?: DecoderOptions,
-  ): Result<ChainOutput<Chain>, Err> {
+    opts?: ChainOptions<Chain>,
+  ): Result<ChainOutput<Chain>, ChainError<Chain>> {
     let next = value;
 
     for (const decoder of this.decoders) {

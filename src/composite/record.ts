@@ -1,6 +1,5 @@
 import { Decoder, ErrorType, OutputType } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderOptions } from '../core/DecoderOptions.js';
 import { Result, error, ok } from '../core/Result.js';
 import { isPlainObject } from '../internal/isPlainObject.js';
 
@@ -49,7 +48,7 @@ class RecordDecoder<
 
   public decode(
     value: unknown,
-    opts?: DecoderOptions,
+    opts?: any,
   ): Result<
     Record<OutputType<Key>, OutputType<Value>>,
     RecordErrorTypeFor<Key, Value>
