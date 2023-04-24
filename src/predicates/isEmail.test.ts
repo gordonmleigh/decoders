@@ -2,7 +2,7 @@ import 'jest';
 import { assertCond } from '../internal/assertCond.js';
 import { isEmail } from './isEmail.js';
 
-describe('emisEmailail', () => {
+describe('isEmail', () => {
   it('accepts a common email format', () => {
     const result = isEmail.decode('gordon.leigh.101@example.com');
 
