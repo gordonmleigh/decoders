@@ -1,7 +1,7 @@
-import { withError, WithErrorFn } from '../converters/withError.js';
-import { AnyDecoder, Decoder, DecoderArray } from '../core/Decoder.js';
+import { AnyDecoder, DecoderArray } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { error, Result } from '../core/Result.js';
+import { DecoderValidator, validator } from '../core/DecoderValidator.js';
+import { error } from '../core/Result.js';
 import { UnionToIntersection } from '../internal/typeUtils.js';
 
 /**
@@ -38,17 +38,15 @@ export type ChooseOptionsType<T> = T extends DecoderArray<
   ? UnionToIntersection<Opts>
   : never;
 
-export interface ChooseDecoderType<
+export type ChooseDecoderType<
   Decoders extends DecoderArray<any, In>,
   In = unknown,
-> extends Decoder<
-    ChooseOutputType<Decoders>,
-    In,
-    ChooseError<Decoders>,
-    ChooseOptionsType<Decoders>
-  > {
-  withError: WithErrorFn<this>;
-}
+> = DecoderValidator<
+  ChooseOutputType<Decoders>,
+  In,
+  ChooseError<Decoders>,
+  ChooseOptionsType<Decoders>
+>;
 
 /**
  * Create a decoder which can succesfully decode an input value using one of the
@@ -72,21 +70,10 @@ export interface ChooseDecoderType<
 export function choose<Decoders extends DecoderArray<any, In>, In = unknown>(
   ...options: Decoders
 ): ChooseDecoderType<Decoders, In> {
-  return new ChooseDecoder(options);
-}
-
-class ChooseDecoder<Decoders extends DecoderArray<any, In>, In = unknown>
-  implements ChooseDecoderType<Decoders, In>
-{
-  constructor(public readonly options: Decoders) {}
-
-  public decode(
-    value: In,
-    opts?: ChooseOptionsType<Decoders>,
-  ): Result<ChooseOutputType<Decoders>, ChooseError<Decoders>> {
+  return validator((value, opts) => {
     const errors: DecoderError[] = [];
 
-    for (const decoder of this.options) {
+    for (const decoder of options) {
       const result = decoder.decode(value, opts);
       if (result.ok) {
         return result;
@@ -99,7 +86,5 @@ class ChooseDecoder<Decoders extends DecoderArray<any, In>, In = unknown>
       text: 'failed to match one of',
       choose: errors as ChooseError<Decoders>['choose'],
     });
-  }
-
-  public readonly withError = withError(this).map;
+  });
 }

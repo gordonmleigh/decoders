@@ -14,7 +14,7 @@ describe('assert', () => {
 
     expect(result).toBe(value);
     expect(decoder.decode).toHaveBeenCalledTimes(1);
-    expect(decoder.mock.calls[0][0]).toBe(input);
+    expect(decoder.decode.mock.calls[0][0]).toBe(input);
   });
 
   it('it throws DecodingAssertError on failure', () => {

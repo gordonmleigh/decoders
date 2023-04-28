@@ -1,8 +1,10 @@
 import { Decoder, OptionsType, OutputType } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { Result, error, invalid, ok } from '../core/Result.js';
+import { DecoderValidator, validator } from '../core/DecoderValidator.js';
+import { error, invalid, ok } from '../core/Result.js';
+import { combineOptions } from '../core/combineOptions.js';
+import { Schema } from '../internal/Schema.js';
 import { isPlainObject } from '../internal/isPlainObject.js';
-import { stripUndefined } from '../internal/stripUndefined.js';
 import { UnionToIntersection, ValuesOf } from '../internal/typeUtils.js';
 
 /**
@@ -94,12 +96,13 @@ export type ObjectType<Props extends PropDecoders<any>> = {
   [K in keyof Props]: OutputType<Props[K]>;
 };
 
-export type ObjectDecoderType<Props extends PropDecoders<any>> = Decoder<
-  ObjectType<Props>,
-  unknown,
-  ObjectError<Props>,
-  ObjectPropsOptions<Props>
->;
+export type ObjectDecoderType<Props extends PropDecoders<any>> =
+  DecoderValidator<
+    ObjectType<Props>,
+    unknown,
+    ObjectError<Props>,
+    ObjectPropsOptions<Props>
+  >;
 
 export interface ObjectDecoderFactory<Out> {
   schema<Props extends PropDecoders<Out>>(
@@ -115,55 +118,21 @@ export function object<Props extends PropDecoders<any>>(
   props: Props,
   defaultOptions?: ObjectPropsOptions<Props>,
 ): ObjectDecoderType<Props> {
-  return ObjectDecoder.schema(props, defaultOptions);
-}
-
-/**
- * Helper function to allow the output type to be constrained and the error type
- * inferred.
- */
-export function objectType<Out>(): ObjectDecoderFactory<Out> {
-  return ObjectDecoder as ObjectDecoderFactory<Out>;
-}
-
-class ObjectDecoder<Props extends PropDecoders<any>>
-  implements ObjectDecoderType<Props>
-{
-  public static readonly schema = <Props extends PropDecoders<any>>(
-    props: Props,
-    defaultOptions?: ObjectPropsOptions<Props>,
-  ): ObjectDecoderType<Props> => {
-    return new this(props, defaultOptions) as any;
-  };
-
-  constructor(
-    public readonly properties: Props,
-    public readonly defaultOptions: ObjectPropsOptions<Props> = {} as any,
-  ) {}
-
-  public decode(
-    value: unknown,
-    optionOverrides?: ObjectPropsOptions<Props>,
-  ): Result<ObjectType<Props>, ObjectError<Props>> {
+  return validator((value, optionOverrides) => {
     if (!isPlainObject(value)) {
       return invalid('composite:object', 'expected object');
     }
-    const opts = optionOverrides
-      ? {
-          ...this.defaultOptions,
-          ...stripUndefined(optionOverrides),
-        }
-      : this.defaultOptions;
+    const opts = combineOptions(defaultOptions, optionOverrides);
 
     let anyErrors = false;
     const errors = {} as Record<keyof Props, DecoderError>;
-    const allKeys = Object.keys(Object.assign({}, value, this.properties));
+    const allKeys = Object.keys(Object.assign({}, value, props));
     const outputValue: Record<string, unknown> = {};
 
     for (const key of allKeys) {
-      if (key in this.properties) {
+      if (key in props) {
         // property is in validator definition
-        const decoder = this.properties[key as keyof Props];
+        const decoder = props[key as keyof Props];
         const propResult = decoder.decode(
           (value as Record<string, unknown>)[key],
           opts,
@@ -214,5 +183,13 @@ class ObjectDecoder<Props extends PropDecoders<any>>
     } else {
       return ok(outputValue as ObjectType<Props>);
     }
-  }
+  });
+}
+
+/**
+ * Helper function to allow the output type to be constrained and the error type
+ * inferred.
+ */
+export function objectType<Out>(): ObjectDecoderFactory<Out> {
+  return new Schema(object);
 }

@@ -1,5 +1,4 @@
-import { decoder } from '../composite/decoder.js';
-import { Decoder } from '../core/Decoder.js';
+import { Decoder, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
 import { Result, error, ok } from '../core/Result.js';
 

@@ -26,8 +26,7 @@ export const ExpectedEnumValue = 'EXPECTED_ENUM_VALUE';
  */
 export function enumValue<T>(values: Record<string, T>): Decoder<T> {
   const allowedValues = Object.values(values);
-  return predicate(
-    (value: T) => allowedValues.includes(value),
+  return predicate((value: T) => allowedValues.includes(value)).withError(
     'expected enum value',
     ExpectedEnumValue,
   );

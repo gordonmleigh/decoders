@@ -4,4 +4,7 @@ import { typePredicate } from '../predicates/typePredicate.js';
 /**
  * A [[Decoder]] which can decode a Date value.
  */
-export const date = typePredicate(isDate, 'value:date', 'expected date');
+export const date = typePredicate(isDate).withError(
+  'value:date',
+  'expected date',
+);

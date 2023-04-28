@@ -17,7 +17,7 @@ describe('optional', () => {
     expect(result.value).toBe(value);
 
     expect(inner.decode).toHaveBeenCalledTimes(1);
-    expect(inner.mock.calls[0][0]).toBe(input);
+    expect(inner.decode.mock.calls[0][0]).toBe(input);
   });
 
   it('passes through null to the inner decoder', () => {
@@ -32,7 +32,7 @@ describe('optional', () => {
     expect(result.value).toBe(value);
 
     expect(inner.decode).toHaveBeenCalledTimes(1);
-    expect(inner.mock.calls[0][0]).toBe(null);
+    expect(inner.decode.mock.calls[0][0]).toBe(null);
   });
 
   it('decodes undefined without calling inner decoder', () => {

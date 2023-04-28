@@ -28,13 +28,13 @@ describe('choose', () => {
     expect(result.value).toBe(value3);
 
     expect(decoder1.decode).toHaveBeenCalledTimes(1);
-    expect(decoder1.mock.calls[0][0]).toBe(input);
+    expect(decoder1.decode.mock.calls[0][0]).toBe(input);
 
     expect(decoder2.decode).toHaveBeenCalledTimes(1);
-    expect(decoder2.mock.calls[0][0]).toBe(input);
+    expect(decoder2.decode.mock.calls[0][0]).toBe(input);
 
     expect(decoder3.decode).toHaveBeenCalledTimes(1);
-    expect(decoder3.mock.calls[0][0]).toBe(input);
+    expect(decoder3.decode.mock.calls[0][0]).toBe(input);
 
     expect(decoder4.decode).toHaveBeenCalledTimes(0);
   });
@@ -60,12 +60,12 @@ describe('choose', () => {
     });
 
     expect(decoder1.decode).toHaveBeenCalledTimes(1);
-    expect(decoder1.mock.calls[0][0]).toBe(input);
+    expect(decoder1.decode.mock.calls[0][0]).toBe(input);
 
     expect(decoder2.decode).toHaveBeenCalledTimes(1);
-    expect(decoder2.mock.calls[0][0]).toBe(input);
+    expect(decoder2.decode.mock.calls[0][0]).toBe(input);
 
     expect(decoder3.decode).toHaveBeenCalledTimes(1);
-    expect(decoder3.mock.calls[0][0]).toBe(input);
+    expect(decoder3.decode.mock.calls[0][0]).toBe(input);
   });
 });

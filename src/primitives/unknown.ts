@@ -1,7 +1,9 @@
-import { decoder } from '../composite/decoder.js';
-import { ok } from '../core/Result.js';
+import { validator } from '../core/DecoderValidator.js';
+import { Result, ok } from '../core/Result.js';
 
 /**
  * A decoder which can accept any value.
  */
-export const unknown = decoder((value: unknown) => ok(value));
+export const unknown = validator(
+  (value: unknown): Result<unknown, never> => ok(value),
+);

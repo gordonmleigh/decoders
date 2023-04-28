@@ -1,13 +1,17 @@
-import { WithErrorFn, withError } from '../converters/withError.js';
 import {
   AnyDecoder,
-  Decoder,
   DecoderArray,
   InputType,
   OutputType,
 } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { Result, ok } from '../core/Result.js';
+import {
+  AnyDecoderValidator,
+  DecoderValidator,
+  validator,
+} from '../core/DecoderValidator.js';
+import { ok } from '../core/Result.js';
+import { Schema } from '../internal/Schema.js';
 import { UnionToIntersection } from '../internal/typeUtils.js';
 
 export type DecoderChain<Decoders> = Decoders extends readonly [AnyDecoder]
@@ -52,13 +56,11 @@ export type ChainOptions<D extends DecoderArray> = D extends DecoderArray<
   ? UnionToIntersection<Exclude<Options, void>>
   : never;
 
-export interface ChainDecoderType<
+export type ChainDecoderType<
   Chain extends DecoderArray,
   Err extends DecoderError = ChainError<Chain>,
   Opts = ChainOptions<Chain>,
-> extends Decoder<ChainOutput<Chain>, ChainInput<Chain>, Err, Opts> {
-  withError: WithErrorFn<this>;
-}
+> = DecoderValidator<ChainOutput<Chain>, ChainInput<Chain>, Err, Opts>;
 
 export interface ChainDecoderFactory<Out, In = unknown, Middle = any> {
   schema<Chain extends ConstrainedDecoderArray<Out, In, Middle>>(
@@ -72,7 +74,19 @@ export interface ChainDecoderFactory<Out, In = unknown, Middle = any> {
 export function chain<Chain extends DecoderArray>(
   ...decoders: DecoderChain<Chain>
 ): ChainDecoderType<Chain> {
-  return new ChainDecoder(decoders);
+  return validator((value, opts) => {
+    let next = value;
+
+    for (const decoder of decoders) {
+      const result = decoder.decode(next, opts);
+      if (!result.ok) {
+        return result;
+      }
+      next = result.value;
+    }
+
+    return ok(next);
+  });
 }
 
 /**
@@ -84,40 +98,5 @@ export function chainType<
   In = unknown,
   Middle = any,
 >(): ChainDecoderFactory<Out, In, Middle> {
-  return ChainDecoder;
-}
-
-class ChainDecoder<Chain extends DecoderArray>
-  implements ChainDecoderType<Chain, ChainError<Chain>>
-{
-  public static readonly schema = <Chain extends DecoderArray>(
-    ...chain: DecoderChain<Chain>
-  ): ChainDecoder<Chain> => {
-    return new this(chain);
-  };
-
-  constructor(public readonly decoders: DecoderChain<Chain>) {}
-
-  public decode(
-    value: ChainInput<Chain>,
-    opts?: ChainOptions<Chain>,
-  ): Result<ChainOutput<Chain>, ChainError<Chain>> {
-    let next = value;
-
-    for (const decoder of this.decoders) {
-      const result = decoder.decode(next, opts);
-      if (!result.ok) {
-        return result;
-      }
-      next = result.value;
-    }
-
-    return ok(next);
-  }
-
-  /**
-   * Return a new decoder that returns the given error on failure instead of the
-   * default one.
-   */
-  public withError = withError(this).map;
+  return new Schema(chain as (...args: DecoderArray) => AnyDecoderValidator);
 }

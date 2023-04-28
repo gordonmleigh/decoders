@@ -6,8 +6,7 @@ import { regexp } from './regexp.js';
 export const W3CEmailValidationRegex =
   /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-export const isEmail = regexp(
-  W3CEmailValidationRegex,
+export const isEmail = regexp(W3CEmailValidationRegex).withError(
   'value:email',
   'expected email',
 );

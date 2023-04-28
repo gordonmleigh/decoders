@@ -1,5 +1,5 @@
-import { Decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
+import { DecoderValidator } from '../core/DecoderValidator.js';
 import { predicate } from './predicate.js';
 
 export type IsDecoderError<T> = DecoderError<'value:is'> & {
@@ -13,9 +13,8 @@ export type IsDecoderError<T> = DecoderError<'value:is'> & {
  */
 export function is<const T>(
   ...options: T[]
-): Decoder<T, unknown, IsDecoderError<T>> {
-  return predicate(
-    (value: T) => options.includes(value),
+): DecoderValidator<T, unknown, IsDecoderError<T>> {
+  return predicate((value: T) => options.includes(value)).withError(
     'value:is',
     'expected specific value',
     { options },

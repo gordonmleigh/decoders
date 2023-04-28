@@ -1,12 +1,13 @@
 import {
   AnyDecoder,
-  Decoder,
   ErrorType,
   OptionsType,
   OutputType,
 } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { Result, error, invalid, ok } from '../core/Result.js';
+import { DecoderValidator, validator } from '../core/DecoderValidator.js';
+import { error, invalid, ok } from '../core/Result.js';
+import { Schema } from '../internal/Schema.js';
 
 /**
  * The error type of an array decoder.
@@ -16,15 +17,16 @@ export interface ArrayError<ElementDecoder extends AnyDecoder>
   elements?: { [index: number]: ErrorType<ElementDecoder> };
 }
 
-export type ArrayDecoderType<ElementDecoder extends AnyDecoder> = Decoder<
-  OutputType<ElementDecoder>[],
-  unknown,
-  ArrayError<ElementDecoder>,
-  OptionsType<ElementDecoder>
->;
+export type ArrayDecoderType<ElementDecoder extends AnyDecoder> =
+  DecoderValidator<
+    OutputType<ElementDecoder>[],
+    unknown,
+    ArrayError<ElementDecoder>,
+    OptionsType<ElementDecoder>
+  >;
 
 export interface ArrayDecoderFactory<ElementType> {
-  schema<ElementDecoder extends Decoder<ElementType>>(
+  schema<ElementDecoder extends AnyDecoder<ElementType>>(
     element: ElementDecoder,
   ): ArrayDecoderType<ElementDecoder>;
 }
@@ -38,32 +40,7 @@ export interface ArrayDecoderFactory<ElementType> {
 export function array<ElementDecoder extends AnyDecoder>(
   element: ElementDecoder,
 ): ArrayDecoderType<ElementDecoder> {
-  return ArrayDecoder.schema(element);
-}
-
-/**
- * Helper function to allow the output type to be constrained and the error type
- * inferred.
- */
-export function arrayType<ElementType>(): ArrayDecoderFactory<ElementType> {
-  return ArrayDecoder;
-}
-
-class ArrayDecoder<ElementDecoder extends AnyDecoder>
-  implements ArrayDecoderType<ElementDecoder>
-{
-  public static readonly schema = <ElementDecoder extends AnyDecoder>(
-    element: ElementDecoder,
-  ): ArrayDecoderType<ElementDecoder> => {
-    return new this(element);
-  };
-
-  constructor(public readonly element: ElementDecoder) {}
-
-  public decode(
-    value: unknown,
-    opts?: OptionsType<ElementDecoder>,
-  ): Result<OutputType<ElementDecoder>[], ArrayError<ElementDecoder>> {
+  return validator((value, opts) => {
     if (!Array.isArray(value)) {
       return invalid('composite:array', 'expected array');
     }
@@ -73,7 +50,7 @@ class ArrayDecoder<ElementDecoder extends AnyDecoder>
     let anyErrors = false;
 
     for (let i = 0; i < value.length; ++i) {
-      const elemResult = this.element.decode(value[i], opts);
+      const elemResult = element.decode(value[i], opts);
       if (elemResult.ok) {
         decoded[i] = elemResult.value;
       } else {
@@ -90,5 +67,13 @@ class ArrayDecoder<ElementDecoder extends AnyDecoder>
       });
     }
     return ok(decoded);
-  }
+  });
+}
+
+/**
+ * Helper function to allow the output type to be constrained and the error type
+ * inferred.
+ */
+export function arrayType<ElementType>(): ArrayDecoderFactory<ElementType> {
+  return new Schema(array);
 }

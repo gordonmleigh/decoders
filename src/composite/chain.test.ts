@@ -24,16 +24,16 @@ describe('chain', () => {
     expect(result.value).toBe(value3);
 
     expect(decoder1.decode).toHaveBeenCalledTimes(1);
-    expect(decoder1.mock.calls[0][0]).toBe(input);
-    expect(decoder1.mock.calls[0][1]).toEqual({ num: 42, str: 'hello' });
+    expect(decoder1.decode.mock.calls[0][0]).toBe(input);
+    expect(decoder1.decode.mock.calls[0][1]).toEqual({ num: 42, str: 'hello' });
 
     expect(decoder2.decode).toHaveBeenCalledTimes(1);
-    expect(decoder2.mock.calls[0][0]).toBe(value1);
-    expect(decoder2.mock.calls[0][1]).toEqual({ num: 42, str: 'hello' });
+    expect(decoder2.decode.mock.calls[0][0]).toBe(value1);
+    expect(decoder2.decode.mock.calls[0][1]).toEqual({ num: 42, str: 'hello' });
 
     expect(decoder3.decode).toHaveBeenCalledTimes(1);
-    expect(decoder3.mock.calls[0][0]).toBe(value2);
-    expect(decoder3.mock.calls[0][1]).toEqual({ num: 42, str: 'hello' });
+    expect(decoder3.decode.mock.calls[0][0]).toBe(value2);
+    expect(decoder3.decode.mock.calls[0][1]).toEqual({ num: 42, str: 'hello' });
   });
 
   it('fails on first error', () => {
@@ -61,10 +61,10 @@ describe('chain', () => {
     });
 
     expect(decoder1.decode).toHaveBeenCalledTimes(1);
-    expect(decoder1.mock.calls[0][0]).toBe(input);
+    expect(decoder1.decode.mock.calls[0][0]).toBe(input);
 
     expect(decoder2.decode).toHaveBeenCalledTimes(1);
-    expect(decoder2.mock.calls[0][0]).toBe(value1);
+    expect(decoder2.decode.mock.calls[0][0]).toBe(value1);
 
     expect(decoder3.decode).toHaveBeenCalledTimes(0);
   });

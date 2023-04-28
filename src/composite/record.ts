@@ -1,6 +1,7 @@
 import { Decoder, ErrorType, OutputType } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { Result, error, ok } from '../core/Result.js';
+import { DecoderValidator, validator } from '../core/DecoderValidator.js';
+import { error, ok } from '../core/Result.js';
 import { isPlainObject } from '../internal/isPlainObject.js';
 
 export type RecordDecoderError<
@@ -20,7 +21,7 @@ type RecordErrorTypeFor<
 type RecordDecoderType<
   Key extends Decoder<PropertyKey>,
   Value extends Decoder<any>,
-> = Decoder<
+> = DecoderValidator<
   Record<OutputType<Key>, OutputType<Value>>,
   unknown,
   RecordErrorTypeFor<Key, Value>
@@ -29,30 +30,14 @@ type RecordDecoderType<
 /**
  * Create a [[Decoder]] to decode a record.
  *
- * @param decodeKey decoder to decode keys
- * @param decodeValue decoder to decode values
+ * @param keyDecoder decoder to decode keys
+ * @param valueDecoder decoder to decode values
  */
 export function record<
   Key extends Decoder<PropertyKey>,
   Value extends Decoder<any>,
->(decodeKey: Key, decodeValue: Value): RecordDecoderType<Key, Value> {
-  return new RecordDecoder(decodeKey, decodeValue);
-}
-
-class RecordDecoder<
-  Key extends Decoder<PropertyKey>,
-  Value extends Decoder<any>,
-> implements RecordDecoderType<Key, Value>
-{
-  constructor(public readonly key: Key, public readonly value: Value) {}
-
-  public decode(
-    value: unknown,
-    opts?: any,
-  ): Result<
-    Record<OutputType<Key>, OutputType<Value>>,
-    RecordErrorTypeFor<Key, Value>
-  > {
+>(keyDecoder: Key, valueDecoder: Value): RecordDecoderType<Key, Value> {
+  return validator((value, opts) => {
     if (!isPlainObject(value)) {
       return error({
         type: 'composite:record',
@@ -66,7 +51,7 @@ class RecordDecoder<
     const outputValue: any = {};
 
     for (const [k, v] of Object.entries(value)) {
-      const keyResult = this.key.decode(k, opts);
+      const keyResult = keyDecoder.decode(k, opts);
       if (!keyResult.ok) {
         anyErrors = true;
         keyErrors[k] = keyResult.error;
@@ -74,7 +59,7 @@ class RecordDecoder<
 
       let decodedValue = v;
 
-      const valueResult = this.value.decode(v, opts);
+      const valueResult = valueDecoder.decode(v, opts);
       if (!valueResult.ok) {
         anyErrors = true;
         valueErrors[k] = valueResult.error;
@@ -97,5 +82,5 @@ class RecordDecoder<
     } else {
       return ok(outputValue);
     }
-  }
+  });
 }

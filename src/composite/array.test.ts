@@ -18,8 +18,8 @@ describe('array', () => {
     expect(result.value).toEqual(input);
 
     expect(elem.decode).toHaveBeenCalledTimes(2);
-    expect(elem.mock.calls[0][0]).toBe(input[0]);
-    expect(elem.mock.calls[1][0]).toBe(input[1]);
+    expect(elem.decode.mock.calls[0][0]).toBe(input[0]);
+    expect(elem.decode.mock.calls[1][0]).toBe(input[1]);
   });
 
   it('fails if an element fails', () => {
@@ -48,10 +48,10 @@ describe('array', () => {
     });
 
     expect(elem.decode).toHaveBeenCalledTimes(5);
-    expect(elem.mock.calls[0][0]).toBe(input[0]);
-    expect(elem.mock.calls[1][0]).toBe(input[1]);
-    expect(elem.mock.calls[2][0]).toBe(input[2]);
-    expect(elem.mock.calls[3][0]).toBe(input[3]);
-    expect(elem.mock.calls[4][0]).toBe(input[4]);
+    expect(elem.decode.mock.calls[0][0]).toBe(input[0]);
+    expect(elem.decode.mock.calls[1][0]).toBe(input[1]);
+    expect(elem.decode.mock.calls[2][0]).toBe(input[2]);
+    expect(elem.decode.mock.calls[3][0]).toBe(input[3]);
+    expect(elem.decode.mock.calls[4][0]).toBe(input[4]);
   });
 });

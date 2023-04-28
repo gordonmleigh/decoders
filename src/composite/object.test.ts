@@ -110,15 +110,15 @@ describe('object', () => {
       });
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBe(input.prop1);
-      expect(prop1.mock.calls[0][1]).toEqual({ num: 1, str: 'hello' });
+      expect(prop1.decode.mock.calls[0][0]).toBe(input.prop1);
+      expect(prop1.decode.mock.calls[0][1]).toEqual({ num: 1, str: 'hello' });
 
       expect(prop2.decode).toHaveBeenCalledTimes(1);
-      expect(prop2.mock.calls[0][0]).toBeUndefined();
-      expect(prop1.mock.calls[0][1]).toEqual({ num: 1, str: 'hello' });
+      expect(prop2.decode.mock.calls[0][0]).toBeUndefined();
+      expect(prop1.decode.mock.calls[0][1]).toEqual({ num: 1, str: 'hello' });
 
       expect(prop3.decode).toHaveBeenCalledTimes(1);
-      expect(prop3.mock.calls[0][0]).toBe(input.prop3);
+      expect(prop3.decode.mock.calls[0][0]).toBe(input.prop3);
     });
 
     it('rejects if a property decoder rejects', () => {
@@ -153,13 +153,13 @@ describe('object', () => {
       });
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBe(input.prop1);
+      expect(prop1.decode.mock.calls[0][0]).toBe(input.prop1);
 
       expect(prop2.decode).toHaveBeenCalledTimes(1);
-      expect(prop2.mock.calls[0][0]).toBe(input.prop2);
+      expect(prop2.decode.mock.calls[0][0]).toBe(input.prop2);
 
       expect(prop3.decode).toHaveBeenCalledTimes(1);
-      expect(prop3.mock.calls[0][0]).toBe(input.prop3);
+      expect(prop3.decode.mock.calls[0][0]).toBe(input.prop3);
     });
 
     it('chooses decoder call properties over decoder creation properties', () => {
@@ -182,7 +182,7 @@ describe('object', () => {
       expect(Object.keys(result.value)).toEqual([]);
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBeUndefined();
+      expect(prop1.decode.mock.calls[0][0]).toBeUndefined();
     });
 
     it('ignores properties with no matching decoder', () => {
@@ -207,7 +207,7 @@ describe('object', () => {
       });
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBe(input.prop1);
+      expect(prop1.decode.mock.calls[0][0]).toBe(input.prop1);
     });
 
     it('removes undefined properties', () => {
@@ -230,7 +230,7 @@ describe('object', () => {
       expect(Object.keys(result.value)).toEqual([]);
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBeUndefined();
+      expect(prop1.decode.mock.calls[0][0]).toBeUndefined();
     });
   });
 
@@ -262,7 +262,7 @@ describe('object', () => {
       });
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBe(input.prop1);
+      expect(prop1.decode.mock.calls[0][0]).toBe(input.prop1);
     });
   });
 
@@ -290,7 +290,7 @@ describe('object', () => {
       expect(result.value).toEqual(input);
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBe(input.prop1);
+      expect(prop1.decode.mock.calls[0][0]).toBe(input.prop1);
     });
   });
 
@@ -324,7 +324,7 @@ describe('object', () => {
       });
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBe(input.prop1);
+      expect(prop1.decode.mock.calls[0][0]).toBe(input.prop1);
     });
   });
 
@@ -352,7 +352,7 @@ describe('object', () => {
       expect(result.value.prop1).toBeUndefined();
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBeUndefined();
+      expect(prop1.decode.mock.calls[0][0]).toBeUndefined();
     });
   });
 
@@ -376,7 +376,7 @@ describe('object', () => {
       expect(result.value.prop1).toBeUndefined();
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBeUndefined();
+      expect(prop1.decode.mock.calls[0][0]).toBeUndefined();
     });
   });
 
@@ -401,7 +401,7 @@ describe('object', () => {
       expect(Object.keys(result.value)).toEqual([]);
 
       expect(prop1.decode).toHaveBeenCalledTimes(1);
-      expect(prop1.mock.calls[0][0]).toBeUndefined();
+      expect(prop1.decode.mock.calls[0][0]).toBeUndefined();
     });
   });
 });

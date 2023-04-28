@@ -17,7 +17,7 @@ describe('nullable', () => {
     expect(result.value).toBe(value);
 
     expect(inner.decode).toHaveBeenCalledTimes(1);
-    expect(inner.mock.calls[0][0]).toBe(input);
+    expect(inner.decode.mock.calls[0][0]).toBe(input);
   });
 
   it('passes through undefined to the inner decoder', () => {
@@ -32,7 +32,7 @@ describe('nullable', () => {
     expect(result.value).toBe(value);
 
     expect(inner.decode).toHaveBeenCalledTimes(1);
-    expect(inner.mock.calls[0][0]).toBeUndefined();
+    expect(inner.decode.mock.calls[0][0]).toBeUndefined();
   });
 
   it('decodes null without calling inner decoder', () => {
