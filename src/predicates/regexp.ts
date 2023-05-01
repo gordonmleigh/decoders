@@ -1,6 +1,6 @@
 import { Decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { predicate } from './predicate.js';
+import { typePredicate } from './typePredicate.js';
 
 export type RegexpDecoderError<T extends string = 'value:regexp'> =
   DecoderError<T>;
@@ -13,9 +13,8 @@ export type RegexpDecoderError<T extends string = 'value:regexp'> =
  */
 export function regexp(
   match: RegExp,
-): Decoder<string, string, RegexpDecoderError> {
-  return predicate((x: string) => match.test(x)).withError(
-    'value:regexp',
-    `must match ${match}`,
-  );
+): Decoder<string, unknown, RegexpDecoderError> {
+  return typePredicate(
+    (x): x is string => typeof x === 'string' && match.test(x),
+  ).withError('value:regexp', `must match ${match}`);
 }

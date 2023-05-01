@@ -1,10 +1,10 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { isEmail } from './isEmail.js';
+import { email } from './email.js';
 
 describe('isEmail', () => {
   it('accepts a common email format', () => {
-    const result = isEmail.decode('gordon.leigh.101@example.com');
+    const result = email.decode('gordon.leigh.101@example.com');
 
     expect(result).toEqual({
       ok: true,
@@ -13,7 +13,7 @@ describe('isEmail', () => {
   });
 
   it('accepts plus addressing', () => {
-    const result = isEmail.decode('gordon.leigh+some.other.stuff9@example.com');
+    const result = email.decode('gordon.leigh+some.other.stuff9@example.com');
 
     expect(result).toEqual({
       ok: true,
@@ -22,7 +22,7 @@ describe('isEmail', () => {
   });
 
   it('accepts emails on TLDs', () => {
-    const result = isEmail.decode('g@example');
+    const result = email.decode('g@example');
 
     expect(result).toEqual({
       ok: true,
@@ -31,7 +31,7 @@ describe('isEmail', () => {
   });
 
   it('rejects a comma in the domain', () => {
-    const result = isEmail.decode('gordon.leigh.101@example,com');
+    const result = email.decode('gordon.leigh.101@example,com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -39,7 +39,7 @@ describe('isEmail', () => {
   });
 
   it('rejects a space in the domain', () => {
-    const result = isEmail.decode('gordon.leigh.101@ example.com');
+    const result = email.decode('gordon.leigh.101@ example.com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -47,7 +47,7 @@ describe('isEmail', () => {
   });
 
   it('rejects a space in the user part', () => {
-    const result = isEmail.decode('gordon leigh@example.com');
+    const result = email.decode('gordon leigh@example.com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -55,7 +55,7 @@ describe('isEmail', () => {
   });
 
   it('rejects multiple at symbols', () => {
-    const result = isEmail.decode('gordon@leigh@example.com');
+    const result = email.decode('gordon@leigh@example.com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
@@ -63,7 +63,7 @@ describe('isEmail', () => {
   });
 
   it('rejects zero at symbols', () => {
-    const result = isEmail.decode('example.com');
+    const result = email.decode('example.com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);

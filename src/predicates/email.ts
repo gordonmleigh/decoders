@@ -19,7 +19,7 @@ const W3CEmailValidationRegex =
  * HTML5 spec, that doesn't place constraints on the initial character of
  * domains since the payoff isn't worth the complexity.
  */
-export const isEmail = regexp(W3CEmailValidationRegex).withError(
+export const email = regexp(W3CEmailValidationRegex).withError(
   'value:email',
   'expected email',
 );
