@@ -1,39 +1,16 @@
-import { DecoderFunction } from './Decoder.js';
+import {
+  Decoder,
+  DecoderBase,
+  DecoderFactoryFunction,
+  DecoderFunction,
+} from './Decoder.js';
 import { DecoderError } from './DecoderError.js';
-import { DecodingAssertError } from './DecodingAssertError.js';
 import { Result } from './Result.js';
-import { combineOptions } from './combineOptions.js';
 
-/**
- * Represents an object which can decode a value.
- *
- * @template Out The output value type.
- * @template In The input value type.
- */
-export interface DecoderValidator<
-  Out extends In,
-  In = unknown,
-  Err extends DecoderError = DecoderError,
-  Opts = void,
-> {
-  /**
-   * Decode a value, or throw an error on failure.
-   *
-   * @param value The input value
-   * @param opts The options for the decoder
-   * @returns The decoded value
-   */
-  assert(value: In, opts?: Opts): Out;
+// eslint-disable-next-line @typescript-eslint/ban-types
+type Empty = {};
 
-  /**
-   * Decode a value, possibly validating or transforming it.
-   *
-   * @param value The input value
-   * @param opts The options for the decoder
-   * @returns A {@link Result} instance
-   */
-  decode(value: In, opts?: Opts): Result<Out, Err>;
-
+type DecoderValidatorExtra<Out extends In, In = unknown, Opts = void> = {
   /**
    * Test if a value matches.
    *
@@ -42,44 +19,31 @@ export interface DecoderValidator<
    * @returns true if the value matches, false otherwise
    */
   test(value: In, opts?: Opts): value is Out;
+};
 
-  /**
-   * Return a new decoder that returns the given error on failure instead of the
-   * default one.
-   */
-  withError<ErrType extends string>(
-    error: ErrType,
-    text: string,
-  ): DecoderValidator<Out, In, DecoderError<ErrType>, Opts>;
-  /**
-   * Return a new decoder that returns the given error on failure instead of the
-   * default one.
-   */
-  withError<ErrType extends string, Meta>(
-    error: ErrType,
-    text: string,
-    meta: Meta,
-  ): DecoderValidator<Out, In, DecoderError<ErrType> & Meta, Opts>;
-  /**
-   * Return a new decoder that returns the given error on failure instead of the
-   * default one.
-   */
-  withError<MappedErr extends DecoderError>(
-    error: MappedErr,
-  ): DecoderValidator<Out, In, MappedErr, Opts>;
-  /**
-   * Return a new decoder that returns the given error on failure instead of the
-   * default one.
-   */
-  withError<MappedErr extends DecoderError>(
-    error: (err: Err) => MappedErr,
-  ): DecoderValidator<Out, In, MappedErr, Opts>;
+/**
+ * Represents an object which can decode a value.
+ *
+ * @template Out The output value type.
+ * @template In The input value type.
+ */
+export type DecoderValidator<
+  Out extends In,
+  In = unknown,
+  Err extends DecoderError = DecoderError,
+  Opts = void,
+  Extra = Empty,
+> = Decoder<Out, In, Err, Opts, DecoderValidatorExtra<Out, In, Opts> & Extra>;
 
-  /**
-   * Return a new decoder with the given options.
-   */
-  withOptions(opts: Opts): DecoderValidator<Out, In, Err, Opts>;
-}
+/**
+ * Represents a function that can decode a value.
+ */
+export type DecoderValidatorFunction<
+  Out extends In,
+  In = unknown,
+  Err extends DecoderError = DecoderError,
+  Opts = unknown,
+> = DecoderValidator<Out, In, Err, Opts>['decode'];
 
 /**
  * Represents a {@link DecoderValidator} with any parameters.
@@ -112,89 +76,61 @@ export function validator<
 >(
   decode: DecoderFunction<Out, In, Err, Opts>,
 ): DecoderValidator<Out, In, Err, Opts> {
-  return new DecoderValidatorImpl(decode);
+  return new DecoderValidatorLambda(decode);
 }
+
+export type DecoderValidatorFactoryFunction<Extra> = <
+  Out extends In,
+  In,
+  Err extends DecoderError,
+  Opts,
+>(
+  decoder: DecoderValidatorFunction<Out, In, Err, Opts>,
+) => DecoderValidator<Out, In, Err, Opts, Extra>;
 
 /**
  * A base class for {@link DecoderValidator} implementations.
  */
 export abstract class DecoderValidatorBase<
-  Out extends In,
-  In,
-  Err extends DecoderError,
-  Opts,
-> implements DecoderValidator<Out, In, Err, Opts>
+    Out extends In,
+    In = unknown,
+    Err extends DecoderError = DecoderError,
+    Opts = void,
+    Extra = Empty,
+  >
+  extends DecoderBase<
+    Out,
+    In,
+    Err,
+    Opts,
+    DecoderValidatorExtra<Out, In, Opts> & Extra
+  >
+  implements DecoderValidator<Out, In, Err, Opts, Extra>
 {
-  public abstract decode: DecoderFunction<Out, In, Err, Opts>;
-
-  public assert(value: In, opts?: Opts): Out {
-    const result = this.decode(value, opts);
-    if (!result.ok) {
-      throw new DecodingAssertError(result.error);
-    }
-    return result.value;
+  constructor(
+    factory: DecoderValidatorFactoryFunction<Extra> = (fn) =>
+      new DecoderValidatorLambda(fn),
+  ) {
+    // need to assert here because of the added generic constraint
+    super(factory as DecoderFactoryFunction<Extra>);
   }
 
   public test(value: In, opts?: Opts | undefined): value is Out {
     return this.decode(value, opts).ok;
   }
-
-  public withError<ErrType extends string>(
-    error: ErrType,
-    text: string,
-  ): DecoderValidator<Out, In, DecoderError<ErrType>, Opts>;
-  public withError<ErrType extends string, Meta>(
-    error: ErrType,
-    text: string,
-    meta: Meta,
-  ): DecoderValidator<Out, In, DecoderError<ErrType> & Meta, Opts>;
-  public withError<MappedErr extends DecoderError<string>>(
-    error: MappedErr,
-  ): DecoderValidator<Out, In, MappedErr, Opts>;
-  public withError<MappedErr extends DecoderError<string>>(
-    error: (err: Err) => MappedErr,
-  ): DecoderValidator<Out, In, MappedErr, Opts>;
-  public withError(
-    error: string | DecoderError | ((err: Err) => DecoderError),
-    text?: unknown,
-    meta?: any,
-  ): AnyDecoderValidator {
-    let mapError: (err: Err) => DecoderError;
-    if (typeof error === 'function') {
-      mapError = error;
-    } else if (typeof error === 'string') {
-      mapError = (): any => ({
-        type: error,
-        text: text as string,
-        ...meta,
-      });
-    } else {
-      mapError = (): any => error;
-    }
-
-    return validator((value, opts) => {
-      const result = this.decode(value, opts);
-      if (!result.ok) {
-        return { ok: false, error: mapError(result.error) };
-      }
-      return result;
-    });
-  }
-
-  public withOptions(opts: Opts): DecoderValidator<Out, In, Err, Opts> {
-    return validator((value, optionOverrides) =>
-      this.decode(value, combineOptions(opts, optionOverrides)),
-    );
-  }
 }
 
-class DecoderValidatorImpl<
+class DecoderValidatorLambda<
   Out extends In,
   In,
   Err extends DecoderError,
   Opts,
 > extends DecoderValidatorBase<Out, In, Err, Opts> {
-  constructor(public readonly decode: DecoderFunction<Out, In, Err, Opts>) {
+  constructor(private readonly _decode: DecoderFunction<Out, In, Err, Opts>) {
     super();
+  }
+
+  public decode(value: In, opts?: Opts | undefined): Result<Out, Err> {
+    return this._decode(value, opts);
   }
 }
