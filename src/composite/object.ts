@@ -1,6 +1,5 @@
-import { Decoder, OptionsType, OutputType } from '../core/Decoder.js';
+import { Decoder, OptionsType, OutputType, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderValidator, validator } from '../core/DecoderValidator.js';
 import { error, invalid, ok } from '../core/Result.js';
 import { combineOptions } from '../core/combineOptions.js';
 import { Schema } from '../internal/Schema.js';
@@ -74,7 +73,7 @@ export type PropDecoders<T> = {
 };
 
 /**
- * The error returned when a {@link object} {@link DecoderValidator} fails.
+ * The error returned when a {@link object} {@link Decoder} fails.
  */
 export interface ObjectError<Props extends PropDecoders<any>>
   extends DecoderError<'composite:object'> {
@@ -86,7 +85,7 @@ export interface ObjectError<Props extends PropDecoders<any>>
 }
 
 /**
- * The combined options type for a {@link object} {@link DecoderValidator}.
+ * The combined options type for a {@link object} {@link Decoder}.
  */
 export type ObjectPropsOptions<Props extends PropDecoders<any>> =
   ObjectDecoderOptions &
@@ -100,18 +99,17 @@ export type ObjectType<Props extends PropDecoders<any>> = {
 };
 
 /**
- * The specific {@link DecoderValidator} type for an object with given props.
+ * The specific {@link Decoder} type for an object with given props.
  */
-export type ObjectDecoderType<Props extends PropDecoders<any>> =
-  DecoderValidator<
-    ObjectType<Props>,
-    unknown,
-    ObjectError<Props>,
-    ObjectPropsOptions<Props>
-  >;
+export type ObjectDecoderType<Props extends PropDecoders<any>> = Decoder<
+  ObjectType<Props>,
+  unknown,
+  ObjectError<Props>,
+  ObjectPropsOptions<Props>
+>;
 
 /**
- * An object to create a {@link object} validator with constrained output type.
+ * An object to create a {@link object} decoder with constrained output type.
  */
 export interface ObjectDecoderFactory<Out> {
   schema<Props extends PropDecoders<Out>>(
@@ -127,7 +125,7 @@ export function object<Props extends PropDecoders<any>>(
   props: Props,
   defaultOptions?: ObjectPropsOptions<Props>,
 ): ObjectDecoderType<Props> {
-  return validator((value, optionOverrides) => {
+  return decoder((value, optionOverrides) => {
     if (!isPlainObject(value)) {
       return invalid('composite:object', 'expected object');
     }
@@ -140,7 +138,7 @@ export function object<Props extends PropDecoders<any>>(
 
     for (const key of allKeys) {
       if (key in props) {
-        // property is in validator definition
+        // property is in decoder definition
         const decoder = props[key as keyof Props];
         const propResult = decoder.decode(
           (value as Record<string, unknown>)[key],
@@ -166,7 +164,7 @@ export function object<Props extends PropDecoders<any>>(
           outputValue[key] = propResult.value;
         }
       } else {
-        // property is not in validator definition
+        // property is not in decoder definition
         switch (opts?.extraFields) {
           case ExtraFields.Reject:
             anyErrors = true;

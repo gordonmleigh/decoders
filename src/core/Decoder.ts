@@ -3,9 +3,6 @@ import { DecodingAssertError } from './DecodingAssertError.js';
 import { Result, ok } from './Result.js';
 import { combineOptions } from './combineOptions.js';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Empty = {};
-
 /**
  * Represents an object which can decode a value.
  *
@@ -17,7 +14,6 @@ export interface Decoder<
   In = unknown,
   Err extends DecoderError = DecoderError,
   Opts = void,
-  Extra = Empty,
 > {
   /**
    * Decode a value, or throw an error on failure.
@@ -41,14 +37,19 @@ export interface Decoder<
    * Returns a decoder which can accept `undefined` or pass to the current
    * decoder.
    */
-  optional(): Decoder<Out | undefined, In | undefined, Err, Opts, Extra>;
+  optional(): Decoder<Out | undefined, In | undefined, Err, Opts>;
+
+  /**
+   * Returns true if the given value is decodable by this decoder.
+   */
+  test(value: unknown, opts?: Opts): value is Out;
 
   /**
    * Transform the output to a different value.
    */
   transform<NewOut>(
     apply: (value: Out) => NewOut,
-  ): Decoder<NewOut, In, Err, Opts, Extra>;
+  ): Decoder<NewOut, In, Err, Opts>;
 
   /**
    * Return a new decoder that returns the given error on failure instead of the
@@ -57,7 +58,7 @@ export interface Decoder<
   withError<ErrType extends string>(
     error: ErrType,
     text: string,
-  ): Decoder<Out, In, DecoderError<ErrType>, Opts, Extra>;
+  ): Decoder<Out, In, DecoderError<ErrType>, Opts>;
   /**
    * Return a new decoder that returns the given error on failure instead of the
    * default one.
@@ -66,26 +67,26 @@ export interface Decoder<
     error: ErrType,
     text: string,
     meta: Meta,
-  ): Decoder<Out, In, DecoderError<ErrType> & Meta, Opts, Extra>;
+  ): Decoder<Out, In, DecoderError<ErrType> & Meta, Opts>;
   /**
    * Return a new decoder that returns the given error on failure instead of the
    * default one.
    */
   withError<MappedErr extends DecoderError>(
     error: MappedErr,
-  ): Decoder<Out, In, MappedErr, Opts, Extra>;
+  ): Decoder<Out, In, MappedErr, Opts>;
   /**
    * Return a new decoder that returns the given error on failure instead of the
    * default one.
    */
   withError<MappedErr extends DecoderError>(
     error: (err: Err) => MappedErr,
-  ): Decoder<Out, In, MappedErr, Opts, Extra>;
+  ): Decoder<Out, In, MappedErr, Opts>;
 
   /**
    * Return a new decoder with the given options.
    */
-  withOptions(opts: Opts): Decoder<Out, In, Err, Opts, Extra>;
+  withOptions(opts: Opts): Decoder<Out, In, Err, Opts>;
 }
 
 /**
@@ -154,15 +155,6 @@ export function decoder<
   return new DecoderLambda(decode);
 }
 
-export type DecoderFactoryFunction<Extra> = <
-  Out,
-  In,
-  Err extends DecoderError,
-  Opts,
->(
-  decoder: DecoderFunction<Out, In, Err, Opts>,
-) => Decoder<Out, In, Err, Opts, Extra>;
-
 /**
  * A base class for {@link Decoder} implementations.
  */
@@ -171,14 +163,8 @@ export abstract class DecoderBase<
   In = unknown,
   Err extends DecoderError = DecoderError,
   Opts = void,
-  Extra = Empty,
-> implements Decoder<Out, In, Err, Opts, Extra>
+> implements Decoder<Out, In, Err, Opts>
 {
-  constructor(
-    private readonly factory: DecoderFactoryFunction<Extra> = (fn) =>
-      new DecoderLambda(fn),
-  ) {}
-
   public abstract decode(value: In, opts?: Opts): Result<Out, Err>;
 
   public assert(value: In, opts?: Opts): Out {
@@ -189,14 +175,8 @@ export abstract class DecoderBase<
     return result.value;
   }
 
-  public optional(): Decoder<
-    Out | undefined,
-    In | undefined,
-    Err,
-    Opts,
-    Extra
-  > {
-    return this.factory((value, opts) => {
+  public optional(): Decoder<Out | undefined, In | undefined, Err, Opts> {
+    return new DecoderLambda((value, opts) => {
       if (value === undefined) {
         return ok(undefined);
       }
@@ -204,10 +184,20 @@ export abstract class DecoderBase<
     });
   }
 
+  public test(value: any, opts?: Opts): value is Out {
+    try {
+      return this.decode(value, opts).ok;
+    } catch {
+      // we swallow errors here in case the decode function relies on a specific
+      // input type which we can't be sure we have here.
+      return false;
+    }
+  }
+
   public transform<NewOut>(
     apply: (value: Out) => NewOut,
-  ): Decoder<NewOut, In, Err, Opts, Extra> {
-    return this.factory((value, opts) => {
+  ): Decoder<NewOut, In, Err, Opts> {
+    return new DecoderLambda((value, opts) => {
       const result = this.decode(value, opts);
       if (!result.ok) {
         return result;
@@ -219,23 +209,23 @@ export abstract class DecoderBase<
   public withError<ErrType extends string>(
     error: ErrType,
     text: string,
-  ): Decoder<Out, In, DecoderError<ErrType>, Opts, Extra>;
+  ): Decoder<Out, In, DecoderError<ErrType>, Opts>;
   public withError<ErrType extends string, Meta>(
     error: ErrType,
     text: string,
     meta: Meta,
-  ): Decoder<Out, In, DecoderError<ErrType> & Meta, Opts, Extra>;
+  ): Decoder<Out, In, DecoderError<ErrType> & Meta, Opts>;
   public withError<MappedErr extends DecoderError<string>>(
     error: MappedErr,
-  ): Decoder<Out, In, MappedErr, Opts, Extra>;
+  ): Decoder<Out, In, MappedErr, Opts>;
   public withError<MappedErr extends DecoderError<string>>(
     error: (err: Err) => MappedErr,
-  ): Decoder<Out, In, MappedErr, Opts, Extra>;
+  ): Decoder<Out, In, MappedErr, Opts>;
   public withError(
     error: string | DecoderError | ((err: Err) => DecoderError),
     text?: unknown,
     meta?: any,
-  ): Decoder<Out, In, DecoderError, Opts, Extra> {
+  ): Decoder<Out, In, DecoderError, Opts> {
     let mapError: (err: Err) => DecoderError;
     if (typeof error === 'function') {
       mapError = error;
@@ -249,7 +239,7 @@ export abstract class DecoderBase<
       mapError = (): any => error;
     }
 
-    return this.factory((value, opts) => {
+    return new DecoderLambda((value, opts) => {
       const result = this.decode(value, opts);
       if (!result.ok) {
         return { ok: false, error: mapError(result.error) };
@@ -258,8 +248,8 @@ export abstract class DecoderBase<
     });
   }
 
-  public withOptions(opts: Opts): Decoder<Out, In, Err, Opts, Extra> {
-    return this.factory((value, optionOverrides) =>
+  public withOptions(opts: Opts): Decoder<Out, In, Err, Opts> {
+    return new DecoderLambda((value, optionOverrides) =>
       this.decode(value, combineOptions(opts, optionOverrides)),
     );
   }
@@ -277,5 +267,9 @@ class DecoderLambda<
 
   public override decode(value: In, opts?: Opts | undefined): Result<Out, Err> {
     return this._decode(value, opts);
+  }
+
+  public test(value: any, opts?: Opts | undefined): value is Out {
+    return this.decode(value, opts).ok;
   }
 }

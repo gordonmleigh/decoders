@@ -1,15 +1,12 @@
 import {
   AnyDecoder,
+  Decoder,
   DecoderArray,
   InputType,
   OutputType,
+  decoder,
 } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import {
-  AnyDecoderValidator,
-  DecoderValidator,
-  validator,
-} from '../core/DecoderValidator.js';
 import { ok } from '../core/Result.js';
 import { Schema } from '../internal/Schema.js';
 import { UnionToIntersection } from '../internal/typeUtils.js';
@@ -76,13 +73,13 @@ export type ChainOptions<D extends DecoderArray> = D extends DecoderArray<
   : never;
 
 /**
- * The specific {@link DecoderValidator} type for a chain decoder.
+ * The specific {@link Decoder} type for a chain decoder.
  */
 export type ChainDecoderType<
   Chain extends DecoderArray,
   Err extends DecoderError = ChainError<Chain>,
   Opts = ChainOptions<Chain>,
-> = DecoderValidator<ChainOutput<Chain>, ChainInput<Chain>, Err, Opts>;
+> = Decoder<ChainOutput<Chain>, ChainInput<Chain>, Err, Opts>;
 
 /**
  * Represents an object which can create a chain decoder with constrained input,
@@ -100,7 +97,7 @@ export interface ChainDecoderFactory<Out, In = unknown, Middle = any> {
 export function chain<Chain extends DecoderArray>(
   ...decoders: DecoderChain<Chain>
 ): ChainDecoderType<Chain> {
-  return validator((value, opts) => {
+  return decoder((value, opts) => {
     let next = value;
 
     for (const decoder of decoders) {
@@ -124,5 +121,5 @@ export function chainType<
   In = unknown,
   Middle = any,
 >(): ChainDecoderFactory<Out, In, Middle> {
-  return new Schema(chain as (...args: DecoderArray) => AnyDecoderValidator);
+  return new Schema(chain as (...args: DecoderArray) => AnyDecoder);
 }

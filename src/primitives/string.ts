@@ -1,8 +1,5 @@
+import { Decoder, DecoderBase } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import {
-  DecoderValidator,
-  DecoderValidatorBase,
-} from '../core/DecoderValidator.js';
 import { Result, invalid, ok } from '../core/Result.js';
 
 export interface StringLengthOptions {
@@ -24,11 +21,7 @@ type StringDecoderExtra = {
   trim(): StringDecoderType;
 };
 
-export type StringDecoderType = DecoderValidator<
-  string,
-  unknown,
-  StringDecoderError
-> &
+export type StringDecoderType = Decoder<string, unknown, StringDecoderError> &
   StringDecoderExtra;
 
 type StringDecoderOptions = StringLengthOptions & {
@@ -36,7 +29,7 @@ type StringDecoderOptions = StringLengthOptions & {
 };
 
 class StringDecoder
-  extends DecoderValidatorBase<string, unknown, StringDecoderError>
+  extends DecoderBase<string, unknown, StringDecoderError>
   implements StringDecoderType
 {
   public readonly options: StringDecoderOptions;

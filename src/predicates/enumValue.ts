@@ -1,5 +1,5 @@
+import { Decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderValidator } from '../core/DecoderValidator.js';
 import { ValuesOf } from '../internal/typeUtils.js';
 import { predicate } from './predicate.js';
 
@@ -11,7 +11,7 @@ export type EnumDecoderError<T> = DecoderError<'value:enum'> & {
 };
 
 /**
- * Creates a {@link DecoderValidator} for an enum.
+ * Creates a {@link Decoder} for an enum.
  *
  * @param values The enum values.
  *
@@ -30,7 +30,7 @@ export type EnumDecoderError<T> = DecoderError<'value:enum'> & {
  */
 export function enumValue<const T extends Record<any, string | number>>(
   values: T,
-): DecoderValidator<ValuesOf<T>, unknown, EnumDecoderError<T>> {
+): Decoder<ValuesOf<T>, unknown, EnumDecoderError<T>> {
   const options = Object.values(values);
   return predicate((value: any) => options.includes(value)).withError(
     'value:enum',

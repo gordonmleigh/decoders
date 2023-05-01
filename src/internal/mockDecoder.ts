@@ -12,7 +12,7 @@ export class MockDecoder<
   public readonly decode: jest.Mock<Result<Out, Err>, [value: In, opts?: Opts]>;
 
   constructor(decode: (value: In, opts?: Opts) => Result<Out, Err>) {
-    super((fn) => new MockDecoder(fn));
+    super();
     this.decode = jest.fn(decode);
   }
 }

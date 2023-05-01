@@ -1,6 +1,5 @@
-import { Decoder, ErrorType, OutputType } from '../core/Decoder.js';
+import { Decoder, ErrorType, OutputType, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderValidator, validator } from '../core/DecoderValidator.js';
 import { error, ok } from '../core/Result.js';
 import { isPlainObject } from '../internal/isPlainObject.js';
 
@@ -26,19 +25,19 @@ type RecordErrorTypeFor<
 > = RecordDecoderError<OutputType<Key>, ErrorType<Key>, ErrorType<Value>>;
 
 /**
- * The specific {@link DecoderValidator} type for a {@link record} decoder.
+ * The specific {@link Decoder} type for a {@link record} decoder.
  */
 type RecordDecoderType<
   Key extends Decoder<PropertyKey>,
   Value extends Decoder<any>,
-> = DecoderValidator<
+> = Decoder<
   Record<OutputType<Key>, OutputType<Value>>,
   unknown,
   RecordErrorTypeFor<Key, Value>
 >;
 
 /**
- * Create a {@link DecoderValidator} to decode a record.
+ * Create a {@link Decoder} to decode a record.
  *
  * @param keyDecoder decoder to decode keys
  * @param valueDecoder decoder to decode values
@@ -47,7 +46,7 @@ export function record<
   Key extends Decoder<PropertyKey>,
   Value extends Decoder<any>,
 >(keyDecoder: Key, valueDecoder: Value): RecordDecoderType<Key, Value> {
-  return validator((value, opts) => {
+  return decoder((value, opts) => {
     if (!isPlainObject(value)) {
       return error({
         type: 'composite:record',

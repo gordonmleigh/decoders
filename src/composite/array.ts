@@ -1,11 +1,12 @@
 import {
   AnyDecoder,
+  Decoder,
   ErrorType,
   OptionsType,
   OutputType,
+  decoder,
 } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderValidator, validator } from '../core/DecoderValidator.js';
 import { error, invalid, ok } from '../core/Result.js';
 import { Schema } from '../internal/Schema.js';
 
@@ -18,15 +19,14 @@ export interface ArrayError<ElementDecoder extends AnyDecoder>
 }
 
 /**
- * The specific {@link DecoderValidator} type for an {@link array} decoder.
+ * The specific {@link Decoder} type for an {@link array} decoder.
  */
-export type ArrayDecoderType<ElementDecoder extends AnyDecoder> =
-  DecoderValidator<
-    OutputType<ElementDecoder>[],
-    unknown,
-    ArrayError<ElementDecoder>,
-    OptionsType<ElementDecoder>
-  >;
+export type ArrayDecoderType<ElementDecoder extends AnyDecoder> = Decoder<
+  OutputType<ElementDecoder>[],
+  unknown,
+  ArrayError<ElementDecoder>,
+  OptionsType<ElementDecoder>
+>;
 
 /**
  * An object that can create a {@link array} decoder with a constrained element
@@ -39,7 +39,7 @@ export interface ArrayDecoderFactory<ElementType> {
 }
 
 /**
- * Create a {@link DecoderValidator} which can decode an array, using the given
+ * Create a {@link Decoder} which can decode an array, using the given
  * decoder for each element.
  *
  * @param elem The decoder to use to decode the elements.
@@ -47,7 +47,7 @@ export interface ArrayDecoderFactory<ElementType> {
 export function array<ElementDecoder extends AnyDecoder>(
   element: ElementDecoder,
 ): ArrayDecoderType<ElementDecoder> {
-  return validator((value, opts) => {
+  return decoder((value, opts) => {
     if (!Array.isArray(value)) {
       return invalid('composite:array', 'expected array');
     }

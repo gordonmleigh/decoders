@@ -1,6 +1,5 @@
-import { AnyDecoder, DecoderArray } from '../core/Decoder.js';
+import { AnyDecoder, Decoder, DecoderArray, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderValidator, validator } from '../core/DecoderValidator.js';
 import { error } from '../core/Result.js';
 import { UnionToIntersection } from '../internal/typeUtils.js';
 
@@ -46,12 +45,12 @@ export type ChooseOptionsType<T> = T extends DecoderArray<
   : never;
 
 /**
- * The specific {@link DecoderValidator} type for a choose decoder.
+ * The specific {@link Decoder} type for a choose decoder.
  */
 export type ChooseDecoderType<
   Decoders extends DecoderArray<any, In>,
   In = unknown,
-> = DecoderValidator<
+> = Decoder<
   ChooseOutputType<Decoders>,
   In,
   ChooseError<Decoders>,
@@ -68,7 +67,7 @@ export type ChooseDecoderType<
  *
  * @example
  * ```typescript
- * // is a DecoderValidator<number|string>:
+ * // is a Decoder<number|string>:
  * const choice = choose(number, string);
  *
  * const result1 = choice(1); // = { ok: true, value: 1 }
@@ -78,7 +77,7 @@ export type ChooseDecoderType<
 export function choose<Decoders extends DecoderArray<any, In>, In = unknown>(
   ...options: Decoders
 ): ChooseDecoderType<Decoders, In> {
-  return validator((value, opts) => {
+  return decoder((value, opts) => {
     const errors: DecoderError[] = [];
 
     for (const decoder of options) {

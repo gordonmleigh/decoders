@@ -1,5 +1,5 @@
+import { Decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderValidator } from '../core/DecoderValidator.js';
 import { predicate } from './predicate.js';
 
 export type RegexpDecoderError<T extends string = 'value:regexp'> =
@@ -13,7 +13,7 @@ export type RegexpDecoderError<T extends string = 'value:regexp'> =
  */
 export function regexp(
   match: RegExp,
-): DecoderValidator<string, string, RegexpDecoderError> {
+): Decoder<string, string, RegexpDecoderError> {
   return predicate((x: string) => match.test(x)).withError(
     'value:regexp',
     `must match ${match}`,

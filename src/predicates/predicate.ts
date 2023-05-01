@@ -1,14 +1,14 @@
+import { Decoder, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderValidator, validator } from '../core/DecoderValidator.js';
 import { invalid, ok } from '../core/Result.js';
 
 /**
- * Create a {@link DecoderValidator} which tests for the given condition.
+ * Create a {@link Decoder} which tests for the given condition.
  */
 export function predicate<Value>(
   test: (value: Value) => boolean,
-): DecoderValidator<Value, Value, DecoderError<'value:condition'>> {
-  return validator((value) => {
+): Decoder<Value, Value, DecoderError<'value:condition'>> {
+  return decoder((value) => {
     if (test(value)) {
       return ok(value);
     }
