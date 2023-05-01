@@ -20,6 +20,10 @@ export type ChooseOutputType<T> = T extends DecoderArray<infer Out>
   ? Out
   : never;
 
+/**
+ * Determine the union which represents the possible error types for multiple
+ * decoders.
+ */
 export type ChooseError<T extends DecoderArray> =
   DecoderError<'composite:choose'> & {
     choose: {
@@ -29,6 +33,9 @@ export type ChooseError<T extends DecoderArray> =
     };
   };
 
+/**
+ * Determine the combined options type for multiple decoders.
+ */
 export type ChooseOptionsType<T> = T extends DecoderArray<
   any,
   any,
@@ -38,6 +45,9 @@ export type ChooseOptionsType<T> = T extends DecoderArray<
   ? UnionToIntersection<Opts>
   : never;
 
+/**
+ * The specific {@link DecoderValidator} type for a choose decoder.
+ */
 export type ChooseDecoderType<
   Decoders extends DecoderArray<any, In>,
   In = unknown,
@@ -58,13 +68,11 @@ export type ChooseDecoderType<
  *
  * @example
  * ```typescript
- * const choice = choose(number, string); // is a Decoder<number|string>;
+ * // is a DecoderValidator<number|string>:
+ * const choice = choose(number, string);
  *
  * const result1 = choice(1); // = { ok: true, value: 1 }
  * const result2 = choice('hello'); // = { ok: true, value: 'hello' }
- *
- * // the `error` field will contain the errors of all decoders
- * const result3 = choice(false); // = { ok: false, error: [ ... ] }
  * ```
  */
 export function choose<Decoders extends DecoderArray<any, In>, In = unknown>(

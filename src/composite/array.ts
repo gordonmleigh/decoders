@@ -10,13 +10,16 @@ import { error, invalid, ok } from '../core/Result.js';
 import { Schema } from '../internal/Schema.js';
 
 /**
- * The error type of an array decoder.
+ * The error type of an {@link array} decoder.
  */
 export interface ArrayError<ElementDecoder extends AnyDecoder>
   extends DecoderError<'composite:array'> {
   elements?: { [index: number]: ErrorType<ElementDecoder> };
 }
 
+/**
+ * The specific {@link DecoderValidator} type for an {@link array} decoder.
+ */
 export type ArrayDecoderType<ElementDecoder extends AnyDecoder> =
   DecoderValidator<
     OutputType<ElementDecoder>[],
@@ -25,6 +28,10 @@ export type ArrayDecoderType<ElementDecoder extends AnyDecoder> =
     OptionsType<ElementDecoder>
   >;
 
+/**
+ * An object that can create a {@link array} decoder with a constrained element
+ * type.
+ */
 export interface ArrayDecoderFactory<ElementType> {
   schema<ElementDecoder extends AnyDecoder<ElementType>>(
     element: ElementDecoder,
@@ -32,10 +39,10 @@ export interface ArrayDecoderFactory<ElementType> {
 }
 
 /**
- * Create a [[Decoder]] which can decode an array, using the given [[Decoder]]
- * to decode each element.
+ * Create a {@link DecoderValidator} which can decode an array, using the given
+ * decoder for each element.
  *
- * @param elem The [[Decoder]] to use to decode the elements.
+ * @param elem The decoder to use to decode the elements.
  */
 export function array<ElementDecoder extends AnyDecoder>(
   element: ElementDecoder,

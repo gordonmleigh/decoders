@@ -30,7 +30,7 @@ export interface DecoderValidator<
    *
    * @param value The input value
    * @param opts The options for the decoder
-   * @returns [[OkResult]] on success or [[ErrorResult]] on failure.
+   * @returns A {@link Result} instance
    */
   decode(value: In, opts?: Opts): Result<Out, Err>;
 
@@ -115,6 +115,9 @@ export function validator<
   return new DecoderValidatorImpl(decode);
 }
 
+/**
+ * A base class for {@link DecoderValidator} implementations.
+ */
 export abstract class DecoderValidatorBase<
   Out extends In,
   In,

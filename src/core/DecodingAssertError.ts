@@ -1,7 +1,7 @@
 import { DecoderError } from './DecoderError.js';
 
 /**
- * Thrown when a [[AssertDecoder]] fails to decode a value.
+ * Thrown when {@link Decoder} `assert` fails to decode a value.
  */
 export class DecodingAssertError<
   Err extends DecoderError = DecoderError,

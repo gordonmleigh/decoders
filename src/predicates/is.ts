@@ -2,6 +2,9 @@ import { DecoderError } from '../core/DecoderError.js';
 import { DecoderValidator } from '../core/DecoderValidator.js';
 import { predicate } from './predicate.js';
 
+/**
+ * The {@link DecoderError} returned when a {@link is} decoder fails.
+ */
 export type IsDecoderError<T> = DecoderError<'value:is'> & {
   options: T[];
 };

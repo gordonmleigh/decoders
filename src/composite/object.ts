@@ -73,12 +73,9 @@ export type PropDecoders<T> = {
   [K in keyof T]-?: Decoder<T[K], any, any, any>;
 };
 
-export interface ObjectErrorBase<Out> extends DecoderError<'composite:object'> {
-  properties?: {
-    [K in keyof Out]?: DecoderError;
-  };
-}
-
+/**
+ * The error returned when a {@link object} {@link DecoderValidator} fails.
+ */
 export interface ObjectError<Props extends PropDecoders<any>>
   extends DecoderError<'composite:object'> {
   properties?: {
@@ -88,14 +85,23 @@ export interface ObjectError<Props extends PropDecoders<any>>
   };
 }
 
+/**
+ * The combined options type for a {@link object} {@link DecoderValidator}.
+ */
 export type ObjectPropsOptions<Props extends PropDecoders<any>> =
   ObjectDecoderOptions &
     UnionToIntersection<Exclude<OptionsType<ValuesOf<Props>>, void>>;
 
+/**
+ * The output type for the given props type.
+ */
 export type ObjectType<Props extends PropDecoders<any>> = {
   [K in keyof Props]: OutputType<Props[K]>;
 };
 
+/**
+ * The specific {@link DecoderValidator} type for an object with given props.
+ */
 export type ObjectDecoderType<Props extends PropDecoders<any>> =
   DecoderValidator<
     ObjectType<Props>,
@@ -104,6 +110,9 @@ export type ObjectDecoderType<Props extends PropDecoders<any>> =
     ObjectPropsOptions<Props>
   >;
 
+/**
+ * An object to create a {@link object} validator with constrained output type.
+ */
 export interface ObjectDecoderFactory<Out> {
   schema<Props extends PropDecoders<Out>>(
     props: Props,
@@ -187,8 +196,8 @@ export function object<Props extends PropDecoders<any>>(
 }
 
 /**
- * Helper function to allow the output type to be constrained and the error type
- * inferred.
+ * Helper function to allow the output type to be constrained and the error and
+ * options types inferred.
  */
 export function objectType<Out>(): ObjectDecoderFactory<Out> {
   return new Schema(object);

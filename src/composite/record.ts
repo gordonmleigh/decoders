@@ -4,6 +4,9 @@ import { DecoderValidator, validator } from '../core/DecoderValidator.js';
 import { error, ok } from '../core/Result.js';
 import { isPlainObject } from '../internal/isPlainObject.js';
 
+/**
+ * The error returned when a {@link record} decoder fails.
+ */
 export type RecordDecoderError<
   Key extends PropertyKey = PropertyKey,
   KeyError extends DecoderError = DecoderError,
@@ -13,11 +16,18 @@ export type RecordDecoderError<
   values?: Record<Key, ValueError>;
 };
 
+/**
+ * The error type for a {@link record} decoder with the given key and value
+ * decoders.
+ */
 type RecordErrorTypeFor<
   Key extends Decoder<PropertyKey>,
   Value extends Decoder<any>,
 > = RecordDecoderError<OutputType<Key>, ErrorType<Key>, ErrorType<Value>>;
 
+/**
+ * The specific {@link DecoderValidator} type for a {@link record} decoder.
+ */
 type RecordDecoderType<
   Key extends Decoder<PropertyKey>,
   Value extends Decoder<any>,
@@ -28,7 +38,7 @@ type RecordDecoderType<
 >;
 
 /**
- * Create a [[Decoder]] to decode a record.
+ * Create a {@link DecoderValidator} to decode a record.
  *
  * @param keyDecoder decoder to decode keys
  * @param valueDecoder decoder to decode values

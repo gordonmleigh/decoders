@@ -1,7 +1,7 @@
 import { DecoderError } from './DecoderError.js';
 
 /**
- * Returned by a [[Decoder]] on success.
+ * Returned by a decoder on success.
  */
 export interface OkResult<T> {
   ok: true;
@@ -9,7 +9,7 @@ export interface OkResult<T> {
 }
 
 /**
- * Returned by a [[Decoder]] on failure.
+ * Returned by a decoder on failure.
  */
 export interface ErrorResult<Err extends DecoderError = DecoderError> {
   ok: false;
@@ -17,14 +17,14 @@ export interface ErrorResult<Err extends DecoderError = DecoderError> {
 }
 
 /**
- * Returned by a [[Decoder]].
+ * Returned by a decoder.
  */
 export type Result<T, Err extends DecoderError = DecoderError> =
   | OkResult<T>
   | ErrorResult<Err>;
 
 /**
- * Create an [[OkResult]].
+ * Create an {@link OkResult}.
  * @param value The value to return.
  */
 export function ok<T>(value: T): OkResult<T> {
@@ -32,7 +32,7 @@ export function ok<T>(value: T): OkResult<T> {
 }
 
 /**
- * Create an [[ErrorResult]].
+ * Create an {@link ErrorResult}.
  * @param error The error to return.
  */
 export function error<Err extends DecoderError>(error: Err): ErrorResult<Err> {
@@ -40,22 +40,22 @@ export function error<Err extends DecoderError>(error: Err): ErrorResult<Err> {
 }
 
 /**
- * Create an [[ErrorResult]] with a single error.
+ * Create an {@link ErrorResult}.
  * @param type A unique ID for the error, for programmatic use.
  * @param text A simple textual description of the error.
  * @param details Extra details, intended to be used in error formatting.
  */
-export function invalid<Type extends string, Rest>(
+export function invalid<Type extends string, Details>(
   type: Type,
   text: string,
-  rest?: Rest,
-): ErrorResult<DecoderError<Type> & Rest> {
+  details?: Details,
+): ErrorResult<DecoderError<Type> & Details> {
   return {
     ok: false,
     error: {
       text,
       type,
-      ...rest,
-    } as DecoderError<Type> & Rest,
+      ...details,
+    } as DecoderError<Type> & Details,
   };
 }

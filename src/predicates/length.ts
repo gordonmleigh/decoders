@@ -2,20 +2,38 @@ import { Decoder, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
 import { Result, error, ok } from '../core/Result.js';
 
+/**
+ * Represents an object with a length.
+ */
 export interface Lengthy {
   length: number;
 }
 
+/**
+ * Options for the {@link length} predicate.
+ */
 export interface LengthOptions {
   min?: number;
   max?: number;
 }
 
+/**
+ * The {@link DecoderError} returned by the {@link length} predicate.
+ */
 export type LengthDecoderError = DecoderError<'value:length'> & LengthOptions;
 
+/**
+ * Make a predicate which requires the value to have an exact length.
+ * @param length The length that the value must have
+ */
 export function length<Out extends Lengthy>(
   length: number,
 ): Decoder<Out, Out, LengthDecoderError>;
+/**
+ * Make a predicate which requires the value to have a minimum length and/or
+ * maximum length.
+ * @param options An object containing the minimum and maximum values.
+ */
 export function length<Out extends Lengthy>(
   options: LengthOptions,
 ): Decoder<Out, Out, LengthDecoderError>;

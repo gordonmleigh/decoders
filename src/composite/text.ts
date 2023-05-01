@@ -5,6 +5,10 @@ import { length } from '../predicates/length.js';
 import { string } from '../primitives/string.js';
 import { chain } from './chain.js';
 
+/**
+ * A decoder which accepts a string with at least one character. The string will
+ * be trimmed.
+ */
 export const text: Decoder<string, unknown, DecoderError<'value:text'>> = chain(
   string,
   trim,

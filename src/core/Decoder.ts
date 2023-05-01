@@ -29,7 +29,7 @@ export interface Decoder<
    *
    * @param value The input value
    * @param opts The options for the decoder
-   * @returns [[OkResult]] on success or [[ErrorResult]] on failure.
+   * @returns A {@link Result} instance
    */
   decode(value: In, opts?: Opts): Result<Out, Err>;
 
@@ -137,6 +137,9 @@ export function decoder<
   return new DecoderImpl(decode);
 }
 
+/**
+ * A base class for {@link Decoder} implementations.
+ */
 export abstract class DecoderBase<Out, In, Err extends DecoderError, Opts>
   implements Decoder<Out, In, Err, Opts>
 {

@@ -6,7 +6,7 @@ import { TypePredicate } from '../internal/TypePredicate.js';
 export const ExpectedType = 'EXPECTED_TYPE';
 
 /**
- * Create a {@link Decoder} which tests for the given type.
+ * Create a {@link DecoderValidator} which tests for the given type.
  */
 export function typePredicate<Out extends In, In>(
   test: TypePredicate<Out, In>,

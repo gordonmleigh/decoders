@@ -2,7 +2,7 @@ import { isDate } from '../internal/isDate.js';
 import { typePredicate } from '../predicates/typePredicate.js';
 
 /**
- * A [[Decoder]] which can decode a Date value.
+ * A decoder which can accept a Date value.
  */
 export const date = typePredicate(isDate).withError(
   'value:date',

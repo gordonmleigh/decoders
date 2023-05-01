@@ -3,7 +3,7 @@ import { DecoderValidator, validator } from '../core/DecoderValidator.js';
 import { invalid, ok } from '../core/Result.js';
 
 /**
- * Create a [[Decoder]] which tests for the given condition.
+ * Create a {@link DecoderValidator} which tests for the given condition.
  */
 export function predicate<Value>(
   test: (value: Value) => boolean,

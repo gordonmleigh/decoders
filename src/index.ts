@@ -17,7 +17,6 @@ export * from './core/DecoderError.js';
 export * from './core/DecoderValidator.js';
 export * from './core/DecodingAssertError.js';
 export * from './core/isValid.js';
-export * from './core/model.js';
 export * from './core/Result.js';
 export * from './predicates/enumValue.js';
 export * from './predicates/is.js';
