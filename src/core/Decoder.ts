@@ -16,6 +16,15 @@ export interface Decoder<
   Opts = void,
 > {
   /**
+   * Apply another decoder function after this decoder runs.
+   */
+  and<NewOut, NewErr extends DecoderError, NewOpts>(
+    decoder:
+      | DecoderFunction<NewOut, Out, NewErr, NewOpts>
+      | Decoder<NewOut, Out, NewErr, NewOpts>,
+  ): Decoder<NewOut, In, Err | NewErr, Opts & NewOpts>;
+
+  /**
    * Decode a value, or throw an error on failure.
    *
    * @param value The input value
@@ -166,6 +175,23 @@ export abstract class DecoderBase<
 > implements Decoder<Out, In, Err, Opts>
 {
   public abstract decode(value: In, opts?: Opts): Result<Out, Err>;
+
+  public and<NewOut, NewErr extends DecoderError, NewOpts>(
+    decoder:
+      | DecoderFunction<NewOut, Out, NewErr, NewOpts>
+      | Decoder<NewOut, Out, NewErr, NewOpts>,
+  ): Decoder<NewOut, In, Err | NewErr, Opts & NewOpts> {
+    return new DecoderLambda((value, opts): Result<NewOut, Err | NewErr> => {
+      const result = this.decode(value, opts);
+      if (!result.ok) {
+        return result;
+      }
+      if (typeof decoder === 'function') {
+        return decoder(result.value, opts);
+      }
+      return decoder.decode(result.value, opts);
+    });
+  }
 
   public assert(value: In, opts?: Opts): Out {
     const result = this.decode(value, opts);
