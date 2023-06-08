@@ -5,7 +5,7 @@ import { ExpectedString } from '../primitives/string.js';
 import { strToNum } from './strToNum.js';
 
 describe('strToNum', () => {
-  it('it convers a string to a number', () => {
+  it('it converts a string to a number', () => {
     const result = strToNum('42');
 
     expect(result.ok).toBe(true);
@@ -13,8 +13,24 @@ describe('strToNum', () => {
     expect(result.value).toBe(42);
   });
 
-  it('it convers a string with decimal places to a number', () => {
+  it('it converts a string with decimal places to a number', () => {
     const result = strToNum('42.23');
+
+    expect(result.ok).toBe(true);
+    assertCond(result.ok);
+    expect(result.value).toEqual(42.23);
+  });
+
+  it('it converts a string with a negative and decimal places to a number', () => {
+    const result = strToNum('-42.23');
+
+    expect(result.ok).toBe(true);
+    assertCond(result.ok);
+    expect(result.value).toEqual(-42.23);
+  });
+
+  it('it converts a string with a positive and decimal places to a number', () => {
+    const result = strToNum('+42.23');
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);

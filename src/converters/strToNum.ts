@@ -24,6 +24,6 @@ import { map } from './map.js';
  */
 export const strToNum = chain(
   string,
-  regexp(/^\d+(\.(\d*))?$/, 'expected number', ExpectedNumber),
+  regexp(/^[+-]?\d+(\.(\d*))?$/, 'expected number', ExpectedNumber),
   map(parseFloat),
 );
