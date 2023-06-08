@@ -88,21 +88,24 @@ function combineTwoOptions(
   a: DecoderOptions | undefined,
   b: DecoderOptions | undefined,
 ): DecoderOptions | undefined {
-  if (!b || (!b.extraFields && !b.undefinedFields)) {
+  if (
+    b === undefined ||
+    (b.extraFields === undefined && b.undefinedFields === undefined)
+  ) {
     return a;
   }
-  if (!a || (!a.extraFields && !a.undefinedFields)) {
+  if (
+    a === undefined ||
+    (a.extraFields === undefined && a.undefinedFields === undefined)
+  ) {
     return b;
   }
-  if (b.extraFields && b.undefinedFields) {
+  if (b.extraFields !== undefined && b.undefinedFields !== undefined) {
     return b;
   }
   return {
-    extraFields:
-      typeof b.extraFields === undefined ? a.extraFields : b.extraFields,
+    extraFields: b.extraFields === undefined ? a.extraFields : b.extraFields,
     undefinedFields:
-      typeof b.undefinedFields === undefined
-        ? a.undefinedFields
-        : b.undefinedFields,
+      b.undefinedFields === undefined ? a.undefinedFields : b.undefinedFields,
   };
 }

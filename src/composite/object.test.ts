@@ -164,107 +164,194 @@ describe('object', () => {
     expect(prop1.mock.calls[0][0]).toBe(input.prop1);
   });
 
-  it('sets missing properties to be explicitly undefined', () => {
-    const prop1 = mockDecoder(undefined);
+  describe('when options are passed to the validator', () => {
+    describe('when `undefinedFields` is set to `Explicit`', () => {
+      it('sets missing properties to be explicitly undefined', () => {
+        const prop1 = mockDecoder(undefined);
+        const prop2 = mockDecoder(undefined);
 
-    const decoder = object(
-      {
-        prop1,
-      },
-      { undefinedFields: UndefinedFields.Explicit },
-    );
+        const decoder = object({
+          prop1,
+          prop2,
+        });
 
-    const input = {};
-    const result = decoder(input);
+        const input = {
+          prop1: undefined,
+        };
 
-    expect(result.ok).toBe(true);
-    assertCond(result.ok);
-    expect(Object.keys(result.value)).toEqual(['prop1']);
-    expect(result.value.prop1).toBeUndefined();
+        const result = decoder(input, {
+          undefinedFields: UndefinedFields.Explicit,
+        });
 
-    expect(prop1).toHaveBeenCalledTimes(1);
-    expect(prop1.mock.calls[0][0]).toBeUndefined();
-  });
-
-  it('removes missing properties if UndefinedFields is set to Strip in decoder call', () => {
-    const prop1 = mockDecoder(undefined);
-
-    const decoder = object({
-      prop1,
+        expect(result.ok).toBe(true);
+        assertCond(result.ok);
+        expect(Object.keys(result.value)).toEqual(['prop1', 'prop2']);
+        expect(result.value.prop1).toBeUndefined();
+        expect(result.value.prop2).toBeUndefined();
+        expect(prop1.mock.calls[0][0]).toBeUndefined();
+      });
     });
 
-    const input = {};
-    const result = decoder(input, { undefinedFields: UndefinedFields.Strip });
+    describe('when `undefinedFields` is set to `Strip`', () => {
+      it('removes all undefined properties', () => {
+        const prop1 = mockDecoder(undefined);
+        const prop2 = mockDecoder(undefined);
 
-    expect(result.ok).toBe(true);
-    assertCond(result.ok);
-    expect(Object.keys(result.value)).toEqual([]);
+        const decoder = object({
+          prop1,
+          prop2,
+        });
 
-    expect(prop1).toHaveBeenCalledTimes(1);
-    expect(prop1.mock.calls[0][0]).toBeUndefined();
+        const input = {
+          prop1: undefined,
+        };
+        const result = decoder(input, {
+          undefinedFields: UndefinedFields.Strip,
+        });
+
+        expect(result.ok).toBe(true);
+        assertCond(result.ok);
+        expect(Object.keys(result.value)).toEqual([]);
+
+        expect(prop1).toHaveBeenCalledTimes(1);
+        expect(prop1.mock.calls[0][0]).toBeUndefined();
+      });
+    });
+
+    describe('when `undefinedFields` is set to `FromInput`', () => {
+      it('follows the input', () => {
+        const prop1 = mockDecoder(undefined);
+        const prop2 = mockDecoder(undefined);
+
+        const decoder = object({
+          prop1,
+          prop2,
+        });
+
+        const input = {
+          prop1: undefined,
+        };
+        const result = decoder(input, {
+          undefinedFields: UndefinedFields.FromInput,
+        });
+
+        expect(result.ok).toBe(true);
+        assertCond(result.ok);
+        expect(Object.keys(result.value)).toEqual(['prop1']);
+        expect(result.value.prop1).toBeUndefined();
+      });
+    });
   });
 
-  it('removes missing properties if UndefinedFields is set to Strip in decoder creation', () => {
-    const prop1 = mockDecoder(undefined);
+  describe('when options are passed to the validator creation', () => {
+    describe('when `undefinedFields` is set to `Explicit`', () => {
+      it('sets missing properties to be explicitly undefined', () => {
+        const prop1 = mockDecoder(undefined);
+        const prop2 = mockDecoder(undefined);
 
-    const decoder = object(
-      {
-        prop1,
-      },
-      { undefinedFields: UndefinedFields.Strip },
-    );
+        const decoder = object(
+          {
+            prop1,
+            prop2,
+          },
+          {
+            undefinedFields: UndefinedFields.Explicit,
+          },
+        );
 
-    const input = {};
-    const result = decoder(input);
+        const input = {
+          prop1: undefined,
+        };
 
-    expect(result.ok).toBe(true);
-    assertCond(result.ok);
-    expect(Object.keys(result.value)).toEqual([]);
+        const result = decoder(input);
 
-    expect(prop1).toHaveBeenCalledTimes(1);
-    expect(prop1.mock.calls[0][0]).toBeUndefined();
+        expect(result.ok).toBe(true);
+        assertCond(result.ok);
+        expect(Object.keys(result.value)).toEqual(['prop1', 'prop2']);
+        expect(result.value.prop1).toBeUndefined();
+        expect(result.value.prop2).toBeUndefined();
+        expect(prop1.mock.calls[0][0]).toBeUndefined();
+      });
+    });
+
+    describe('when `undefinedFields` is set to `Strip`', () => {
+      it('removes all undefined properties', () => {
+        const prop1 = mockDecoder(undefined);
+        const prop2 = mockDecoder(undefined);
+
+        const decoder = object(
+          {
+            prop1,
+            prop2,
+          },
+          {
+            undefinedFields: UndefinedFields.Strip,
+          },
+        );
+
+        const input = {
+          prop1: undefined,
+        };
+        const result = decoder(input);
+
+        expect(result.ok).toBe(true);
+        assertCond(result.ok);
+        expect(Object.keys(result.value)).toEqual([]);
+
+        expect(prop1).toHaveBeenCalledTimes(1);
+        expect(prop1.mock.calls[0][0]).toBeUndefined();
+      });
+    });
+
+    describe('when `undefinedFields` is set to `FromInput`', () => {
+      it('follows the input', () => {
+        const prop1 = mockDecoder(undefined);
+        const prop2 = mockDecoder(undefined);
+
+        const decoder = object(
+          {
+            prop1,
+            prop2,
+          },
+          {
+            undefinedFields: UndefinedFields.FromInput,
+          },
+        );
+
+        const input = {
+          prop1: undefined,
+        };
+        const result = decoder(input);
+
+        expect(result.ok).toBe(true);
+        assertCond(result.ok);
+        expect(Object.keys(result.value)).toEqual(['prop1']);
+        expect(result.value.prop1).toBeUndefined();
+      });
+    });
   });
 
-  it('chooses decoder call properties over decoder creation properties', () => {
-    const prop1 = mockDecoder(undefined);
+  describe('withOptions()', () => {
+    it('creates a new decoder with overridden options', () => {
+      const prop1 = mockDecoder(undefined);
 
-    const decoder = object(
-      {
-        prop1,
-      },
-      { undefinedFields: UndefinedFields.Explicit },
-    );
+      const decoder = object(
+        {
+          prop1,
+        },
+        { undefinedFields: UndefinedFields.Explicit },
+      ).withOptions({ undefinedFields: UndefinedFields.Strip });
 
-    const input = {};
-    const result = decoder(input, { undefinedFields: UndefinedFields.Strip });
+      const input = {};
+      const result = decoder(input);
 
-    expect(result.ok).toBe(true);
-    assertCond(result.ok);
-    expect(Object.keys(result.value)).toEqual([]);
+      expect(result.ok).toBe(true);
+      assertCond(result.ok);
+      expect(Object.keys(result.value)).toEqual([]);
 
-    expect(prop1).toHaveBeenCalledTimes(1);
-    expect(prop1.mock.calls[0][0]).toBeUndefined();
-  });
-
-  it('creates a new decoder with overridden options with withOptions()', () => {
-    const prop1 = mockDecoder(undefined);
-
-    const decoder = object(
-      {
-        prop1,
-      },
-      { undefinedFields: UndefinedFields.Explicit },
-    ).withOptions({ undefinedFields: UndefinedFields.Strip });
-
-    const input = {};
-    const result = decoder(input);
-
-    expect(result.ok).toBe(true);
-    assertCond(result.ok);
-    expect(Object.keys(result.value)).toEqual([]);
-
-    expect(prop1).toHaveBeenCalledTimes(1);
-    expect(prop1.mock.calls[0][0]).toBeUndefined();
+      expect(prop1).toHaveBeenCalledTimes(1);
+      expect(prop1.mock.calls[0][0]).toBeUndefined();
+    });
   });
 
   it('rejects if a property decoder rejects', () => {
