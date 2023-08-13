@@ -1,9 +1,11 @@
 {
-  "name": "@fmtk/decoders",
-  "version": "0.5.6",
+  "name": "@gordonmleigh/decoders",
+  "version": "0.8.0",
   "type": "module",
-  "repository": "https://github.com/futurematik/decoders",
-  "author": "Gordon Leigh <gordon.leigh@futurematik.co.uk>",
+  "repository": "https://github.com/gordonmleigh/decoders",
+  "author": {
+    "name": "Gordon Leigh"
+  },
   "license": "MIT",
   "private": false,
   "publishConfig": {
