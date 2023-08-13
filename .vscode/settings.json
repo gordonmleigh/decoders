@@ -1,9 +1,9 @@
 {
-  "typescript.tsdk": "/Users/gordonmleigh/Projects/fmtk/decoders/node_modules/typescript/lib",
   "[typescript]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     }
   },
-  "typescript.preferences.importModuleSpecifierEnding": "js"
+  "typescript.preferences.importModuleSpecifierEnding": "js",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

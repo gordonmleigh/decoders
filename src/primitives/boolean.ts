@@ -1,15 +1,8 @@
-import { Decoder } from '../core/Decoder.js';
-import { invalid, ok, Result } from '../core/Result.js';
+import { typePredicate } from '../predicates/typePredicate.js';
 
 /**
- * Error identifer returned when [[boolean]] fails.
+ * A decoder which can accept a boolean value.
  */
-export const ExpectedBoolean = 'EXPECTED_BOOLEAN';
-
-/**
- * A [[Decoder]] which can decode a boolean value.
- */
-export const boolean: Decoder<boolean> = (value: unknown): Result<boolean> =>
-  typeof value === 'boolean'
-    ? ok(value)
-    : invalid(ExpectedBoolean, 'expected boolean');
+export const boolean = typePredicate(
+  (value): value is boolean => typeof value === 'boolean',
+).withError('value:boolean', 'expected boolean');

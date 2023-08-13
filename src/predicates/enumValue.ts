@@ -1,13 +1,17 @@
 import { Decoder } from '../core/Decoder.js';
-import { invalid, ok } from '../core/Result.js';
+import { DecoderError } from '../core/DecoderError.js';
+import { ValuesOf } from '../internal/typeUtils.js';
+import { predicate } from './predicate.js';
 
 /**
- * Error identifier returned by [[enumValue]] on failure.
+ * The {@link DecoderError} returned when a {@link enum} decoder fails.
  */
-export const ExpectedEnumValue = 'EXPECTED_ENUM_VALUE';
+export type EnumDecoderError<T> = DecoderError<'value:enum'> & {
+  options: T;
+};
 
 /**
- * Creates a decoder for an enum.
+ * Creates a {@link Decoder} for an enum.
  *
  * @param values The enum values.
  *
@@ -24,11 +28,13 @@ export const ExpectedEnumValue = 'EXPECTED_ENUM_VALUE';
  * const result1 = decoder('red'); // = { ok: true, value: MyEnum.Red }
  * ```
  */
-export function enumValue<T>(values: Record<string, T>): Decoder<T> {
-  return (value) =>
-    Object.values(values).includes(value as T)
-      ? ok(value as T)
-      : invalid(ExpectedEnumValue, 'expected enum value', undefined, {
-          options: values,
-        });
+export function enumValue<const T extends Record<any, string | number>>(
+  values: T,
+): Decoder<ValuesOf<T>, unknown, EnumDecoderError<T>> {
+  const options = Object.values(values);
+  return predicate((value: any) => options.includes(value)).withError(
+    'value:enum',
+    'expected enum value',
+    { options: values },
+  );
 }

@@ -10,14 +10,14 @@ describe('optional', () => {
     const decoder = optional(inner);
 
     const input = Symbol();
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toBe(value);
 
-    expect(inner).toHaveBeenCalledTimes(1);
-    expect(inner.mock.calls[0][0]).toBe(input);
+    expect(inner.decode).toHaveBeenCalledTimes(1);
+    expect(inner.decode.mock.calls[0][0]).toBe(input);
   });
 
   it('passes through null to the inner decoder', () => {
@@ -25,26 +25,26 @@ describe('optional', () => {
     const inner = mockDecoder(value);
     const decoder = optional(inner);
 
-    const result = decoder(null);
+    const result = decoder.decode(null);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toBe(value);
 
-    expect(inner).toHaveBeenCalledTimes(1);
-    expect(inner.mock.calls[0][0]).toBe(null);
+    expect(inner.decode).toHaveBeenCalledTimes(1);
+    expect(inner.decode.mock.calls[0][0]).toBe(null);
   });
 
   it('decodes undefined without calling inner decoder', () => {
     const inner = mockDecoder();
     const decoder = optional(inner);
 
-    const result = decoder(undefined);
+    const result = decoder.decode(undefined);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toBeUndefined();
 
-    expect(inner).toHaveBeenCalledTimes(0);
+    expect(inner.decode).toHaveBeenCalledTimes(0);
   });
 });

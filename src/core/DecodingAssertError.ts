@@ -1,9 +1,11 @@
 import { DecoderError } from './DecoderError.js';
 
 /**
- * Thrown when a [[AssertDecoder]] fails to decode a value.
+ * Thrown when {@link Decoder} `assert` fails to decode a value.
  */
-export class DecodingAssertError extends Error {
+export class DecodingAssertError<
+  Err extends DecoderError = DecoderError,
+> extends Error {
   public static readonly Name = 'DecodingAssertError';
 
   /**
@@ -11,7 +13,7 @@ export class DecodingAssertError extends Error {
    *
    * @param errors The errors encountered during decoding.
    */
-  constructor(public readonly errors: DecoderError[]) {
+  constructor(public readonly error: Err) {
     super(`decoding failed`);
     this.name = DecodingAssertError.Name;
   }

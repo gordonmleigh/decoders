@@ -1,24 +1,17 @@
-import { Decoder } from '../core/Decoder.js';
+import { Decoder, decoder } from '../core/Decoder.js';
+import { DecoderError } from '../core/DecoderError.js';
 import { invalid, ok } from '../core/Result.js';
 
 /**
- * The default error identifier returned by [[predicate]].
+ * Create a {@link Decoder} which tests for the given condition.
  */
-export const ConditionFailure = 'CONDITION_FAILURE';
-
-/**
- * Create a [[Decoder]] which tests for the given condition.
- * @param test A condition predicate function.
- * @param message An optional error message to return on failure.
- * @param id An optional error id to return on failure.
- * @param details Extra details, intended to be used in error formatting.
- */
-export function predicate<T>(
-  test: (value: T) => boolean,
-  message = 'condition failure',
-  id = ConditionFailure,
-  details?: Record<string, any>,
-): Decoder<T, T> {
-  return (value) =>
-    test(value) ? ok(value) : invalid(id, message, undefined, details);
+export function predicate<Value>(
+  test: (value: Value) => boolean,
+): Decoder<Value, Value, DecoderError<'value:condition'>> {
+  return decoder((value) => {
+    if (test(value)) {
+      return ok(value);
+    }
+    return invalid('value:condition', 'condition failure');
+  });
 }

@@ -1,60 +1,79 @@
-import { Decoder } from '../core/Decoder.js';
+import { Decoder, ErrorType, OutputType, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { error, invalid, ok, Result } from '../core/Result.js';
+import { error, ok } from '../core/Result.js';
 import { isPlainObject } from '../internal/isPlainObject.js';
-import { joinIds } from '../internal/joinIds.js';
 
 /**
- * Error identifier returned when the given value is not a record.
+ * The error returned when a {@link record} decoder fails.
  */
-export const ExpectedRecord = 'EXPECTED_RECORD';
+export type RecordDecoderError<
+  Key extends PropertyKey = PropertyKey,
+  KeyError extends DecoderError = DecoderError,
+  ValueError extends DecoderError = DecoderError,
+> = DecoderError<'composite:record'> & {
+  keys?: Record<Key, KeyError>;
+  values?: Record<Key, ValueError>;
+};
 
 /**
- * Create a [[Decoder]] to decode a record.
+ * The error type for a {@link record} decoder with the given key and value
+ * decoders.
+ */
+type RecordErrorTypeFor<
+  Key extends Decoder<PropertyKey>,
+  Value extends Decoder<any>,
+> = RecordDecoderError<OutputType<Key>, ErrorType<Key>, ErrorType<Value>>;
+
+/**
+ * The specific {@link Decoder} type for a {@link record} decoder.
+ */
+type RecordDecoderType<
+  Key extends Decoder<PropertyKey>,
+  Value extends Decoder<any>,
+> = Decoder<
+  Record<OutputType<Key>, OutputType<Value>>,
+  unknown,
+  RecordErrorTypeFor<Key, Value>
+>;
+
+/**
+ * Create a {@link Decoder} to decode a record.
  *
- * @param decodeKey decoder to decode keys
- * @param decodeValue decoder to decode values
+ * @param keyDecoder decoder to decode keys
+ * @param valueDecoder decoder to decode values
  */
-export function record<K extends keyof any, V>(
-  decodeKey: Decoder<K>,
-  decodeValue?: Decoder<V>,
-): Decoder<Record<K, V>> {
-  return (value, opts): Result<Record<K, V>> => {
+export function record<
+  Key extends Decoder<PropertyKey>,
+  Value extends Decoder<any>,
+>(keyDecoder: Key, valueDecoder: Value): RecordDecoderType<Key, Value> {
+  return decoder((value, opts) => {
     if (!isPlainObject(value)) {
-      return invalid(ExpectedRecord, 'expected record');
+      return error({
+        type: 'composite:record',
+        text: 'expected record',
+      });
     }
 
     let anyErrors = false;
-    const errors: DecoderError[] = [];
-    const outputValue: Record<string, unknown> = {};
+    const keyErrors: any = {};
+    const valueErrors: any = {};
+    const outputValue: any = {};
 
     for (const [k, v] of Object.entries(value)) {
-      const keyResult = decodeKey(k, opts);
+      const keyResult = keyDecoder.decode(k, opts);
       if (!keyResult.ok) {
         anyErrors = true;
-        errors.push(
-          ...keyResult.error.map((x) => ({
-            ...x,
-            field: '$key',
-          })),
-        );
+        keyErrors[k] = keyResult.error;
       }
 
       let decodedValue = v;
 
-      if (decodeValue) {
-        const valueResult = decodeValue(v, opts);
-        if (!valueResult.ok) {
-          anyErrors = true;
-          errors.push(
-            ...valueResult.error.map((x) => ({
-              ...x,
-              field: joinIds(k, x.field),
-            })),
-          );
-        } else {
-          decodedValue = valueResult.value;
-        }
+      const valueResult = valueDecoder.decode(v, opts);
+      if (!valueResult.ok) {
+        anyErrors = true;
+        valueErrors[k] = valueResult.error;
+      } else {
+        decodedValue = valueResult.value;
       }
 
       if (!anyErrors) {
@@ -62,10 +81,15 @@ export function record<K extends keyof any, V>(
       }
     }
 
-    if (anyErrors || errors.length) {
-      return error(errors);
+    if (anyErrors) {
+      return error({
+        type: 'composite:record',
+        text: 'invalid keys or values',
+        keys: keyErrors,
+        values: valueErrors,
+      });
     } else {
-      return ok(outputValue as Record<K, V>);
+      return ok(outputValue);
     }
-  };
+  });
 }

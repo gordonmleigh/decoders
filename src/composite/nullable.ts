@@ -1,5 +1,7 @@
 import { Decoder } from '../core/Decoder.js';
-import { ok } from '../core/Result.js';
+import { DecoderError } from '../core/DecoderError.js';
+import { is } from '../predicates/is.js';
+import { choose } from './choose.js';
 
 /**
  * Creates a decoder which can decode `null` or pass through to the given
@@ -17,9 +19,9 @@ import { ok } from '../core/Result.js';
  * const result3 = decoder(12); // = { ok: false, error: [ ... ] }
  * ```
  */
-export function nullable<Out, In>(
-  decoder: Decoder<Out, In>,
-): Decoder<Out | null, In> {
-  return (value, opts) =>
-    value === null ? ok((value as unknown) as null) : decoder(value, opts);
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function nullable<Out, In, Err extends DecoderError>(
+  decoder: Decoder<Out, In, Err>,
+) {
+  return choose(is(null), decoder);
 }

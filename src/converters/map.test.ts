@@ -10,7 +10,7 @@ describe('map', () => {
     const decoder = map(mapper);
     const input = Symbol();
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);

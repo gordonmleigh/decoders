@@ -1,5 +1,6 @@
 import { Decoder } from '../core/Decoder.js';
-import { ok } from '../core/Result.js';
+import { is } from '../predicates/is.js';
+import { choose } from './choose.js';
 
 /**
  * Creates a decoder which can decode `undefined` or pass through to the given
@@ -20,6 +21,5 @@ import { ok } from '../core/Result.js';
 export function optional<Out, In>(
   decoder: Decoder<Out, In>,
 ): Decoder<Out | undefined, In> {
-  return (value, opts) =>
-    typeof value === 'undefined' ? ok(value) : decoder(value, opts);
+  return choose(is(undefined), decoder);
 }

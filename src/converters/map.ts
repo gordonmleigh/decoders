@@ -1,4 +1,4 @@
-import { Decoder } from '../core/Decoder.js';
+import { Decoder, decoder } from '../core/Decoder.js';
 import { ok } from '../core/Result.js';
 
 /**
@@ -12,6 +12,8 @@ import { ok } from '../core/Result.js';
  * const trim = map((value: string) => value.trim());
  * ```
  */
-export function map<T, V>(map: (value: T) => V): Decoder<V, T> {
-  return (value) => ok(map(value));
+export function map<Out, In, Opts = void>(
+  map: (value: In, opts?: Opts) => Out,
+): Decoder<Out, In, never, Opts> {
+  return decoder((value, opts) => ok(map(value, opts)));
 }

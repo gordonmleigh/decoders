@@ -17,7 +17,7 @@ enum TestIntEnum {
 describe('enumValue', () => {
   it('decodes a string enum', () => {
     const decoder = enumValue(TestStringEnum);
-    const result = decoder('three');
+    const result = decoder.decode('three');
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toEqual(TestStringEnum.Three);
@@ -25,7 +25,7 @@ describe('enumValue', () => {
 
   it('decodes an integer enum', () => {
     const decoder = enumValue(TestIntEnum);
-    const result = decoder(2);
+    const result = decoder.decode(2);
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toEqual(TestIntEnum.Two);

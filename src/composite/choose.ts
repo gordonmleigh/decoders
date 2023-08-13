@@ -1,23 +1,61 @@
-import { Decoder } from '../core/Decoder.js';
+import { AnyDecoder, Decoder, DecoderArray, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderOptions } from '../core/DecoderOptions.js';
-import { error, Result } from '../core/Result.js';
+import { error } from '../core/Result.js';
+import { UnionToIntersection } from '../internal/typeUtils.js';
 
 /**
- * Get the composite type of an array of decoders.
+ * Get the output type of an array of decoders.
  *
  * @example
  *
  * ```typescript
- * type A = CombinedTypeOf<[Decoder<number>, Decoder<string>]>;
+ * type A = ChooseOutputType<[Decoder<number>, Decoder<string>]>;
  *
  * // equivalent to
- * type B = Decoder<number|string>;
+ * type B = number | string;
  * ```
  */
-export type CombinedTypeOf<T> = T extends Decoder<infer X, infer Y>[]
-  ? Decoder<X, Y>
+export type ChooseOutputType<T> = T extends DecoderArray<infer Out>
+  ? Out
   : never;
+
+/**
+ * Determine the union which represents the possible error types for multiple
+ * decoders.
+ */
+export type ChooseError<T extends DecoderArray> =
+  DecoderError<'composite:choose'> & {
+    choose: {
+      [K in keyof T]: T[K] extends AnyDecoder<any, any, infer Err>
+        ? Err
+        : never;
+    };
+  };
+
+/**
+ * Determine the combined options type for multiple decoders.
+ */
+export type ChooseOptionsType<T> = T extends DecoderArray<
+  any,
+  any,
+  any,
+  infer Opts
+>
+  ? UnionToIntersection<Opts>
+  : never;
+
+/**
+ * The specific {@link Decoder} type for a choose decoder.
+ */
+export type ChooseDecoderType<
+  Decoders extends DecoderArray<any, In>,
+  In = unknown,
+> = Decoder<
+  ChooseOutputType<Decoders>,
+  In,
+  ChooseError<Decoders>,
+  ChooseOptionsType<Decoders>
+>;
 
 /**
  * Create a decoder which can succesfully decode an input value using one of the
@@ -29,33 +67,31 @@ export type CombinedTypeOf<T> = T extends Decoder<infer X, infer Y>[]
  *
  * @example
  * ```typescript
- * const choice = choose(number, string); // is a Decoder<number|string>;
+ * // is a Decoder<number|string>:
+ * const choice = choose(number, string);
  *
  * const result1 = choice(1); // = { ok: true, value: 1 }
  * const result2 = choice('hello'); // = { ok: true, value: 'hello' }
- *
- * // the `error` field will contain the errors of all decoders
- * const result3 = choice(false); // = { ok: false, error: [ ... ] }
  * ```
  */
-export function choose<T extends Decoder<unknown>[]>(
-  ...options: T
-): CombinedTypeOf<T> {
-  if (options.length === 0) {
-    throw new Error(`choose must have at least one option`);
-  }
-  const combined = (value: unknown, opts?: DecoderOptions): Result<unknown> => {
+export function choose<Decoders extends DecoderArray<any, In>, In = unknown>(
+  ...options: Decoders
+): ChooseDecoderType<Decoders, In> {
+  return decoder((value, opts) => {
     const errors: DecoderError[] = [];
 
     for (const decoder of options) {
-      const result = decoder(value, opts);
+      const result = decoder.decode(value, opts);
       if (result.ok) {
         return result;
       }
-      errors.push(...result.error);
+      errors.push(result.error);
     }
 
-    return error(errors);
-  };
-  return combined as CombinedTypeOf<T>;
+    return error({
+      type: 'composite:choose',
+      text: 'failed to match one of',
+      choose: errors as ChooseError<Decoders>['choose'],
+    });
+  });
 }

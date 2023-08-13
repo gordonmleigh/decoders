@@ -1,8 +1,8 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
 import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder.js';
-import { assert } from './assert.js';
 import { DecodingAssertError } from './DecodingAssertError.js';
+import { assert } from './assert.js';
 
 describe('assert', () => {
   it('calls the original decoder', () => {
@@ -13,8 +13,8 @@ describe('assert', () => {
     const result = assert(decoder, input);
 
     expect(result).toBe(value);
-    expect(decoder).toHaveBeenCalledTimes(1);
-    expect(decoder.mock.calls[0][0]).toBe(input);
+    expect(decoder.decode).toHaveBeenCalledTimes(1);
+    expect(decoder.decode.mock.calls[0][0]).toBe(input);
   });
 
   it('it throws DecodingAssertError on failure', () => {
@@ -30,8 +30,6 @@ describe('assert', () => {
 
     expect(thrownError).toBeInstanceOf(DecodingAssertError);
     assertCond(thrownError instanceof DecodingAssertError);
-    expect(thrownError.errors).toEqual([
-      { id: 'FAIL1', text: 'text1', field: 'field1' },
-    ]);
+    expect(thrownError.error).toEqual({ type: 'FAIL1', text: 'text1' });
   });
 });

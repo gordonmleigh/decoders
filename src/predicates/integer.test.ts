@@ -1,12 +1,10 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { ExpectedInteger } from '../predicates/isInt.js';
-import { ExpectedNumber } from '../primitives/number.js';
 import { integer } from './integer.js';
 
 describe('integer', () => {
   it('decodes an integer', () => {
-    const result = integer(3);
+    const result = integer.decode(3);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -14,7 +12,7 @@ describe('integer', () => {
   });
 
   it('decodes the biggest possible integer', () => {
-    const result = integer(Number.MAX_SAFE_INTEGER);
+    const result = integer.decode(Number.MAX_SAFE_INTEGER);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -22,7 +20,7 @@ describe('integer', () => {
   });
 
   it('decodes the smallest possible integer', () => {
-    const result = integer(Number.MIN_SAFE_INTEGER);
+    const result = integer.decode(Number.MIN_SAFE_INTEGER);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
@@ -30,34 +28,26 @@ describe('integer', () => {
   });
 
   it('rejects a float', () => {
-    const result = integer(3.14);
+    const result = integer.decode(3.14);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedInteger);
+    expect(result.error.type).toBe('value:integer');
   });
 
   it('rejects an unsafe integer', () => {
-    const result = integer(Number.MAX_SAFE_INTEGER + 1);
+    const result = integer.decode(Number.MAX_SAFE_INTEGER + 1);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedInteger);
+    expect(result.error.type).toBe('value:integer');
   });
 
   it('rejects an unsafe negative integer', () => {
-    const result = integer(Number.MIN_SAFE_INTEGER - 1);
+    const result = integer.decode(Number.MIN_SAFE_INTEGER - 1);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedInteger);
-  });
-
-  it('rejects a string', () => {
-    const result = integer('3');
-
-    expect(result.ok).toBe(false);
-    assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedNumber);
+    expect(result.error.type).toBe('value:integer');
   });
 });

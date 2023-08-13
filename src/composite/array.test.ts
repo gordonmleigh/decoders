@@ -11,15 +11,15 @@ describe('array', () => {
     const decoder = array(elem);
     const input = [Symbol(), Symbol()];
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
     expect(result.value).toEqual(input);
 
-    expect(elem).toHaveBeenCalledTimes(2);
-    expect(elem.mock.calls[0][0]).toBe(input[0]);
-    expect(elem.mock.calls[1][0]).toBe(input[1]);
+    expect(elem.decode).toHaveBeenCalledTimes(2);
+    expect(elem.decode.mock.calls[0][0]).toBe(input[0]);
+    expect(elem.decode.mock.calls[1][0]).toBe(input[1]);
   });
 
   it('fails if an element fails', () => {
@@ -33,42 +33,25 @@ describe('array', () => {
     const decoder = array(elem);
     const input = [1, 2, 3, 4, 5];
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(false);
 
     assertCond(!result.ok);
-    expect(result.error).toEqual([
-      { id: 'FAIL', text: 'fail', field: '3' },
-      { id: 'FAIL', text: 'fail', field: '4' },
-    ]);
+    expect(result.error).toEqual({
+      type: 'composite:array',
+      text: 'invalid elements',
+      elements: {
+        [3]: { type: 'FAIL', text: 'fail' },
+        [4]: { type: 'FAIL', text: 'fail' },
+      },
+    });
 
-    expect(elem).toHaveBeenCalledTimes(5);
-    expect(elem.mock.calls[0][0]).toBe(input[0]);
-    expect(elem.mock.calls[1][0]).toBe(input[1]);
-    expect(elem.mock.calls[2][0]).toBe(input[2]);
-    expect(elem.mock.calls[3][0]).toBe(input[3]);
-    expect(elem.mock.calls[4][0]).toBe(input[4]);
-  });
-
-  it('nests error fields properly', () => {
-    const elem = mockDecoderFn(
-      (value): Result<number> => invalid('FAIL', 'fail', 'field'),
-    );
-
-    const decoder = array(elem);
-    const input = [1];
-
-    const result = decoder(input);
-
-    expect(result.ok).toBe(false);
-
-    assertCond(!result.ok);
-    expect(result.error).toEqual([
-      { id: 'FAIL', text: 'fail', field: '0.field' },
-    ]);
-
-    expect(elem).toHaveBeenCalledTimes(1);
-    expect(elem.mock.calls[0][0]).toBe(input[0]);
+    expect(elem.decode).toHaveBeenCalledTimes(5);
+    expect(elem.decode.mock.calls[0][0]).toBe(input[0]);
+    expect(elem.decode.mock.calls[1][0]).toBe(input[1]);
+    expect(elem.decode.mock.calls[2][0]).toBe(input[2]);
+    expect(elem.decode.mock.calls[3][0]).toBe(input[3]);
+    expect(elem.decode.mock.calls[4][0]).toBe(input[4]);
   });
 });

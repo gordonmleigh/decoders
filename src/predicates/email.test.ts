@@ -1,10 +1,10 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { ExpectedEmail, isEmail } from './isEmail.js';
+import { email } from './email.js';
 
-describe('emisEmailail', () => {
+describe('isEmail', () => {
   it('accepts a common email format', () => {
-    const result = isEmail('gordon.leigh.101@example.com');
+    const result = email.decode('gordon.leigh.101@example.com');
 
     expect(result).toEqual({
       ok: true,
@@ -13,7 +13,7 @@ describe('emisEmailail', () => {
   });
 
   it('accepts plus addressing', () => {
-    const result = isEmail('gordon.leigh+some.other.stuff9@example.com');
+    const result = email.decode('gordon.leigh+some.other.stuff9@example.com');
 
     expect(result).toEqual({
       ok: true,
@@ -22,7 +22,7 @@ describe('emisEmailail', () => {
   });
 
   it('accepts emails on TLDs', () => {
-    const result = isEmail('g@example');
+    const result = email.decode('g@example');
 
     expect(result).toEqual({
       ok: true,
@@ -31,42 +31,42 @@ describe('emisEmailail', () => {
   });
 
   it('rejects a comma in the domain', () => {
-    const result = isEmail('gordon.leigh.101@example,com');
+    const result = email.decode('gordon.leigh.101@example,com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error.type).toEqual('value:email');
   });
 
   it('rejects a space in the domain', () => {
-    const result = isEmail('gordon.leigh.101@ example.com');
+    const result = email.decode('gordon.leigh.101@ example.com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error.type).toEqual('value:email');
   });
 
   it('rejects a space in the user part', () => {
-    const result = isEmail('gordon leigh@example.com');
+    const result = email.decode('gordon leigh@example.com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error.type).toEqual('value:email');
   });
 
   it('rejects multiple at symbols', () => {
-    const result = isEmail('gordon@leigh@example.com');
+    const result = email.decode('gordon@leigh@example.com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error.type).toEqual('value:email');
   });
 
   it('rejects zero at symbols', () => {
-    const result = isEmail('example.com');
+    const result = email.decode('example.com');
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
-    expect(result.error[0].id).toEqual(ExpectedEmail);
+    expect(result.error.type).toEqual('value:email');
   });
 });

@@ -1,19 +1,15 @@
 import 'jest';
-import { assertCond } from '../internal/assertCond.js';
-import { ExpectedString, string } from './string.js';
+import { expectInvalid, expectValid } from '../internal/expectResult.js';
+import { string } from './string.js';
 
 describe('date', () => {
   it('decodes a string', () => {
-    const result = string('hello world');
-    expect(result.ok).toBe(true);
-    assertCond(result.ok);
-    expect(result.value).toEqual('hello world');
+    const result = string.decode('hello world');
+    expectValid(result, 'hello world');
   });
 
   it('rejects numbers', () => {
-    const result = string(0);
-    expect(result.ok).toBe(false);
-    assertCond(!result.ok);
-    expect(result.error[0].id).toBe(ExpectedString);
+    const result = string.decode(0);
+    expectInvalid(result, 'value:string');
   });
 });

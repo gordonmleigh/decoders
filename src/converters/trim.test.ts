@@ -4,7 +4,7 @@ import { trim } from './trim.js';
 
 describe('trim', () => {
   it('strips whitespace from start and end of string input', () => {
-    const result = trim(' \thello \nworld \t\r\n');
+    const result = trim.decode(' \thello \nworld \t\r\n');
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);

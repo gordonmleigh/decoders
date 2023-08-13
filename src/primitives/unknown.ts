@@ -1,7 +1,9 @@
-import { Decoder } from '../core/Decoder.js';
-import { ok } from '../core/Result.js';
+import { decoder } from '../core/Decoder.js';
+import { Result, ok } from '../core/Result.js';
 
 /**
  * A decoder which can accept any value.
  */
-export const unknown: Decoder<unknown> = (value) => ok(value);
+export const unknown = decoder(
+  (value: unknown): Result<unknown, never> => ok(value),
+);

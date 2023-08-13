@@ -1,48 +1,86 @@
-import { Decoder } from '../core/Decoder.js';
+import {
+  AnyDecoder,
+  Decoder,
+  ErrorType,
+  OptionsType,
+  OutputType,
+  decoder,
+} from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { DecoderOptions } from '../core/DecoderOptions.js';
-import { invalid, ok, Result } from '../core/Result.js';
-import { joinIds } from '../internal/joinIds.js';
+import { error, invalid, ok } from '../core/Result.js';
+import { Schema } from '../internal/Schema.js';
 
 /**
- * Error identifier returned when [[array]] fails.
+ * The error type of an {@link array} decoder.
  */
-export const ExpectedArray = 'EXPECTED_ARRAY';
+export interface ArrayError<ElementDecoder extends AnyDecoder>
+  extends DecoderError<'composite:array'> {
+  elements?: { [index: number]: ErrorType<ElementDecoder> };
+}
 
 /**
- * Create a [[Decoder]] which can decode an array, using the given [[Decoder]]
- * to decode each element.
+ * The specific {@link Decoder} type for an {@link array} decoder.
+ */
+export type ArrayDecoderType<ElementDecoder extends AnyDecoder> = Decoder<
+  OutputType<ElementDecoder>[],
+  unknown,
+  ArrayError<ElementDecoder>,
+  OptionsType<ElementDecoder>
+>;
+
+/**
+ * An object that can create a {@link array} decoder with a constrained element
+ * type.
+ */
+export interface ArrayDecoderFactory<ElementType> {
+  schema<ElementDecoder extends AnyDecoder<ElementType>>(
+    element: ElementDecoder,
+  ): ArrayDecoderType<ElementDecoder>;
+}
+
+/**
+ * Create a {@link Decoder} which can decode an array, using the given
+ * decoder for each element.
  *
- * @param elem The [[Decoder]] to use to decode the elements.
+ * @param elem The decoder to use to decode the elements.
  */
-export function array<T>(elem: Decoder<T>): Decoder<T[]> {
-  return (value: unknown, opts?: DecoderOptions): Result<T[]> => {
+export function array<ElementDecoder extends AnyDecoder>(
+  element: ElementDecoder,
+): ArrayDecoderType<ElementDecoder> {
+  return decoder((value, opts) => {
     if (!Array.isArray(value)) {
-      return invalid(ExpectedArray, 'expected array');
+      return invalid('composite:array', 'expected array');
     }
 
-    const decoded: T[] = [];
-    const errors: DecoderError[] = [];
+    const decoded: OutputType<ElementDecoder>[] = [];
+    const errors: Record<number, ErrorType<ElementDecoder>> = {};
     let anyErrors = false;
 
     for (let i = 0; i < value.length; ++i) {
-      const elemResult = elem(value[i], opts);
+      const elemResult = element.decode(value[i], opts);
       if (elemResult.ok) {
         decoded[i] = elemResult.value;
       } else {
-        errors.push(
-          ...elemResult.error.map((x) => ({
-            ...x,
-            field: joinIds(i.toString(), x.field),
-          })),
-        );
+        errors[i] = elemResult.error;
         anyErrors = true;
       }
     }
 
     if (anyErrors) {
-      return { ok: false, error: errors };
+      return error({
+        type: 'composite:array',
+        text: 'invalid elements',
+        elements: errors,
+      });
     }
     return ok(decoded);
-  };
+  });
+}
+
+/**
+ * Helper function to allow the output type to be constrained and the error type
+ * inferred.
+ */
+export function arrayType<ElementType>(): ArrayDecoderFactory<ElementType> {
+  return new Schema(array);
 }

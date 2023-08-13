@@ -20,23 +20,23 @@ describe('choose', () => {
 
     const decoder = choose(decoder1, decoder2, decoder3, decoder4);
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(true);
     assertCond(result.ok);
 
     expect(result.value).toBe(value3);
 
-    expect(decoder1).toHaveBeenCalledTimes(1);
-    expect(decoder1.mock.calls[0][0]).toBe(input);
+    expect(decoder1.decode).toHaveBeenCalledTimes(1);
+    expect(decoder1.decode.mock.calls[0][0]).toBe(input);
 
-    expect(decoder2).toHaveBeenCalledTimes(1);
-    expect(decoder2.mock.calls[0][0]).toBe(input);
+    expect(decoder2.decode).toHaveBeenCalledTimes(1);
+    expect(decoder2.decode.mock.calls[0][0]).toBe(input);
 
-    expect(decoder3).toHaveBeenCalledTimes(1);
-    expect(decoder3.mock.calls[0][0]).toBe(input);
+    expect(decoder3.decode).toHaveBeenCalledTimes(1);
+    expect(decoder3.decode.mock.calls[0][0]).toBe(input);
 
-    expect(decoder4).toHaveBeenCalledTimes(0);
+    expect(decoder4.decode).toHaveBeenCalledTimes(0);
   });
 
   it('combines all errors on failure', () => {
@@ -48,20 +48,24 @@ describe('choose', () => {
 
     const decoder = choose(decoder1, decoder2, decoder3);
 
-    const result = decoder(input);
+    const result = decoder.decode(input);
 
     expect(result.ok).toBe(false);
     assertCond(!result.ok);
 
-    expect(result.error).toEqual([mockError(1), mockError(2), mockError(3)]);
+    expect(result.error).toEqual({
+      type: 'composite:choose',
+      text: 'failed to match one of',
+      choose: [mockError(1), mockError(2), mockError(3)],
+    });
 
-    expect(decoder1).toHaveBeenCalledTimes(1);
-    expect(decoder1.mock.calls[0][0]).toBe(input);
+    expect(decoder1.decode).toHaveBeenCalledTimes(1);
+    expect(decoder1.decode.mock.calls[0][0]).toBe(input);
 
-    expect(decoder2).toHaveBeenCalledTimes(1);
-    expect(decoder2.mock.calls[0][0]).toBe(input);
+    expect(decoder2.decode).toHaveBeenCalledTimes(1);
+    expect(decoder2.decode.mock.calls[0][0]).toBe(input);
 
-    expect(decoder3).toHaveBeenCalledTimes(1);
-    expect(decoder3.mock.calls[0][0]).toBe(input);
+    expect(decoder3.decode).toHaveBeenCalledTimes(1);
+    expect(decoder3.decode.mock.calls[0][0]).toBe(input);
   });
 });

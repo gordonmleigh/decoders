@@ -1,14 +1,10 @@
-import { Decoder } from '../core/Decoder.js';
-import { invalid, ok, Result } from '../core/Result.js';
 import { isDate } from '../internal/isDate.js';
+import { typePredicate } from '../predicates/typePredicate.js';
 
 /**
- * The error identifier returned when [[date]] fails.
+ * A decoder which can accept a Date value.
  */
-export const ExpectedDate = 'EXPECTED_DATE';
-
-/**
- * A [[Decoder]] which can decode a Date value.
- */
-export const date: Decoder<Date> = (value: unknown): Result<Date> =>
-  isDate(value) ? ok(value) : invalid(ExpectedDate, 'expected date');
+export const date = typePredicate(isDate).withError(
+  'value:date',
+  'expected date',
+);

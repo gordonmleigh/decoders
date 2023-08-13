@@ -1,7 +1,7 @@
 import { DecoderError } from './DecoderError.js';
 
 /**
- * Returned by a [[Decoder]] on success.
+ * Returned by a decoder on success.
  */
 export interface OkResult<T> {
   ok: true;
@@ -9,20 +9,22 @@ export interface OkResult<T> {
 }
 
 /**
- * Returned by a [[Decoder]] on failure.
+ * Returned by a decoder on failure.
  */
-export interface ErrorResult {
+export interface ErrorResult<Err extends DecoderError = DecoderError> {
   ok: false;
-  error: DecoderError[];
+  error: Err;
 }
 
 /**
- * Returned by a [[Decoder]].
+ * Returned by a decoder.
  */
-export type Result<T> = OkResult<T> | ErrorResult;
+export type Result<T, Err extends DecoderError = DecoderError> =
+  | OkResult<T>
+  | ErrorResult<Err>;
 
 /**
- * Create an [[OkResult]].
+ * Create an {@link OkResult}.
  * @param value The value to return.
  */
 export function ok<T>(value: T): OkResult<T> {
@@ -30,25 +32,30 @@ export function ok<T>(value: T): OkResult<T> {
 }
 
 /**
- * Create an [[ErrorResult]].
+ * Create an {@link ErrorResult}.
  * @param error The error to return.
  */
-export function error(error: DecoderError[]): ErrorResult {
+export function error<Err extends DecoderError>(error: Err): ErrorResult<Err> {
   return { ok: false, error };
 }
 
 /**
- * Create an [[ErrorResult]] with a single error.
- * @param id A unique ID for the error, for programmatic use.
+ * Create an {@link ErrorResult}.
+ * @param type A unique ID for the error, for programmatic use.
  * @param text A simple textual description of the error.
- * @param field The field causing the error. Possibly dot-separated path.
  * @param details Extra details, intended to be used in error formatting.
  */
-export function invalid(
-  id: string,
+export function invalid<Type extends string, Details>(
+  type: Type,
   text: string,
-  field?: string,
-  details?: Record<string, any>,
-): ErrorResult {
-  return { ok: false, error: [{ id, text, field, details }] };
+  details?: Details,
+): ErrorResult<DecoderError<Type> & Details> {
+  return {
+    ok: false,
+    error: {
+      text,
+      type,
+      ...details,
+    } as DecoderError<Type> & Details,
+  };
 }

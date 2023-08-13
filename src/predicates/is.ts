@@ -1,21 +1,25 @@
 import { Decoder } from '../core/Decoder.js';
-import { invalid, ok } from '../core/Result.js';
+import { DecoderError } from '../core/DecoderError.js';
+import { predicate } from './predicate.js';
 
 /**
- * The error identifier returned by [[is]] on failure.
+ * The {@link DecoderError} returned when a {@link is} decoder fails.
  */
-export const ExpectedSpecificValue = 'EXPECTED_SPECIFIC_VALUE';
+export type IsDecoderError<T> = DecoderError<'value:is'> & {
+  options: T[];
+};
 
 /**
  * Creates a predicate which allows only the given value(s).
  *
  * @param options The values allowed.
  */
-export function is<T>(...options: T[]): Decoder<T> {
-  return (value) =>
-    options.includes(value as T)
-      ? ok(value as T)
-      : invalid(ExpectedSpecificValue, 'expected specific value', undefined, {
-          options,
-        });
+export function is<const T>(
+  ...options: T[]
+): Decoder<T, unknown, IsDecoderError<T>> {
+  return predicate((value: T) => options.includes(value)).withError(
+    'value:is',
+    'expected specific value',
+    { options },
+  );
 }
