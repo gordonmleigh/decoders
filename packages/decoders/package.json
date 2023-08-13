@@ -1,0 +1,41 @@
+{
+  "name": "@gordonmleigh/decoders",
+  "version": "0.8.0",
+  "type": "module",
+  "repository": "https://github.com/gordonmleigh/decoders",
+  "author": {
+    "name": "Gordon Leigh"
+  },
+  "license": "MIT",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/cjs/index.js"
+    }
+  },
+  "files": [
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "lib/**/*.map",
+    "lib/**/package.json",
+    "!lib/**/*.test.*",
+    "!lib/testing/",
+    "src/**/*.ts",
+    "!src/**/*.test.ts"
+  ],
+  "scripts": {
+    "compile": "npm run index && npm run compile:esm && npm run compile:cjs",
+    "compile:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > lib/cjs/package.json",
+    "compile:esm": "tsc",
+    "index": "node ../../makeIndex.js src/",
+    "lint": "eslint src/ --ext=ts",
+    "test": "jest"
+  }
+}

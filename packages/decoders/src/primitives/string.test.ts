@@ -1,5 +1,8 @@
 import 'jest';
-import { expectInvalid, expectValid } from '../internal/expectResult.js';
+import {
+  expectInvalid,
+  expectValid,
+} from '../internal/testing/expectResult.js';
 import { string } from './string.js';
 
 describe('date', () => {

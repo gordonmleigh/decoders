@@ -1,6 +1,6 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { mockDecoder } from '../internal/mockDecoder.js';
+import { mockDecoder } from '../internal/testing/mockDecoder.js';
 import { optional } from './optional.js';
 
 describe('optional', () => {

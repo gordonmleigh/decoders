@@ -1,8 +1,11 @@
-import { writeFileSync, readdirSync } from 'fs';
-import { resolve, relative, join, basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { readdirSync, writeFileSync } from 'fs';
+import { basename, extname, join, relative } from 'path';
 
-const srcDir = resolve(dirname(fileURLToPath(import.meta.url)), 'src');
+const srcDir = process.argv[2];
+if (!srcDir) {
+  console.error(`usage: makeIndex.js <src>`);
+  process.exit(2);
+}
 
 const files = collectFiles(srcDir)
   .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
@@ -22,7 +25,7 @@ function collectFiles(dir) {
     if (file.isDirectory() && file.name !== 'internal') {
       matches.push(...collectFiles(join(dir, file.name)));
     } else if (matchFile(file.name)) {
-      matches.push(join(dir, basename(file.name, '.ts')));
+      matches.push(join(dir, basename(file.name, extname(file.name))));
     }
   }
 
@@ -31,7 +34,7 @@ function collectFiles(dir) {
 
 function matchFile(fileName) {
   return (
-    fileName.endsWith('.ts') &&
+    (fileName.endsWith('.ts') || fileName.endsWith('.tsx')) &&
     !fileName.endsWith('.internal.ts') &&
     !fileName.endsWith('.test.ts')
   );

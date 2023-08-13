@@ -1,6 +1,6 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { mockDecoderFn } from '../internal/mockDecoder.js';
+import { mockDecoderFn } from '../internal/testing/mockDecoder.js';
 import { nullable } from './nullable.js';
 
 describe('nullable', () => {

@@ -1,6 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import 'jest';
-import { ErrorResult, OkResult, Result } from '../core/Result.js';
-import { assertCond } from './assertCond.js';
+import { ErrorResult, OkResult, Result } from '../../core/Result.js';
+import { assertCond } from '../assertCond.js';
 
 export function expectValid<T>(
   result: Result<T>,

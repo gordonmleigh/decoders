@@ -1,9 +1,8 @@
 {
-  "[typescript]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
-    }
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
   },
+  "eslint.workingDirectories": [{ "mode": "auto" }],
   "typescript.preferences.importModuleSpecifierEnding": "js",
   "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,7 +1,7 @@
 import 'jest';
 import { invalid, ok, Result } from '../core/Result.js';
 import { assertCond } from '../internal/assertCond.js';
-import { mockDecoder, mockDecoderFn } from '../internal/mockDecoder.js';
+import { mockDecoder, mockDecoderFn } from '../internal/testing/mockDecoder.js';
 import { array } from './array.js';
 
 describe('array', () => {

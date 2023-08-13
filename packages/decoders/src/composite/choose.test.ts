@@ -4,7 +4,7 @@ import {
   mockDecoder,
   mockError,
   mockFailDecoder,
-} from '../internal/mockDecoder';
+} from '../internal/testing/mockDecoder.js';
 import { choose } from './choose.js';
 
 describe('choose', () => {

@@ -1,7 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import 'jest';
-import { DecoderBase } from '../core/Decoder.js';
-import { DecoderError } from '../core/DecoderError.js';
-import { Result } from '../core/Result.js';
+import { DecoderBase } from '../../core/Decoder.js';
+import { DecoderError } from '../../core/DecoderError.js';
+import { Result } from '../../core/Result.js';
 
 export class MockDecoder<
   Out = unknown,

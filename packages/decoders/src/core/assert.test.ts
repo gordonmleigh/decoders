@@ -1,6 +1,9 @@
 import 'jest';
 import { assertCond } from '../internal/assertCond.js';
-import { mockDecoder, mockFailDecoder } from '../internal/mockDecoder.js';
+import {
+  mockDecoder,
+  mockFailDecoder,
+} from '../internal/testing/mockDecoder.js';
 import { DecodingAssertError } from './DecodingAssertError.js';
 import { assert } from './assert.js';
 
