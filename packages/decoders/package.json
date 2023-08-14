@@ -11,13 +11,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/index.js",
   "module": "./lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
-      "import": "./lib/index.js",
-      "require": "./lib/cjs/index.js"
+      "import": "./lib/index.js"
     }
   },
   "files": [
@@ -31,9 +30,7 @@
     "!src/**/*.test.ts"
   ],
   "scripts": {
-    "compile": "npm run index && npm run compile:esm && npm run compile:cjs",
-    "compile:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > lib/cjs/package.json",
-    "compile:esm": "tsc",
+    "compile": "npm run index && tsc",
     "index": "node ../../makeIndex.js src/",
     "lint": "eslint src/ --ext=ts",
     "test": "jest"
