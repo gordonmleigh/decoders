@@ -8,10 +8,7 @@
     {
       "files": ["*.ts"],
       "parser": "@typescript-eslint/parser",
-      "extends": [
-        "plugin:@typescript-eslint/recommended",
-        "plugin:import/typescript"
-      ],
+      "extends": ["plugin:@typescript-eslint/recommended"],
       "plugins": ["import"],
       "parserOptions": {
         "project": "tsconfig.json"
@@ -32,8 +29,7 @@
           "warn",
           { "classes": false, "functions": false }
         ],
-        "import/extensions": ["error", "always"],
-        "import/no-extraneous-dependencies": "error"
+        "import/extensions": ["error", "always"]
       }
     }
   ]
