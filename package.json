@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rimraf --glob '**/*.tsbuildinfo' '**/lib/'",
     "compile": "npm run --workspaces --if-present compile",
-    "dev:docs": "npm run -w @w/docs dev",
+    "dev:docs": "NEXT_PUBLIC_BASE_PATH=/decoders nodemon --exec 'npm run -w @w/docs dev' --watch packages/superdocs/lib",
     "docs": "npm run -w @w/docs build",
     "lint": "npm run --workspaces --if-present lint",
     "test": "npm run --workspaces --if-present test"

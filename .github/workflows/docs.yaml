@@ -1,4 +1,4 @@
-name: "Publish Docs"
+name: 'Publish Docs'
 on:
   push:
     branches:
@@ -15,7 +15,7 @@ permissions:
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
       - name: Build Docs
         run: npm run docs
         env:
-          NEXT_PUBLIC_BASE_PATH: /superdocs
+          NEXT_PUBLIC_BASE_PATH: /decoders
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v1
         with:
