@@ -9,6 +9,7 @@
     "clean": "rimraf --glob '**/*.tsbuildinfo' '**/lib/'",
     "compile": "npm run --workspaces --if-present compile",
     "dev:docs": "npm run -w @w/docs dev",
+    "docs": "npm run -w @w/docs build",
     "lint": "npm run --workspaces --if-present lint",
     "test": "npm run --workspaces --if-present test"
   },
