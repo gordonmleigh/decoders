@@ -15,8 +15,117 @@
   "module": "./lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./lib/index.js"
+    "./composite/array": {
+      "import": "./lib/composite/array.js",
+      "types": "./lib/composite/array.d.ts"
+    },
+    "./composite/chain": {
+      "import": "./lib/composite/chain.js",
+      "types": "./lib/composite/chain.d.ts"
+    },
+    "./composite/choose": {
+      "import": "./lib/composite/choose.js",
+      "types": "./lib/composite/choose.d.ts"
+    },
+    "./composite/nullable": {
+      "import": "./lib/composite/nullable.js",
+      "types": "./lib/composite/nullable.d.ts"
+    },
+    "./composite/object": {
+      "import": "./lib/composite/object.js",
+      "types": "./lib/composite/object.d.ts"
+    },
+    "./composite/optional": {
+      "import": "./lib/composite/optional.js",
+      "types": "./lib/composite/optional.d.ts"
+    },
+    "./composite/record": {
+      "import": "./lib/composite/record.js",
+      "types": "./lib/composite/record.d.ts"
+    },
+    "./converters/map": {
+      "import": "./lib/converters/map.js",
+      "types": "./lib/converters/map.d.ts"
+    },
+    "./converters/trim": {
+      "import": "./lib/converters/trim.js",
+      "types": "./lib/converters/trim.d.ts"
+    },
+    "./core/assert": {
+      "import": "./lib/core/assert.js",
+      "types": "./lib/core/assert.d.ts"
+    },
+    "./core/combineOptions": {
+      "import": "./lib/core/combineOptions.js",
+      "types": "./lib/core/combineOptions.d.ts"
+    },
+    "./core/Decoder": {
+      "import": "./lib/core/Decoder.js",
+      "types": "./lib/core/Decoder.d.ts"
+    },
+    "./core/DecoderError": {
+      "import": "./lib/core/DecoderError.js",
+      "types": "./lib/core/DecoderError.d.ts"
+    },
+    "./core/DecodingAssertError": {
+      "import": "./lib/core/DecodingAssertError.js",
+      "types": "./lib/core/DecodingAssertError.d.ts"
+    },
+    "./core/isValid": {
+      "import": "./lib/core/isValid.js",
+      "types": "./lib/core/isValid.d.ts"
+    },
+    "./core/Result": {
+      "import": "./lib/core/Result.js",
+      "types": "./lib/core/Result.d.ts"
+    },
+    "./predicates/email": {
+      "import": "./lib/predicates/email.js",
+      "types": "./lib/predicates/email.d.ts"
+    },
+    "./predicates/enumValue": {
+      "import": "./lib/predicates/enumValue.js",
+      "types": "./lib/predicates/enumValue.d.ts"
+    },
+    "./predicates/integer": {
+      "import": "./lib/predicates/integer.js",
+      "types": "./lib/predicates/integer.d.ts"
+    },
+    "./predicates/is": {
+      "import": "./lib/predicates/is.js",
+      "types": "./lib/predicates/is.d.ts"
+    },
+    "./predicates/predicate": {
+      "import": "./lib/predicates/predicate.js",
+      "types": "./lib/predicates/predicate.d.ts"
+    },
+    "./predicates/regexp": {
+      "import": "./lib/predicates/regexp.js",
+      "types": "./lib/predicates/regexp.d.ts"
+    },
+    "./predicates/typePredicate": {
+      "import": "./lib/predicates/typePredicate.js",
+      "types": "./lib/predicates/typePredicate.d.ts"
+    },
+    "./primitives/boolean": {
+      "import": "./lib/primitives/boolean.js",
+      "types": "./lib/primitives/boolean.d.ts"
+    },
+    "./primitives/date": {
+      "import": "./lib/primitives/date.js",
+      "types": "./lib/primitives/date.d.ts"
+    },
+    "./primitives/number": {
+      "import": "./lib/primitives/number.js",
+      "types": "./lib/primitives/number.d.ts"
+    },
+    "./primitives/string": {
+      "import": "./lib/primitives/string.js",
+      "types": "./lib/primitives/string.d.ts"
+    },
+    "./primitives/unknown": {
+      "import": "./lib/primitives/unknown.js",
+      "types": "./lib/primitives/unknown.d.ts"
     }
   },
   "files": [
@@ -33,6 +142,7 @@
     "compile": "npm run index && tsc",
     "index": "node ../../makeIndex.js src/",
     "lint": "eslint src/ --ext=ts",
-    "test": "jest"
+    "test": "jest",
+    "watch:compile": "tsc -w"
   }
 }
