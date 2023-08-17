@@ -9,6 +9,7 @@ const W3CEmailValidationRegex =
 /**
  * A decoder which accepts a valid email.
  *
+ * @remarks
  * The following regex is used to match the value:
  *
  * ```
@@ -18,6 +19,8 @@ const W3CEmailValidationRegex =
  * This is a slightly simplified version of the regex that appears in the W3C
  * HTML5 spec, that doesn't place constraints on the initial character of
  * domains since the payoff isn't worth the complexity.
+ *
+ * @group Predicates
  */
 export const email = regexp(W3CEmailValidationRegex).withError(
   'value:email',

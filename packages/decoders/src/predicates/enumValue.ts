@@ -5,6 +5,8 @@ import { predicate } from './predicate.js';
 
 /**
  * The {@link DecoderError} returned when a {@link enum} decoder fails.
+ *
+ * @group Types
  */
 export type EnumDecoderError<T> = DecoderError<'value:enum'> & {
   options: T;
@@ -27,6 +29,8 @@ export type EnumDecoderError<T> = DecoderError<'value:enum'> & {
  *
  * const result1 = decoder('red'); // = { ok: true, value: MyEnum.Red }
  * ```
+ *
+ * @group Predicates
  */
 export function enumValue<const T extends Record<any, string | number>>(
   values: T,

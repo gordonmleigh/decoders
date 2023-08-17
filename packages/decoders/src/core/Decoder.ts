@@ -8,6 +8,8 @@ import { combineOptions } from './combineOptions.js';
  *
  * @template Out The output value type.
  * @template In The input value type.
+ *
+ * @group Core
  */
 export interface Decoder<
   Out,
@@ -100,16 +102,22 @@ export interface Decoder<
 
 /**
  * Determine the input type of the decoder.
+ *
+ * @group Utilities
  */
 export type InputType<T> = T extends AnyDecoder<any, infer In> ? In : never;
 
 /**
  * Determine the output type of the decoder.
+ *
+ * @group Utilities
  */
 export type OutputType<T> = T extends AnyDecoder<infer Out, any> ? Out : never;
 
 /**
  * Determine the error type of the decoder.
+ *
+ * @group Utilities
  */
 export type ErrorType<T> = T extends AnyDecoder<any, any, infer Err>
   ? Err
@@ -117,6 +125,8 @@ export type ErrorType<T> = T extends AnyDecoder<any, any, infer Err>
 
 /**
  * Determine the options type of the decoder.
+ *
+ * @group Utilities
  */
 export type OptionsType<T> = T extends AnyDecoder<any, any, any, infer Opts>
   ? Opts
@@ -124,6 +134,8 @@ export type OptionsType<T> = T extends AnyDecoder<any, any, any, infer Opts>
 
 /**
  * Represents a {@link Decoder} with any parameters.
+ *
+ * @group Types
  */
 export type AnyDecoder<
   Out = any,
@@ -134,6 +146,8 @@ export type AnyDecoder<
 
 /**
  * Represents an array of {@link Decoder}s with any parameters.
+ *
+ * @group Types
  */
 export type DecoderArray<
   Out = any,
@@ -144,6 +158,8 @@ export type DecoderArray<
 
 /**
  * Represents a function that can decode a value.
+ *
+ * @group Types
  */
 export type DecoderFunction<
   Out,
@@ -154,6 +170,8 @@ export type DecoderFunction<
 
 /**
  * Create a custom {@link Decoder} from a {@link DecoderFunction}.
+ *
+ * @group Core
  */
 export function decoder<
   Out,
@@ -166,6 +184,8 @@ export function decoder<
 
 /**
  * A base class for {@link Decoder} implementations.
+ *
+ * @group Core
  */
 export abstract class DecoderBase<
   Out,

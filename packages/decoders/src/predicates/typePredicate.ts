@@ -3,10 +3,10 @@ import { DecoderError } from '../core/DecoderError.js';
 import { invalid, ok } from '../core/Result.js';
 import { TypePredicate } from '../internal/TypePredicate.js';
 
-export const ExpectedType = 'EXPECTED_TYPE';
-
 /**
  * Create a {@link Decoder} which tests for the given type.
+ *
+ * @group Predicates
  */
 export function typePredicate<Out extends In, In>(
   test: TypePredicate<Out, In>,

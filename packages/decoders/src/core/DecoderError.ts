@@ -1,5 +1,7 @@
 /**
  * Represents an error which occurs during a decoding operation.
+ *
+ * @group Types
  */
 export interface DecoderError<Key extends string = string> {
   /**

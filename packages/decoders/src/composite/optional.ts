@@ -17,6 +17,8 @@ import { choose } from './choose.js';
  * const result2 = decoder('hello'); // = { ok: true, value: 'hello' }
  * const result3 = decoder(12); // = { ok: false, error: [ ... ] }
  * ```
+ *
+ * @group Composite
  */
 export function optional<Out, In>(
   decoder: Decoder<Out, In>,

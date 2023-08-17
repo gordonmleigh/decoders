@@ -2,17 +2,32 @@ import { Decoder, DecoderBase } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
 import { Result, invalid, ok } from '../core/Result.js';
 
+/**
+ * Represents length options for a {@link string} {@link Decoder}.
+ *
+ * @group Types
+ */
 export interface StringLengthOptions {
   minLength?: number;
   maxLength?: number;
 }
 
+/**
+ * The error type for a {@link string} {@link Decoder}.
+ *
+ * @group Types
+ */
 export type StringDecoderError = DecoderError<
   'value:string' | 'value:string-max-length' | 'value:string-min-length'
 > &
   StringLengthOptions;
 
-type StringDecoderExtra = {
+/**
+ * Extra convenience methods available on the {@link string} {@link Decoder}.
+ *
+ * @group Types
+ */
+export type StringDecoderExtra = {
   length(maxLength: number): StringDecoderType;
   length(maxLength: number | undefined, minLength?: number): StringDecoderType;
   length(options: StringLengthOptions): StringDecoderType;
@@ -21,10 +36,23 @@ type StringDecoderExtra = {
   trim(): StringDecoderType;
 };
 
+/**
+ * The specific type of the {@link string} {@link Decoder}.
+ *
+ * @group Types
+ */
 export type StringDecoderType = Decoder<string, unknown, StringDecoderError> &
   StringDecoderExtra;
 
-type StringDecoderOptions = StringLengthOptions & {
+/**
+ * Options for the {@link string} {@link Decoder}.
+ *
+ * @group Types
+ */
+export type StringDecoderOptions = StringLengthOptions & {
+  /**
+   * True to automatically trim whitespace from the start and end of strings.
+   */
   trim?: boolean;
 };
 
@@ -109,6 +137,8 @@ class StringDecoder
 }
 
 /**
- * A decoder which can accept a string value.
+ * A {@link Decoder} which can accept a string value.
+ *
+ * @group Primitives
  */
 export const string: StringDecoderType = new StringDecoder();

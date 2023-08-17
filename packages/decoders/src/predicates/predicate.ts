@@ -4,6 +4,8 @@ import { invalid, ok } from '../core/Result.js';
 
 /**
  * Create a {@link Decoder} which tests for the given condition.
+ *
+ * @group Predicates
  */
 export function predicate<Value>(
   test: (value: Value) => boolean,

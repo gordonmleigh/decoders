@@ -5,6 +5,8 @@ import { isPlainObject } from '../internal/isPlainObject.js';
 
 /**
  * The error returned when a {@link record} decoder fails.
+ *
+ * @group Types
  */
 export type RecordDecoderError<
   Key extends PropertyKey = PropertyKey,
@@ -18,16 +20,20 @@ export type RecordDecoderError<
 /**
  * The error type for a {@link record} decoder with the given key and value
  * decoders.
+ *
+ * @group Types
  */
-type RecordErrorTypeFor<
+export type RecordErrorTypeFor<
   Key extends Decoder<PropertyKey>,
   Value extends Decoder<any>,
 > = RecordDecoderError<OutputType<Key>, ErrorType<Key>, ErrorType<Value>>;
 
 /**
  * The specific {@link Decoder} type for a {@link record} decoder.
+ *
+ * @group Types
  */
-type RecordDecoderType<
+export type RecordDecoderType<
   Key extends Decoder<PropertyKey>,
   Value extends Decoder<any>,
 > = Decoder<
@@ -41,6 +47,8 @@ type RecordDecoderType<
  *
  * @param keyDecoder decoder to decode keys
  * @param valueDecoder decoder to decode values
+ *
+ * @group Composite
  */
 export function record<
   Key extends Decoder<PropertyKey>,

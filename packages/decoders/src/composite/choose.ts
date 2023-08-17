@@ -14,6 +14,8 @@ import { UnionToIntersection } from '../internal/typeUtils.js';
  * // equivalent to
  * type B = number | string;
  * ```
+ *
+ * @group Types
  */
 export type ChooseOutputType<T> = T extends DecoderArray<infer Out>
   ? Out
@@ -22,6 +24,8 @@ export type ChooseOutputType<T> = T extends DecoderArray<infer Out>
 /**
  * Determine the union which represents the possible error types for multiple
  * decoders.
+ *
+ * @group Types
  */
 export type ChooseError<T extends DecoderArray> =
   DecoderError<'composite:choose'> & {
@@ -34,6 +38,8 @@ export type ChooseError<T extends DecoderArray> =
 
 /**
  * Determine the combined options type for multiple decoders.
+ *
+ * @group Types
  */
 export type ChooseOptionsType<T> = T extends DecoderArray<
   any,
@@ -46,6 +52,8 @@ export type ChooseOptionsType<T> = T extends DecoderArray<
 
 /**
  * The specific {@link Decoder} type for a choose decoder.
+ *
+ * @group Types
  */
 export type ChooseDecoderType<
   Decoders extends DecoderArray<any, In>,
@@ -58,9 +66,9 @@ export type ChooseDecoderType<
 >;
 
 /**
- * Create a decoder which can succesfully decode an input value using one of the
- * supplie decoders. The decoders are invoked in the given order until one is
- * successful. If none are successful, the errors from all decoders are
+ * Create a decoder which can successfully decode an input value using one of
+ * the supplied decoders. The decoders are invoked in the given order until one
+ * is successful. If none are successful, the errors from all decoders are
  * concatenated and returned.
  *
  * @param options The possible decoders to try.
@@ -73,6 +81,8 @@ export type ChooseDecoderType<
  * const result1 = choice(1); // = { ok: true, value: 1 }
  * const result2 = choice('hello'); // = { ok: true, value: 'hello' }
  * ```
+ *
+ * @group Composite
  */
 export function choose<Decoders extends DecoderArray<any, In>, In = unknown>(
   ...options: Decoders

@@ -12,7 +12,10 @@ import { Schema } from '../internal/Schema.js';
 import { UnionToIntersection } from '../internal/typeUtils.js';
 
 /**
- * A chain of decoders with matching input/output types.
+ * A chain of {@link Decoder} objects with matching input/output types. Used as
+ * input to the {@link chain} decoder.
+ *
+ * @group Types
  */
 export type DecoderChain<Decoders> = Decoders extends readonly [AnyDecoder]
   ? Decoders
@@ -21,8 +24,11 @@ export type DecoderChain<Decoders> = Decoders extends readonly [AnyDecoder]
   : never;
 
 /**
- * A chain of decoder objects with matching input/output types, with
- * constrained input, output and intermediate value types.
+ * A chain of {@link Decoder} objects with matching input/output types, with
+ * constrained input, output and intermediate value types. Used as input to the
+ * {@link chain} decoder.
+ *
+ * @group Types
  */
 export type ConstrainedDecoderArray<Out, In = unknown, Middle = any> =
   | [AnyDecoder<Out, In>]
@@ -30,7 +36,10 @@ export type ConstrainedDecoderArray<Out, In = unknown, Middle = any> =
   | [AnyDecoder<Middle, In>, ...DecoderArray, AnyDecoder<Out, Middle>];
 
 /**
- * Determine the input type of a chain of decoder objects.
+ * Determine the input type of a chain of {@link Decoder} objects; i.e the input
+ * type of the _first_ decoder in the list.
+ *
+ * @group Types
  */
 export type ChainInput<D extends DecoderArray> = D extends [
   infer First,
@@ -40,7 +49,10 @@ export type ChainInput<D extends DecoderArray> = D extends [
   : never;
 
 /**
- * Determine the output type of a chain of decoder objects.
+ * Determine the output type of a chain of {@link Decoder} objects; i.e the
+ * output type of the _last_ decoder in the list.
+ *
+ * @group Types
  */
 export type ChainOutput<D extends DecoderArray> = D extends [
   ...DecoderArray,
@@ -50,7 +62,10 @@ export type ChainOutput<D extends DecoderArray> = D extends [
   : never;
 
 /**
- * Determine the error type of a chain of decoder objects.
+ * Determine the error type of a chain of {@link Decoder} objects; i.e the union
+ * of all the possible errors in the chain.
+ *
+ * @group Types
  */
 export type ChainError<D extends DecoderArray> = D extends DecoderArray<
   any,
@@ -61,7 +76,10 @@ export type ChainError<D extends DecoderArray> = D extends DecoderArray<
   : never;
 
 /**
- * Determine the options type of a chain of decoder objects.
+ * Determine the options type of a chain of {@link Decoder} objects; i.e the
+ * intersection of all the possible options objects in the chain.
+ *
+ * @group Types
  */
 export type ChainOptions<D extends DecoderArray> = D extends DecoderArray<
   any,
@@ -73,7 +91,9 @@ export type ChainOptions<D extends DecoderArray> = D extends DecoderArray<
   : never;
 
 /**
- * The specific {@link Decoder} type for a chain decoder.
+ * The specific {@link Decoder} type for the {@link chain} decoder.
+ *
+ * @group Types
  */
 export type ChainDecoderType<
   Chain extends DecoderArray,
@@ -82,8 +102,10 @@ export type ChainDecoderType<
 > = Decoder<ChainOutput<Chain>, ChainInput<Chain>, Err, Opts>;
 
 /**
- * Represents an object which can create a chain decoder with constrained input,
- * output and intermediate value types.
+ * Represents an object which can create a {@link chain} {@link Decoder} with
+ * constrained input, output and intermediate value types.
+ *
+ * @group Types
  */
 export interface ChainDecoderFactory<Out, In = unknown, Middle = any> {
   schema<Chain extends ConstrainedDecoderArray<Out, In, Middle>>(
@@ -92,7 +114,21 @@ export interface ChainDecoderFactory<Out, In = unknown, Middle = any> {
 }
 
 /**
- * Compose multiple decoders together to create a single decoder.
+ * Compose multiple {@link Decoder} objects together to create a single decoder.
+ * The decoders are run serially with the input of each decoder being the output
+ * of the previous decoder in the chain.
+ *
+ * @remark
+ * This decoder is used to compose the behaviour of multiple decoders—either to
+ * combine multiple refinements (e.g. max length and min length), or to combine
+ * processing and type conversion steps, or both.
+ *
+ * @example
+ * ```typescript
+ * const strToNum = chain(string, trim, convertStrToNum, min(5));
+ * ```
+ *
+ * @group Composite
  */
 export function chain<Chain extends DecoderArray>(
   ...decoders: DecoderChain<Chain>
@@ -115,6 +151,13 @@ export function chain<Chain extends DecoderArray>(
 /**
  * Helper function to allow the decoder types to be constrained and the error
  * type inferred.
+ *
+ * @remarks
+ * This would be used when you want to explicitly specify the input, output or
+ * middle types, but want to benefit from type inference for the rest of the
+ * parameters.
+ *
+ * @group Composite
  */
 export function chainType<
   Out,

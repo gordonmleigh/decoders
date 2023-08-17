@@ -4,6 +4,8 @@ import { predicate } from './predicate.js';
 
 /**
  * The {@link DecoderError} returned when a {@link is} decoder fails.
+ *
+ * @group Types
  */
 export type IsDecoderError<T> = DecoderError<'value:is'> & {
   options: T[];
@@ -13,6 +15,8 @@ export type IsDecoderError<T> = DecoderError<'value:is'> & {
  * Creates a predicate which allows only the given value(s).
  *
  * @param options The values allowed.
+ *
+ * @group Predicates
  */
 export function is<const T>(
   ...options: T[]

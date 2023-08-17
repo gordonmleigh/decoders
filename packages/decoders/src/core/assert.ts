@@ -6,6 +6,8 @@ import { DecodingAssertError } from './DecodingAssertError.js';
  *
  * @param decoder The decoder to use.
  * @param value The value to decode.
+ *
+ * @group Core
  */
 export function assert<Out, In>(decoder: Decoder<Out, In>, value: In): Out {
   const result = decoder.decode(value);

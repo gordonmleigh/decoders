@@ -11,6 +11,8 @@ import { ok } from '../core/Result.js';
  * ```typescript
  * const trim = map((value: string) => value.trim());
  * ```
+ *
+ * @group Converters
  */
 export function map<Out, In, Opts = void>(
   map: (value: In, opts?: Opts) => Out,

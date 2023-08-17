@@ -2,6 +2,8 @@ import { DecoderError } from './DecoderError.js';
 
 /**
  * Thrown when {@link Decoder} `assert` fails to decode a value.
+ *
+ * @group Core
  */
 export class DecodingAssertError<
   Err extends DecoderError = DecoderError,

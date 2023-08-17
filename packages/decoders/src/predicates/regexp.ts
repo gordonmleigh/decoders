@@ -2,6 +2,11 @@ import { Decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
 import { typePredicate } from './typePredicate.js';
 
+/**
+ * The error for the {@link regexp} {@link Decoder}.
+ *
+ * @group Types
+ */
 export type RegexpDecoderError<T extends string = 'value:regexp'> =
   DecoderError<T>;
 
@@ -10,6 +15,8 @@ export type RegexpDecoderError<T extends string = 'value:regexp'> =
  * expression.
  *
  * @param match The regular expression to match.
+ *
+ * @group Predicates
  */
 export function regexp(
   match: RegExp,

@@ -18,6 +18,8 @@ import { choose } from './choose.js';
  * const result2 = decoder('hello'); // = { ok: true, value: 'hello' }
  * const result3 = decoder(12); // = { ok: false, error: [ ... ] }
  * ```
+ *
+ * @group Composite
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function nullable<Out, In, Err extends DecoderError>(

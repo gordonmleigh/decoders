@@ -9,6 +9,8 @@ import { UnionToIntersection, ValuesOf } from '../internal/typeUtils.js';
 /**
  * Specifies the action to take when a field is encountered that has no
  * corresponding decoder.
+ *
+ * @group Types
  */
 export enum ExtraFields {
   /**
@@ -30,6 +32,8 @@ export enum ExtraFields {
 /**
  * Specifies the action to take for an when a decoder for a field returns
  * undefined.
+ *
+ * @group Types
  */
 export enum UndefinedFields {
   /**
@@ -50,6 +54,8 @@ export enum UndefinedFields {
 
 /**
  * Options to control decoding of a value.
+ *
+ * @group Types
  */
 export interface ObjectDecoderOptions {
   /**
@@ -67,6 +73,8 @@ export interface ObjectDecoderOptions {
 
 /**
  * Defines a map of decoders for each property of a given type.
+ *
+ * @group Types
  */
 export type PropDecoders<T> = {
   [K in keyof T]-?: Decoder<T[K], any, any, any>;
@@ -74,6 +82,8 @@ export type PropDecoders<T> = {
 
 /**
  * The error returned when a {@link object} {@link Decoder} fails.
+ *
+ * @group Types
  */
 export interface ObjectError<Props extends PropDecoders<any>>
   extends DecoderError<'composite:object'> {
@@ -86,6 +96,8 @@ export interface ObjectError<Props extends PropDecoders<any>>
 
 /**
  * The combined options type for a {@link object} {@link Decoder}.
+ *
+ * @group Types
  */
 export type ObjectPropsOptions<Props extends PropDecoders<any>> =
   ObjectDecoderOptions &
@@ -93,6 +105,8 @@ export type ObjectPropsOptions<Props extends PropDecoders<any>> =
 
 /**
  * The output type for the given props type.
+ *
+ * @group Types
  */
 export type ObjectType<Props extends PropDecoders<any>> = {
   [K in keyof Props]: OutputType<Props[K]>;
@@ -100,6 +114,8 @@ export type ObjectType<Props extends PropDecoders<any>> = {
 
 /**
  * The specific {@link Decoder} type for an object with given props.
+ *
+ * @group Types
  */
 export type ObjectDecoderType<Props extends PropDecoders<any>> = Decoder<
   ObjectType<Props>,
@@ -110,6 +126,8 @@ export type ObjectDecoderType<Props extends PropDecoders<any>> = Decoder<
 
 /**
  * An object to create a {@link object} decoder with constrained output type.
+ *
+ * @group Types
  */
 export interface ObjectDecoderFactory<Out> {
   schema<Props extends PropDecoders<Out>>(
@@ -120,6 +138,8 @@ export interface ObjectDecoderFactory<Out> {
 
 /**
  * Create a decoder which can decode an object.
+ *
+ * @group Composite
  */
 export function object<Props extends PropDecoders<any>>(
   props: Props,
@@ -196,6 +216,8 @@ export function object<Props extends PropDecoders<any>>(
 /**
  * Helper function to allow the output type to be constrained and the error and
  * options types inferred.
+ *
+ * @group Composite
  */
 export function objectType<Out>(): ObjectDecoderFactory<Out> {
   return new Schema(object);

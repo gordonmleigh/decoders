@@ -12,14 +12,21 @@ import { Schema } from '../internal/Schema.js';
 
 /**
  * The error type of an {@link array} decoder.
+ *
+ * @group Types
  */
 export interface ArrayError<ElementDecoder extends AnyDecoder>
   extends DecoderError<'composite:array'> {
-  elements?: { [index: number]: ErrorType<ElementDecoder> };
+  /**
+   * Errors for each of the elements, if relevant.
+   */
+  elements?: { [index: number]: ErrorType<ElementDecoder> | undefined };
 }
 
 /**
  * The specific {@link Decoder} type for an {@link array} decoder.
+ *
+ * @group Types
  */
 export type ArrayDecoderType<ElementDecoder extends AnyDecoder> = Decoder<
   OutputType<ElementDecoder>[],
@@ -31,6 +38,8 @@ export type ArrayDecoderType<ElementDecoder extends AnyDecoder> = Decoder<
 /**
  * An object that can create a {@link array} decoder with a constrained element
  * type.
+ *
+ * @group Types
  */
 export interface ArrayDecoderFactory<ElementType> {
   schema<ElementDecoder extends AnyDecoder<ElementType>>(
@@ -42,7 +51,14 @@ export interface ArrayDecoderFactory<ElementType> {
  * Create a {@link Decoder} which can decode an array, using the given
  * decoder for each element.
  *
- * @param elem The decoder to use to decode the elements.
+ * @param element The decoder to use to decode the elements.
+ *
+ * @example
+ * ```typescript
+ * const decoder = array(string);
+ * ```
+ *
+ * @group Composite
  */
 export function array<ElementDecoder extends AnyDecoder>(
   element: ElementDecoder,
@@ -78,8 +94,23 @@ export function array<ElementDecoder extends AnyDecoder>(
 }
 
 /**
- * Helper function to allow the output type to be constrained and the error type
- * inferred.
+ * Helper function to allow the output type to be constrained and the other type
+ * parameters to be inferred.
+ *
+ * @remarks
+ * This would be used when you want to explicitly specify the element type, but
+ * want to benefit from type inference for the rest of the parameters:
+ *
+ * ```typescript
+ * const myType: Decoder<MyType, unknown, MyTypeError, MyTypeOpts> = blah;
+ *
+ * const decodeList = arrayType<MyType>().schema(myType);
+ *
+ * // now decodeList has type
+ * // Decoder<MyType, unknown, ArrayError<MyTypeError>, MyTypeOpts>
+ * ```
+ *
+ * @group Composite
  */
 export function arrayType<ElementType>(): ArrayDecoderFactory<ElementType> {
   return new Schema(array);

@@ -8,5 +8,7 @@ import { map } from './map.js';
  * ```typescript
  * const value = trim(' hello world\n') // = { ok: true, value: 'hello world' }
  * ```
+ *
+ * @group Converters
  */
 export const trim = map((x: string) => x.trim());
