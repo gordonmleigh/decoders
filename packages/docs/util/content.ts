@@ -4,7 +4,10 @@ import { glob } from 'fast-glob';
 import { readFile } from 'fs/promises';
 import { compileMDX } from 'next-mdx-remote/rsc';
 import { resolve } from 'path';
-import { ReactNode, cache } from 'react';
+import { ReactNode } from 'react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { cache } from 'react';
 
 const ContentPath = resolve('./content');
 
@@ -19,7 +22,9 @@ export interface ContentPage {
   };
 }
 
-export const fetchAllContent = cache(fetchAllContentInternal);
+export const fetchAllContent: typeof fetchAllContentInternal = cache(
+  fetchAllContentInternal,
+);
 
 async function fetchAllContentInternal(): Promise<ContentPage[]> {
   const paths = await glob('**/*.mdx', { cwd: ContentPath });
@@ -69,7 +74,7 @@ async function fetchPage(path: string): Promise<ContentPage> {
         (frontmatter.slug as string) ?? path.replace(/\.mdx$/, ''),
       ),
     },
-    content,
+    content: content as any,
   };
 }
 

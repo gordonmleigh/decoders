@@ -1,4 +1,3 @@
-/// <reference types="react/canary" />
 import { SiteMeta } from '@/util/metadata.js';
 import clsx from 'clsx';
 import { Inter } from 'next/font/google';

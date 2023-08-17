@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "clean": "rimraf --glob '**/*.tsbuildinfo' '**/lib/' packages/docs/.next",
+    "clean": "rimraf --glob '**/*.tsbuildinfo' 'packages/decoders/lib/' packages/docs/.next",
     "compile": "npm run --workspaces --if-present compile",
     "dev:docs": "nodemon --exec 'npm run -w @w/docs dev' --watch packages/decoders/lib",
     "docs": "npm run -w @w/docs build",
