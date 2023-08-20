@@ -8,8 +8,8 @@ import {
 } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
 import { ok } from '../core/Result.js';
+import { UnionToIntersection } from '../core/typeUtils.js';
 import { Schema } from '../internal/Schema.js';
-import { UnionToIntersection } from '../internal/typeUtils.js';
 
 /**
  * A chain of {@link Decoder} objects with matching input/output types. Used as

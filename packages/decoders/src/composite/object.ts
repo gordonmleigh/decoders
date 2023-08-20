@@ -2,9 +2,9 @@ import { Decoder, OptionsType, OutputType, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
 import { error, invalid, ok } from '../core/Result.js';
 import { combineOptions } from '../core/combineOptions.js';
+import { UnionToIntersection, ValuesOf } from '../core/typeUtils.js';
 import { Schema } from '../internal/Schema.js';
 import { isPlainObject } from '../internal/isPlainObject.js';
-import { UnionToIntersection, ValuesOf } from '../internal/typeUtils.js';
 
 /**
  * Specifies the action to take when a field is encountered that has no

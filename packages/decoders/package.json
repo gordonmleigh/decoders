@@ -79,6 +79,10 @@
       "import": "./lib/core/Result.js",
       "types": "./lib/core/Result.d.ts"
     },
+    "./core/typeUtils": {
+      "import": "./lib/core/typeUtils.js",
+      "types": "./lib/core/typeUtils.d.ts"
+    },
     "./predicates/email": {
       "import": "./lib/predicates/email.js",
       "types": "./lib/predicates/email.d.ts"

@@ -1,6 +1,6 @@
 import { Decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
-import { ValuesOf } from '../internal/typeUtils.js';
+import { ValuesOf } from '../core/typeUtils.js';
 import { predicate } from './predicate.js';
 
 /**

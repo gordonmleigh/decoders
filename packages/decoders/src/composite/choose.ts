@@ -1,7 +1,7 @@
 import { AnyDecoder, Decoder, DecoderArray, decoder } from '../core/Decoder.js';
 import { DecoderError } from '../core/DecoderError.js';
 import { error } from '../core/Result.js';
-import { UnionToIntersection } from '../internal/typeUtils.js';
+import { UnionToIntersection } from '../core/typeUtils.js';
 
 /**
  * Get the output type of an array of decoders.
