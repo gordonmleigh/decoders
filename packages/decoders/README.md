@@ -2,6 +2,8 @@
 
 Lightweight, composable validation and serialization library.
 
+👉 [Documentation](https://gordonmleigh.github.io/decoders)
+
 ## What's it for?
 
 Typescript lets you check your own code and nothing more. This library lets you check data flowing in and out of code that is under your control.
