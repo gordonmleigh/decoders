@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: SiteMeta.title,
-  description: 'A test of some documentation',
+  description: 'Lightweight, composable validation and serialization library',
 };
 
 export default function RootLayout({
