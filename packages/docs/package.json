@@ -9,7 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@gordonmleigh/superdocs": "^0.1.9",
+    "@gordonmleigh/superdocs": "^0.1.11",
+    "@gordonmleigh/superdocs-kit": "^0.1.11",
     "@heroicons/react": "^2.0.18",
     "@mapbox/rehype-prism": "^0.8.0",
     "@tailwindcss/typography": "^0.5.9",

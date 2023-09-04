@@ -1,30 +1,36 @@
-const { join, dirname } = require('path');
+const { join, dirname } = require("path");
+const plugin = require("tailwindcss/plugin");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
+  darkMode: "class",
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
     join(
-      dirname(require.resolve('@gordonmleigh/superdocs/tailwind')),
-      'components/*.{js,ts,jsx,tsx,mdx}',
+      dirname(require.resolve("@gordonmleigh/superdocs/tailwind")),
+      "components/*.{js,ts,jsx,tsx,mdx}",
+    ),
+    join(
+      dirname(require.resolve("@gordonmleigh/superdocs-kit/tailwind")),
+      "components/*.{js,ts,jsx,tsx,mdx}",
     ),
   ],
   theme: {
     extend: {
       maxWidth: {
-        lg: '33rem',
-        '2xl': '40rem',
-        '3xl': '50rem',
-        '5xl': '66rem',
+        lg: "33rem",
+        "2xl": "40rem",
+        "3xl": "50rem",
+        "5xl": "66rem",
       },
-      typography: require('./typography.js'),
+      typography: require("./typography.js"),
     },
   },
   plugins: [
-    require('@gordonmleigh/superdocs/tailwind'),
-    require('@tailwindcss/typography'),
+    require("@gordonmleigh/superdocs/tailwind"),
+    require("@gordonmleigh/superdocs-kit/tailwind"),
+    require("@tailwindcss/typography"),
   ],
 };

@@ -1,13 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
-  output: 'export',
+  output: "export",
+  images: {
+    unoptimized: true,
+  },
   webpack: (config) => {
     config.resolve = {
       ...config.resolve,
       extensionAlias: {
         ...config.resolve?.extensionAlias,
-        '.js': ['.ts', '.js'],
+        ".js": [".ts", ".js"],
       },
     };
     return config;
